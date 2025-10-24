@@ -2,7 +2,7 @@ import express from "express";
 import * as Handler from "./importController"; 
 const routerAdmin = express.Router();
 
-// User Details
+// User Details user
 routerAdmin.post("/user-login", Handler.LoginController); // 1      -> .782 s
 routerAdmin.put("/user-profile-update", Handler.userProfileUpdate); // 2  -> .282 s
 routerAdmin.get("/user-profile/:email", Handler.ProfileUpdate); // 3   -> 2.69 s
