@@ -1,107 +1,140 @@
-import jwt from "jsonwebtoken";
-import { Login } from "../Entities/login";
-import { User } from "../Entities/user";
-import { sendEmail } from "../Helpers/email";
+// import jwt from "jsonwebtoken";
+import { Login } from "../Entities/Login";
+import { User } from "../Entities/User";
+// import { sendEmail } from "../Helpers/email";
 import { MESSAGES } from "../Helpers/constants";
 import { createResponse } from "../Helpers/response";
-import { generateToken, profileCompletion } from "../Helpers/utils";
+import {
+    //  generateToken, 
+    profileCompletion
+} from "../Helpers/utils";
 import path from "path";
 import fs from "fs";
-export const TestRoute = async (req: any, res: any) => {
+import bcrypt from "bcrypt";
+import { handleFileUploads } from "../Helpers/UploadHandler";
+
+
+
+
+export const UserRegisterController = async (req: any, res: any) => {
     try {
-        const { email } = req.params;
+        const {
+            fullName,
+            roleId,
+            languagePreference,
+            city,
+            locality,
+            gender = "Male",
+            email,
+            phone,
+            password = "Test@12345",
+            userRole = "JOB_SEEKER",
+        } = req.body; 
 
-        // Execute the query to fetch the user data with a LEFT JOIN on the Login table
-        const queryBuilder = User.createQueryBuilder("user")
-            .leftJoinAndSelect(Login, "login", "user.emailId = login.emailId")
-            .where("user.emailId = :email", { email });
-
-        // Fetch the user data
-        const userData = await queryBuilder.getRawOne();
-
-        // If no user data is found, return a 404 response
-        if (!userData) {
-            return res.status(404).json({ message: "Data not found", success: false });
-        }
-
-        // Return a successful response with the fetched data
-        return res.status(200).json({
-            message: "Data fetched successfully",
-            data: userData,
-            success: true,
+        const uploadDir = path.join(__dirname, "../../uploads");
+        const uploadedFiles = await handleFileUploads(req, uploadDir); 
+        
+        const newUser: any = User.create({
+            fullName,
+            roleId,
+            languagePreference: languagePreference || "English",
+            city,
+            locality,
+            gender,
+            profile: uploadedFiles.length > 0 ? uploadedFiles : undefined,  
         });
+
+        await newUser.save();
+
+        // ✅ Hash password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // ✅ Create Login entry
+        const newLogin = Login.create({
+            userId: newUser.id,
+            email,
+            phone,
+            password: hashedPassword,
+            userRole,
+        });
+
+        await newLogin.save();
+
+        return createResponse(
+            res,
+            201,
+            uploadedFiles.length > 0
+                ? "User registered with files uploaded"
+                : "User registered successfully",
+            { user: newUser, login: newLogin },
+            true,
+            false
+        );
     } catch (error: any) {
-        // Log the error to the console for debugging purposes
-        // tslint:disable-next-line:no-console
-        console.log("Error fetching data:", error);
-
-        // Return a 500 response for internal server errors
-        return res.status(500).json({
-            message: "Internal Server Error",
-            error: error.message,
-        });
+        console.error("Error in UserRegisterController:", error);
+        return createResponse(res, 500, "Internal Server Error", [], false, true);
     }
 };
 
 export const LoginController = async (req: any, res: any) => {
     try {
-        const { email, password } = req.body;
+        // const { email, password } = req.body;
 
-        // Fetch login entry based on email and select userId and password for optimized query
-        const login = await Login.findOne({
-            where: { emailId: email },
-            select: ["userId", "password"]
-        });
+        // // Fetch login entry based on email and select userId and password for optimized query
+        // const login = await Login.findOne({
+        //     where: { emailId: email },
+        //     select: ["userId", "password"]
+        // });
 
-        // Check if login entry exists
-        if (!login) {
-            return createResponse(res, 404, MESSAGES?.USER_NOT_FOUND, [], false, true);
-        }
+        // // Check if login entry exists
+        // if (!login) {
+        //     return createResponse(res, 404, MESSAGES?.USER_NOT_FOUND, [], false, true);
+        // }
 
-        // Fetch user data using the userId and select only necessary fields
-        const user = await User.findOne({
-            where: { userId: login.userId },
-            select: [
-                "id", "userId", "firstName", "lastName", "emailId", "phoneNumber", "profile",
-                "address", "companyId", "title", "createdAt", "secondaryEmailId"
-            ],
-        });
+        // // Fetch user data using the userId and select only necessary fields
+        // const user = await User.findOne({
+        //     where: { userId: login.userId },
+        //     select: [
+        //         "id",  
+        //     ],
+        // });
 
-        // Check if user exists
-        if (!user) {
-            return createResponse(res, 404, MESSAGES?.USER_NOT_FOUND, [], false, true);
-        }
+        // // Check if user exists
+        // if (!user) {
+        //     return createResponse(res, 404, MESSAGES?.USER_NOT_FOUND, [], false, true);
+        // }
 
-        // Compare provided password with stored password (plaintext comparison assumed)
-        if (login.password !== password) {
-            return createResponse(res, 401, MESSAGES?.INVALID_CREDENTIALS, [], false, true);
-        }
+        // // Compare provided password with stored password (plaintext comparison assumed)
+        // if (login.password !== password) {
+        //     return createResponse(res, 401, MESSAGES?.INVALID_CREDENTIALS, [], false, true);
+        // }
 
-        // Create JWT token with userId and email as payload
-        const JWT_SECRET: any = `${process.env.JWT_SECRET}`;
-        const token = jwt.sign({ id: user.userId, email: user.emailId }, JWT_SECRET, {
-            expiresIn: "24h",
-        });
+        // // Create JWT token with userId and email as payload
+        // const JWT_SECRET: any = `${process.env.JWT_SECRET}`;
+        // const token = jwt.sign({ id: user.userId, email: user.emailId }, JWT_SECRET, {
+        //     expiresIn: "24h",
+        // });
 
-        // Calculate profile completion percentage
-        const profileComplete = await profileCompletion(user);
+        // // Calculate profile completion percentage
+        // const profileComplete = await profileCompletion(user);
 
-        // Send response with necessary data and token
-        return createResponse(res, 200, MESSAGES?.LOGIN_SUCCESS, {
-            memberId: user?.userId,
-            id: user?.id,
-            firstName: user?.firstName,
-            lastName: user?.lastName,
-            email: user?.emailId,
-            phoneNumber: user?.phoneNumber,
-            profile: user?.profile,
-            address: user?.address,
-            companyId: user?.companyId,
-            title: user?.title,
-            createdAt: user?.createdAt,
-            token,
-            profileComplete
-        });
+        // // Send response with necessary data and token
+        // return createResponse(res, 200, MESSAGES?.LOGIN_SUCCESS, {
+        //     memberId: user?.userId,
+        //     id: user?.id,
+        //     firstName: user?.firstName,
+        //     lastName: user?.lastName,
+        //     email: user?.emailId,
+        //     phoneNumber: user?.phoneNumber,
+        //     profile: user?.profile,
+        //     address: user?.address,
+        //     companyId: user?.companyId,
+        //     title: user?.title,
+        //     createdAt: user?.createdAt,
+        //     token,
+        //     profileComplete
+        // });
 
     } catch (error) {
         // Log the error to the console for debugging purposes
@@ -114,28 +147,28 @@ export const LoginController = async (req: any, res: any) => {
 };
 
 export const ForgetPassword = async (req: any, res: any, next: any) => {
-    const { email } = req.body;
+    // const { email } = req.body;
 
     try {
-        // Fetch user data using the email from the `Login` table
-        const user = await Login.findOne({ where: { emailId: email } });
+        //     // Fetch user data using the email from the `Login` table
+        //     const user = await Login.findOne({ where: { emailId: email } });
 
-        if (user) {
-            // Generate a new token for the password reset
-            const token = await generateToken();
+        //     if (user) {
+        //         // Generate a new token for the password reset
+        //         const token = await generateToken();
 
-            // Update the user's record with the new token and update timestamp
-            await Login.update({ emailId: email }, { loginToken: token, updatedAt: new Date() });
+        //         // Update the user's record with the new token and update timestamp
+        //         await Login.update({ emailId: email }, { loginToken: token, updatedAt: new Date() });
 
-            // Send a reset password email with the token as a URL parameter
-            await sendEmail(email, "Reset Password", "", `${process.env.UI_BASE_URL}/resetpassword/${token}`);
+        //         // Send a reset password email with the token as a URL parameter
+        //         await sendEmail(email, "Reset Password", "", `${process.env.UI_BASE_URL}/resetpassword/${token}`);
 
-            // Send a success response for the reset link
-            return createResponse(res, 200, MESSAGES?.RESET_LINK_SENT);
-        } else {
-            // If user not found, send a user not found response
-            return createResponse(res, 404, MESSAGES?.USER_NOT_FOUND, [], false, true);
-        }
+        //         // Send a success response for the reset link
+        //         return createResponse(res, 200, MESSAGES?.RESET_LINK_SENT);
+        //     } else {
+        //         // If user not found, send a user not found response
+        //         return createResponse(res, 404, MESSAGES?.USER_NOT_FOUND, [], false, true);
+        //     }
 
     } catch (err) {
         // Log the error to the console for debugging purposes
@@ -229,54 +262,54 @@ export const ResetTockenCheck = async (req: any, res: any, next: any) => {
 };
 
 export const ProfileUpdate = async (req: any, res: any) => {
-    const { email } = req.params;
+    // const { email } = req.params;
 
     try {
         // Fetch user data from the `User` table using the provided email
         // This retrieves selected fields only
-        const userData = await User.findOne({
-            where: { emailId: email },
-            select: ["userId", "userType", "firstName", "profile", "lastName", "emailId",
-                "phoneNumber", "address", "status", "secondaryEmailId", "companyId", "title", "updatedAt", "createdAt"],
-        });
+        // const userData = await User.findOne({
+        //     where: { emailId: email },
+        //     select: ["userId", "userType", "firstName", "profile", "lastName", "emailId",
+        //         "phoneNumber", "address", "status", "secondaryEmailId", "companyId", "title", "updatedAt", "createdAt"],
+        // });
 
-        // Calculate profile completion percentage based on the user data
-        const profileComplete = await profileCompletion(userData);
+        // // Calculate profile completion percentage based on the user data
+        // const profileComplete = await profileCompletion(userData);
 
-        // Fetch login data from the `Login` table using the provided email
-        // Only fetches the `password` field
-        const loginData = await Login.findOne({
-            where: { emailId: email },
-            select: ["password"],
-        });
+        // // Fetch login data from the `Login` table using the provided email
+        // // Only fetches the `password` field
+        // const loginData = await Login.findOne({
+        //     where: { emailId: email },
+        //     select: ["password"],
+        // });
 
-        // Check if user data was found; if not, send a 404 response
-        if (!userData) {
-            return createResponse(res, 404, MESSAGES?.USER_NOT_FOUND, [], true, false);
-        }
+        // // Check if user data was found; if not, send a 404 response
+        // if (!userData) {
+        //     return createResponse(res, 404, MESSAGES?.USER_NOT_FOUND, [], true, false);
+        // }
 
-        // Combine user data and login data into a single response object
-        const responseData = {
-            userId: userData?.userId,
-            userType: userData?.userType,
-            firstName: userData?.firstName,
-            lastName: userData?.lastName,
-            emailId: userData?.emailId,
-            phoneNumber: userData?.phoneNumber,
-            address: userData?.address,
-            secondaryEmailId: userData?.secondaryEmailId,
-            profile: userData?.profile,
-            companyId: userData?.companyId,
-            title: userData?.title,
-            // Include the password from the login data, or null if not available
-            password: loginData?.password || null,
-            updatedAt: userData?.updatedAt,
-            last_record_updated: userData?.createdAt,
-            profileComplete
-        };
+        // // Combine user data and login data into a single response object
+        // const responseData = {
+        //     userId: userData?.userId,
+        //     userType: userData?.userType,
+        //     firstName: userData?.firstName,
+        //     lastName: userData?.lastName,
+        //     emailId: userData?.emailId,
+        //     phoneNumber: userData?.phoneNumber,
+        //     address: userData?.address,
+        //     secondaryEmailId: userData?.secondaryEmailId,
+        //     profile: userData?.profile,
+        //     companyId: userData?.companyId,
+        //     title: userData?.title,
+        //     // Include the password from the login data, or null if not available
+        //     password: loginData?.password || null,
+        //     updatedAt: userData?.updatedAt,
+        //     last_record_updated: userData?.createdAt,
+        //     profileComplete
+        // };
 
-        // Send a successful response with the combined data
-        return createResponse(res, 200, MESSAGES?.DATA_FETCH_SUCCESS, responseData, true, false);
+        // // Send a successful response with the combined data
+        // return createResponse(res, 200, MESSAGES?.DATA_FETCH_SUCCESS, responseData, true, false);
 
     } catch (error: any) {
         // Log the error to the console for debugging purposes
