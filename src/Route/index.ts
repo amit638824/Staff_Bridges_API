@@ -10,7 +10,7 @@ routerAdmin.get("/user-profile/:email", Handler.ProfileUpdate); // 3   -> 2.69 s
 routerAdmin.post("/forget-password", Handler.ForgetPassword); // 4    -> 6.34 s
 routerAdmin.post("/reset-password", Handler.ResetPassword); // 5     ->.790 s
 routerAdmin.post("/reset-token-check", Handler.ResetTockenCheck); // 6  ->.629 s     
-//add role and permission 
+// add role and permission 
 routerAdmin.post("/add-role", Handler.ResetTockenCheck); 
 
 // Contact Details

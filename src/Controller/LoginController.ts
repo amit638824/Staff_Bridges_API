@@ -10,69 +10,55 @@ import {
 } from "../Helpers/utils";
 import path from "path";
 import fs from "fs";
-import bcrypt from "bcrypt";
-import { handleFileUploads } from "../Helpers/UploadHandler";
-
-
-
 
 export const UserRegisterController = async (req: any, res: any) => {
     try {
-        const {
-            fullName,
-            roleId,
-            languagePreference,
-            city,
-            locality,
-            gender = "Male",
-            email,
-            phone,
-            password = "Test@12345",
-            userRole = "JOB_SEEKER",
-        } = req.body; 
+        // const {
+        //     fullName,
+        //     roleId,
+        //     languagePreference,
+        //     city,
+        //     locality,
+        //     gender = "Male",
+        //     email,
+        //     phone,
+        //     password = "Test@12345",
+        //     userRole = "JOB_SEEKER",
+        // } = req.body; 
 
-        const uploadDir = path.join(__dirname, "../../uploads");
-        const uploadedFiles = await handleFileUploads(req, uploadDir); 
-        
-        const newUser: any = User.create({
-            fullName,
-            roleId,
-            languagePreference: languagePreference || "English",
-            city,
-            locality,
-            gender,
-            profile: uploadedFiles.length > 0 ? uploadedFiles : undefined,  
-        });
+        // const uploadDir = path.join(__dirname, "../../uploads");
+        // const uploadedFiles = await handleFileUploads(req, uploadDir); 
 
-        await newUser.save();
+        // const newUser: any = User.create({
+        //     fullName,
+        //     roleId,
+        //     languagePreference: languagePreference || "English",
+        //     city,
+        //     locality,
+        //     gender,
+        //     profile: uploadedFiles.length > 0 ? uploadedFiles : undefined,  
+        // });
 
-        // ✅ Hash password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        // await newUser.save();
 
-        // ✅ Create Login entry
-        const newLogin = Login.create({
-            userId: newUser.id,
-            email,
-            phone,
-            password: hashedPassword,
-            userRole,
-        });
+        // // ✅ Hash password
+        // const salt = await bcrypt.genSalt(10);
+        // const hashedPassword = await bcrypt.hash(password, salt);
 
-        await newLogin.save();
+        // // ✅ Create Login entry
+        // const newLogin = Login.create({
+        //     userId: newUser.id,
+        //     email,
+        //     phone,
+        //     password: hashedPassword,
+        //     userRole,
+        // });
 
-        return createResponse(
-            res,
-            201,
-            uploadedFiles.length > 0
-                ? "User registered with files uploaded"
-                : "User registered successfully",
-            { user: newUser, login: newLogin },
-            true,
-            false
-        );
+        // await newLogin.save();
+
     } catch (error: any) {
         console.error("Error in UserRegisterController:", error);
+
         return createResponse(res, 500, "Internal Server Error", [], false, true);
     }
 };
@@ -181,36 +167,36 @@ export const ForgetPassword = async (req: any, res: any, next: any) => {
 };
 
 export const ResetPassword = async (req: any, res: any, next: any) => {
-    const { password, token } = req.body;
+    //  const { password, token } = req.body;
 
     try {
         // Fetch user data using the token from the `Login` table
-        const user = await Login.findOne({ where: { loginToken: token } });
+        // const user = await Login.findOne({ where: { loginToken: token } });
 
-        if (user) {
-            // Extract the token issued time from the `updatedAt` field
-            const tokenIssuedAt = new Date(user.updatedAt).getTime(); // Token issued timestamp
-            const currentTime = Date.now(); // Current timestamp
-            const tokenExpiryTime = 300000; // 5 minutes in milliseconds
+        // if (user) {
+        // Extract the token issued time from the `updatedAt` field
+        //  const tokenIssuedAt = new Date(user.updatedAt).getTime(); // Token issued timestamp
+        // const currentTime = Date.now(); // Current timestamp
+        // const tokenExpiryTime = 300000; // 5 minutes in milliseconds
 
-            // Check if token is still valid based on the expiry time
-            if ((currentTime - tokenIssuedAt) <= tokenExpiryTime) {
-                // Update the user's password and clear the login token
-                await Login.update({ loginToken: token }, { loginToken: "", password: password });
+        // Check if token is still valid based on the expiry time
+        // if ((currentTime - tokenIssuedAt) <= tokenExpiryTime) {
+        // Update the user's password and clear the login token
+        //  await Login.update({ loginToken: token }, { loginToken: "", password: password });
 
-                // Send a success response for password update
-                return createResponse(res, 200, MESSAGES?.PASSWORD_UPDATED);
-            } else {
-                // If the token has expired, clear the login token
-                await Login.update({ loginToken: token }, { loginToken: "" });
+        // Send a success response for password update
+        //     return createResponse(res, 200, MESSAGES?.PASSWORD_UPDATED);
+        // } else {
+        // If the token has expired, clear the login token
+        // await Login.update({ loginToken: token }, { loginToken: "" });
 
-                // Send a response indicating token expiration
-                return createResponse(res, 401, MESSAGES?.TOKEN_EXPIRED, [], false, true);
-            }
-        } else {
-            // If token not found, send an invalid token response
-            return createResponse(res, 404, MESSAGES?.INVALID_TOKEN, [], false, true);
-        }
+        // Send a response indicating token expiration
+        //         return createResponse(res, 401, MESSAGES?.TOKEN_EXPIRED, [], false, true);
+        //     }
+        // } else {
+        //     // If token not found, send an invalid token response
+        //     return createResponse(res, 404, MESSAGES?.INVALID_TOKEN, [], false, true);
+        // }
     } catch (err) {
         // Log the error to the console for debugging purposes
         // tslint:disable-next-line:no-console
@@ -351,7 +337,7 @@ export const userProfileUpdate = async (req: any, res: any) => {
             secondaryEmailId,
             address,
             phoneNumber,
-            password
+            // password
         } = req.body;
 
         // Validate required fields
@@ -392,13 +378,13 @@ export const userProfileUpdate = async (req: any, res: any) => {
         const profileComplete = await profileCompletion(result.raw[0]);
 
         // Update password in Login table, if provided
-        if (password) {
-            await Login.createQueryBuilder()
-                .update(Login)
-                .set({ password, updatedAt: new Date(), updatedBy: userId })
-                .where("userId = :userId", { userId })
-                .execute();
-        }
+        // if (password) {
+        //     await Login.createQueryBuilder()
+        //         .update(Login)
+        //         .set({ password, updatedAt: new Date(), updatedBy: userId })
+        //         .where("userId = :userId", { userId })
+        //         .execute();
+        // }
 
         const updatedUserData = result.raw[0];
 

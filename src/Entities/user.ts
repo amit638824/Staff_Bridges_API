@@ -25,8 +25,7 @@ export class User extends BaseEntity {
   password: any;
 
   @Column({ name: "mobile", type: "varchar", length: 15, nullable: true })
-  mobile: any;
-
+  mobile: any; 
 
   @Column({ name: "RoleId", type: "varchar", nullable: true })
   RoleId: any;
@@ -40,7 +39,7 @@ export class User extends BaseEntity {
   @Column({ name: "countryId", type: "int", nullable: true })
   countryId: any;
 
-  @Column({ name: "state_id", type: "int", nullable: true })
+  @Column({ name: "stateId", type: "int", nullable: true })
   stateId: any;
 
   @Column({ name: "city", type: "varchar", length: 50, nullable: true })
@@ -73,3 +72,5 @@ export class User extends BaseEntity {
   @Column({ name: "updatedBy", type: "int", nullable: true })
   updatedBy: any;
 }
+
+ 

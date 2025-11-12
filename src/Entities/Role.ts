@@ -37,8 +37,6 @@ export class Role extends BaseEntity {
     updatedBy: any;
 }
 
-
-
 // INSERT INTO "Role" ("roleName", "description", "status")
 // VALUES
 //   ('SUPER_ADMIN', 'Full access to system and can manage other admins', 1),
@@ -47,5 +45,4 @@ export class Role extends BaseEntity {
 //   ('SUPPORT_ADMIN', 'Handles user complaints and account resets', 1),
 //   ('JOB_SEEKER', 'End user searching for jobs via mobile app', 1),
 //   ('RECRUITER', 'Employer or company representative who posts and manages jobs', 1),
-//   ('RECRUITMENT_AGENCY', 'Agency managing multiple recruiters and job listings', 1),;
-
+//   ('RECRUITMENT_AGENCY', 'Agency managing multiple recruiters and job listings', 1);
