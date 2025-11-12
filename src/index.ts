@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
-import cors from "cors";
+import cors from "cors"; 
 import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./SwaggerDocs/swagger";  
