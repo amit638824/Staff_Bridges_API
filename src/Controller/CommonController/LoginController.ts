@@ -296,7 +296,7 @@ export const MobileLoginController = async (req: any, res: any) => {
         return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
     }
 };
-export const ForgetPassword = async (req: any, res: any, next: any) => {
+export const ForgetPassword = async (req: any, res: any) => {
     const { email } = req.body;
 
     try {
@@ -327,7 +327,7 @@ export const ForgetPassword = async (req: any, res: any, next: any) => {
         return createResponse(res, 500, MESSAGES?.RESET_LINK_ERROR, [], false, true);
     }
 };
-export const ResetPassword = async (req: any, res: any, next: any) => {
+export const ResetPassword = async (req: any, res: any) => {
     const { password, token } = req.body;
 
     try {
@@ -367,7 +367,7 @@ export const ResetPassword = async (req: any, res: any, next: any) => {
         return createResponse(res, 500, MESSAGES?.RESET_ERROR, [], false, true);
     }
 };
-export const ResetTockenCheck = async (req: any, res: any, next: any) => {
+export const ResetTockenCheck = async (req: any, res: any) => {
     const { token } = req.body;
 
     try {
