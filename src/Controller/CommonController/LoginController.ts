@@ -1,14 +1,14 @@
 import fs from "fs";
 import path from "path";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken"; 
-import { User } from "../../Entities/User";
-import { Login } from "../../Entities/Login";
-import { Role } from "../../Entities/Role"; 
+import jwt from "jsonwebtoken";
+import { User } from "../../Entities/user";
+import { Login } from "../../Entities/login";
+import { Role } from "../../Entities/Role";
 import { MESSAGES } from "../../Helpers/constants";
 import { createResponse } from "../../Helpers/response";
 import { sendEmail } from "../../Helpers/email";
-import { generateToken, profileCompletion } from "../../Helpers/utils";
+import { generateToken, profileCompletion } from "../../Helpers/utils"; 
 
 export const UserRegisterController = async (req: any, res: any) => {
     try {
@@ -195,7 +195,7 @@ export const EmailLoginController = async (req: any, res: any) => {
             res,
             200,
             MESSAGES?.LOGIN_SUCCESS || "Login Successful",
-            {user: data,token },
+            { user: data, token },
             true,
             false
         );
@@ -232,7 +232,7 @@ export const SendOtpMobileController = async (req: any, res: any) => {
 
         return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
     }
-}; 
+};
 export const MobileLoginController = async (req: any, res: any) => {
     try {
         const { mobile, otp } = req.body;
@@ -295,7 +295,7 @@ export const MobileLoginController = async (req: any, res: any) => {
 
         return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
     }
-}; 
+};
 export const ForgetPassword = async (req: any, res: any, next: any) => {
     const { email } = req.body;
 
@@ -326,46 +326,46 @@ export const ForgetPassword = async (req: any, res: any, next: any) => {
         console.log(MESSAGES?.RESET_LINK_ERROR, err);
         return createResponse(res, 500, MESSAGES?.RESET_LINK_ERROR, [], false, true);
     }
-}; 
+};
 export const ResetPassword = async (req: any, res: any, next: any) => {
-  const { password, token } = req.body;
+    const { password, token } = req.body;
 
-  try {
-     
-    if (!password || !token) {
-      return createResponse(res, 400, "Password and token are required.", [], false, true);
+    try {
+
+        if (!password || !token) {
+            return createResponse(res, 400, "Password and token are required.", [], false, true);
+        }
+
+        // Fetch user data using the token from the `Login` table
+        const loginToken = await Login.findOne({ where: { loginToken: token } });
+
+        if (!loginToken) {
+            return createResponse(res, 404, MESSAGES?.INVALID_TOKEN, [], false, true);
+        }
+
+        // Check token validity (5 minutes)
+        const tokenIssuedAt = new Date(loginToken.updatedAt).getTime();
+        const currentTime = Date.now();
+        const TOKEN_EXPIRY_MS = 5 * 60 * 1000; // 5 minutes
+
+        if (currentTime - tokenIssuedAt > TOKEN_EXPIRY_MS) {
+            // Expired → clear token
+            await Login.update({ loginToken: token }, { loginToken: "" as any });
+            return createResponse(res, 401, MESSAGES?.TOKEN_EXPIRED, [], false, true);
+        }
+
+        // ✅ Hash the password before saving
+        const hashedPassword: any = await bcrypt.hash(password.toString(), 10);
+
+        // Update user password and clear login token
+        await User.update({ id: loginToken.userId }, { password: hashedPassword });
+        await Login.update({ loginToken: token }, { loginToken: "" as any });
+
+        return createResponse(res, 200, MESSAGES?.PASSWORD_UPDATED);
+    } catch (err) {
+        console.error(MESSAGES?.RESET_ERROR, err);
+        return createResponse(res, 500, MESSAGES?.RESET_ERROR, [], false, true);
     }
-
-    // Fetch user data using the token from the `Login` table
-    const loginToken = await Login.findOne({ where: { loginToken: token } });
-
-    if (!loginToken) {
-      return createResponse(res, 404, MESSAGES?.INVALID_TOKEN, [], false, true);
-    }
-
-    // Check token validity (5 minutes)
-    const tokenIssuedAt = new Date(loginToken.updatedAt).getTime();
-    const currentTime = Date.now();
-    const TOKEN_EXPIRY_MS = 5 * 60 * 1000; // 5 minutes
-
-    if (currentTime - tokenIssuedAt > TOKEN_EXPIRY_MS) {
-      // Expired → clear token
-      await Login.update({ loginToken: token }, { loginToken: "" as any });
-      return createResponse(res, 401, MESSAGES?.TOKEN_EXPIRED, [], false, true);
-    }
-
-    // ✅ Hash the password before saving
-    const hashedPassword :any= await bcrypt.hash(password.toString(), 10);
-
-    // Update user password and clear login token
-    await User.update({ id: loginToken.userId }, { password: hashedPassword });
-    await Login.update({ loginToken: token }, { loginToken: "" as any });
-
-    return createResponse(res, 200, MESSAGES?.PASSWORD_UPDATED);
-  } catch (err) {
-    console.error(MESSAGES?.RESET_ERROR, err);
-    return createResponse(res, 500, MESSAGES?.RESET_ERROR, [], false, true);
-  }
 };
 export const ResetTockenCheck = async (req: any, res: any, next: any) => {
     const { token } = req.body;
@@ -405,7 +405,7 @@ export const ResetTockenCheck = async (req: any, res: any, next: any) => {
         // Send a 500 response for internal server error
         return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
     }
-}; 
+};
 export const ProfileUpdate = async (req: any, res: any) => {
     // const { email } = req.params;
 
@@ -464,7 +464,7 @@ export const ProfileUpdate = async (req: any, res: any) => {
         // Send a 500 response with the error message
         return res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
-}; 
+};
 export const userProfileUpdate = async (req: any, res: any) => {
     try {
 
