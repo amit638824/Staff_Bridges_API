@@ -153,9 +153,7 @@ export const SocialLoginController = async (req: any, res: any) => {
 export const EmailLoginController = async (req: any, res: any) => {
     try {
         const { email, password } = req.body;
-           
-  const loginn:any = await User.find( );
-          return createResponse(res, 404, MESSAGES?.USER_NOT_FOUND,loginn, false, true);
+     
         // Step 1: Fetch user by email
         const login:any = await User.findOne({
             where: { email: email },
