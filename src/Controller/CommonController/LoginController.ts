@@ -1,14 +1,14 @@
 import fs from "fs";
 import path from "path";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { User } from "../../Entities/user";
-import { Login } from "../../Entities/login";
+import jwt from "jsonwebtoken"; 
 import { Role } from "../../Entities/Role";
 import { MESSAGES } from "../../Helpers/constants";
 import { createResponse } from "../../Helpers/response";
 import { sendEmail } from "../../Helpers/email";
 import { generateToken, profileCompletion } from "../../Helpers/utils"; 
+import { User } from "../../Entities/user";
+import { Login } from "../../Entities/login";
 
 export const UserRegisterController = async (req: any, res: any) => {
     try {

@@ -15,19 +15,19 @@ export class User extends BaseEntity {
   @Generated("uuid")
   uuid: any;
 
-  @Column({ name: "fullName", type: "varchar", length: 100 })
+  @Column({ name: "fullName", type: "varchar", length: 100, nullable: true })
   fullName: any;
 
-  @Column({ name: "email", type: "varchar", length: 100, unique: true })
+  @Column({ name: "email", type: "varchar", length: 100, unique: true, nullable: true })
   email: any;
 
-  @Column({ name: "password", type: "varchar", length: 255 })
+  @Column({ name: "password", type: "varchar", length: 255, nullable: true  })
   password: any;
 
   @Column({ name: "mobile", type: "varchar", length: 15, nullable: true })
   mobile: any;
 
-  @Column({ name: "RoleId", type: "int" , nullable: true})
+  @Column({ name: "RoleId", type: "int", nullable: true })
   RoleId: any;
 
   @Column({ name: "languagePreference", type: "varchar", length: 20, default: "English" })

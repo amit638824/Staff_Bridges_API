@@ -6,7 +6,7 @@ import {
   Generated 
 } from "typeorm"; 
 
-@Entity({ name: "logins" })
+@Entity({ name: "Login" })
 export class Login extends BaseEntity {
   @PrimaryGeneratedColumn({ name: "id" })
   id: any;
