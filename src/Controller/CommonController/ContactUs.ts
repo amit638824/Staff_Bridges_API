@@ -1,8 +1,8 @@
 
-import { ContactUs } from "../Entities/ContactUs";
-import { MESSAGES } from "../Helpers/constants";
-import { sendContactFormEmail } from "../Helpers/email";
-import { createResponse } from "../Helpers/response";
+import { ContactUs } from "../../Entities/ContactUs";
+import { MESSAGES } from "../../Helpers/constants";
+import { sendContactFormEmail } from "../../Helpers/email";
+import { createResponse } from "../../Helpers/response";
 
 export const insertContactUs = async (req: any, res: any) => {
     try {

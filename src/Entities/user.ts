@@ -25,9 +25,9 @@ export class User extends BaseEntity {
   password: any;
 
   @Column({ name: "mobile", type: "varchar", length: 15, nullable: true })
-  mobile: any; 
+  mobile: any;
 
-  @Column({ name: "RoleId", type: "varchar", nullable: true })
+  @Column({ name: "RoleId", type: "int" , nullable: true})
   RoleId: any;
 
   @Column({ name: "languagePreference", type: "varchar", length: 20, default: "English" })
@@ -72,5 +72,3 @@ export class User extends BaseEntity {
   @Column({ name: "updatedBy", type: "int", nullable: true })
   updatedBy: any;
 }
-
- 

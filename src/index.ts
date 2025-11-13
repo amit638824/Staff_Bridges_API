@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./SwaggerDocs/swagger";  
-import routerAdmin from "./Route/index";
+import loginRoute from "./Route/CommonRoute/index";
 import { AppDataSource } from "./DbConfig/TypeOrm";
 import { throttleMiddleware } from "./Middleware/ThrottleMiddleware";
 import expressFileupload from "express-fileupload";
@@ -37,7 +37,7 @@ app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 //  BatchFileExecution(); // batch file logic automate 30 min   
 //  testCronJob()  test cron job
 // Routes
-app.use("/api", throttleMiddleware, routerAdmin);
+app.use("/api", throttleMiddleware, loginRoute);
 
 app.get("/", throttleMiddleware, (req: Request, res: Response) => {
 
