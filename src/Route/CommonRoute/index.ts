@@ -1,26 +1,48 @@
 import express from "express";
-import * as Handler from "./importCommonController"; 
+import * as AuthHandler from "./importCommonController";
+
 const loginRoute = express.Router();
 
-// // User Details user
-loginRoute.post("/seeker-register-mobile", Handler.SeekerRegistrationMobileController);
-loginRoute.post("/seeker-register-otp-verify", Handler.SeekerOTPVerifyController); 
-loginRoute.post("/email-login", Handler.EmailLoginController);
-loginRoute.post("/send-otp", Handler.SendOtpMobileController);
-loginRoute.post("/mobile-login", Handler.MobileLoginController); 
-loginRoute.post("/social-login", Handler.SocialLoginController);
-loginRoute.put("/user-profile-update", Handler.userProfileUpdate);
-loginRoute.get("/user-profile/:email", Handler.ProfileUpdate);
-loginRoute.post("/forget-password", Handler.ForgetPassword);
-loginRoute.post("/reset-password", Handler.ResetPassword);
-loginRoute.post("/reset-token-check", Handler.ResetTockenCheck);
+/* ---------------------------------------------
+    REGISTRATION (SEEKER + RECRUITER)
+----------------------------------------------*/
+// Seeker Registration
+loginRoute.post("/seeker-register-mobile", AuthHandler.SeekerRegistrationMobileController);
+loginRoute.post("/seeker-register-otp-verify", AuthHandler.SeekerOTPVerifyController);
 
-// Add role and permission
-loginRoute.post("/add-role", Handler.ResetTockenCheck);
+// Recruiter Registration
+loginRoute.post("/recruiter-register-mobile", AuthHandler.RecruiterRegistrationMobileController);
+loginRoute.post("/recruiter-register-otp-verify", AuthHandler.RecruiterOTPVerifyController);
+/* ---------------------------------------------
+   LOGIN SYSTEM (OTP, MOBILE, SOCIAL, EMAIL)
+----------------------------------------------*/
+loginRoute.post("/send-otp", AuthHandler.SendOtpMobileController);
+loginRoute.post("/mobile-login", AuthHandler.MobileLoginController);
+loginRoute.post("/social-login", AuthHandler.SocialLoginController);
+loginRoute.post("/email-login", AuthHandler.EmailLoginController);
+/* ---------------------------------------------
+   PASSWORD MANAGEMENT
+----------------------------------------------*/
+loginRoute.post("/forget-password", AuthHandler.ForgetPassword);
+loginRoute.post("/reset-password", AuthHandler.ResetPassword);
+loginRoute.post("/reset-token-check", AuthHandler.ResetTockenCheck);
 
-// Contact Details
-loginRoute.post("/contact-us", Handler.insertContactUs);
-loginRoute.get("/contact-us", Handler.readContactUs);
-loginRoute.delete("/contact-us/:id", Handler.deleteContactUs);
+/* ---------------------------------------------
+   USER PROFILE MANAGEMENT
+----------------------------------------------*/
+loginRoute.put("/user-profile-update", AuthHandler.userProfileUpdate);
+loginRoute.get("/user-profile/:email", AuthHandler.ProfileUpdate);
+
+/* ---------------------------------------------
+   ROLE & PERMISSION
+----------------------------------------------*/
+loginRoute.post("/add-role", AuthHandler.insertContactUs);
+
+/* ---------------------------------------------
+   CONTACT US
+----------------------------------------------*/
+loginRoute.post("/contact-us", AuthHandler.insertContactUs);
+loginRoute.get("/contact-us", AuthHandler.readContactUs);
+loginRoute.delete("/contact-us/:id", AuthHandler.deleteContactUs);
 
 export default loginRoute;

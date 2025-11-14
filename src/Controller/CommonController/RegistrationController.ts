@@ -1,11 +1,10 @@
 import fs from "fs";
-import path from "path"; 
+import path from "path";
 import { MESSAGES } from "../../Helpers/constants";
 import { createResponse } from "../../Helpers/response";
 import { profileCompletion } from "../../Helpers/utils";
 import { User } from "../../Entities/user";
-import { Login } from "../../Entities/login";
-
+import { Login } from "../../Entities/login"; 
 export const SeekerRegistrationMobileController = async (req: any, res: any) => {
     try {
         const { mobile } = req.body;
@@ -55,7 +54,57 @@ export const SeekerOTPVerifyController = async (req: any, res: any) => {
         console.log("ERROR:", error);
         return createResponse(res, 500, "Internal server error", [], false, true);
     }
-}; 
+};
+export const RecruiterRegistrationMobileController = async (req: any, res: any) => {
+    try {
+        const { mobile } = req.body;
+        if (!mobile) {
+            return createResponse(res, 400, "Mobile number required", [], false, true);
+        }
+        const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+        const otpExpiry = new Date(Date.now() + 5 * 60 * 1000);
+        let user = await User.findOne({ where: { mobile } });
+        if (!user) {
+            user = await User.save(User.create({ fullName: null, email: null, mobile, RoleId: 6, isVerified: 0, status: 1 }));
+            await Login.save(Login.create({ userId: user.id, loginMethod: "MOBILE_OTP", otpCode, otpExpiry, status: 1 }));
+            return createResponse(res, 200, "Recruiter registration successful, OTP sent", { mobile, Otp: otpCode, newUser: true }, true, false);
+        } else {
+            return createResponse(res, 200, "Recruiter already registered", { mobile, Otp: otpCode, newUser: false }, true, false);
+        }
+    } catch (error) {
+        console.log("ERROR:", error);
+        return createResponse(res, 500, "Internal server error", [], false, true);
+    }
+};
+export const RecruiterOTPVerifyController = async (req: any, res: any) => {
+    try {
+        const { mobile, otp } = req.body;
+        if (!mobile || !otp) {
+            return createResponse(res, 400, "Mobile & OTP required", [], false, true);
+        }
+        const user = await User.findOne({ where: { mobile, RoleId: 6 } });
+        if (!user) {
+            return createResponse(res, 404, "Recruiter not found", [], false, true);
+        }
+        const login = await Login.findOne({ where: { userId: user.id } });
+        if (!login) {
+            return createResponse(res, 404, "Login record not found", [], false, true);
+        }
+        if (login.otpCode !== otp) {
+            return createResponse(res, 400, "Invalid OTP", [], false, true);
+        }
+        if (login.otpExpiry < new Date()) {
+            return createResponse(res, 400, "OTP expired", [], false, true);
+        }
+        const loginToken = Math.random().toString(36).substring(2) + Date.now();
+        await User.update({ id: user.id }, { isMobileVerified: 1 as any });
+        await Login.update({ id: login.id }, { lastLogin: new Date(), loginToken: loginToken as any, otpCode: null as any });
+        return createResponse(res, 200, "Recruiter OTP verified successfully", { userId: user.id, loginToken }, true, false);
+    } catch (error) {
+        console.log("ERROR:", error);
+        return createResponse(res, 500, "Internal server error", [], false, true);
+    }
+};
 export const ProfileUpdate = async (req: any, res: any) => {
     // const { email } = req.params;
 
@@ -206,4 +255,4 @@ export const userProfileUpdate = async (req: any, res: any) => {
         // Respond with error message
         return createResponse(res, 200, MESSAGES?.INTERNAL_SERVER_ERROR, true, false);
     }
-};//
+};
