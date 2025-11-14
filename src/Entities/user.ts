@@ -39,6 +39,9 @@ export class User extends BaseEntity {
   @Column({ name: "countryId", type: "int", nullable: true })
   countryId: any;
 
+  @Column({ name: "profile", type: "int", nullable: true })
+  profile: any;
+
   @Column({ name: "stateId", type: "int", nullable: true })
   stateId: any;
 

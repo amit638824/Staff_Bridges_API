@@ -1,15 +1,12 @@
 import express from "express";
-import * as AuthHandler from "./importCommonController";
-
-const loginRoute = express.Router();
-
+import * as AuthHandler from "./importCommonController"; 
+const loginRoute = express.Router(); 
 /* ---------------------------------------------
     REGISTRATION (SEEKER + RECRUITER)
 ----------------------------------------------*/
 // Seeker Registration
 loginRoute.post("/seeker-register-mobile", AuthHandler.SeekerRegistrationMobileController);
-loginRoute.post("/seeker-register-otp-verify", AuthHandler.SeekerOTPVerifyController);
-
+loginRoute.post("/seeker-register-otp-verify", AuthHandler.SeekerOTPVerifyController); 
 // Recruiter Registration
 loginRoute.post("/recruiter-register-mobile", AuthHandler.RecruiterRegistrationMobileController);
 loginRoute.post("/recruiter-register-otp-verify", AuthHandler.RecruiterOTPVerifyController);
@@ -25,19 +22,16 @@ loginRoute.post("/email-login", AuthHandler.EmailLoginController);
 ----------------------------------------------*/
 loginRoute.post("/forget-password", AuthHandler.ForgetPassword);
 loginRoute.post("/reset-password", AuthHandler.ResetPassword);
-loginRoute.post("/reset-token-check", AuthHandler.ResetTockenCheck);
-
+loginRoute.post("/reset-token-check", AuthHandler.ResetTockenCheck); 
 /* ---------------------------------------------
    USER PROFILE MANAGEMENT
 ----------------------------------------------*/
 loginRoute.put("/user-profile-update", AuthHandler.userProfileUpdate);
-loginRoute.get("/user-profile/:email", AuthHandler.ProfileUpdate);
-
+loginRoute.get("/user-profile/:email", AuthHandler.ProfileUpdate); 
 /* ---------------------------------------------
    ROLE & PERMISSION
 ----------------------------------------------*/
-loginRoute.post("/add-role", AuthHandler.insertContactUs);
-
+loginRoute.post("/add-role", AuthHandler.insertContactUs); 
 /* ---------------------------------------------
    CONTACT US
 ----------------------------------------------*/
