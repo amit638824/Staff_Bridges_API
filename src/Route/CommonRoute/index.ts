@@ -3,7 +3,8 @@ import * as Handler from "./importCommonController";
 const loginRoute = express.Router();
 
 // // User Details user
-loginRoute.post("/user-register", Handler.UserRegisterController);
+loginRoute.post("/seeker-register-mobile", Handler.SeekerRegistrationMobileController);
+loginRoute.post("/seeker-register-otp-verify", Handler.SeekerOTPVerifyController); 
 loginRoute.post("/email-login", Handler.EmailLoginController);
 loginRoute.post("/send-otp", Handler.SendOtpMobileController);
 loginRoute.post("/mobile-login", Handler.MobileLoginController); 

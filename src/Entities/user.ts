@@ -21,7 +21,7 @@ export class User extends BaseEntity {
   @Column({ name: "email", type: "varchar", length: 100, unique: true, nullable: true })
   email: any;
 
-  @Column({ name: "password", type: "varchar", length: 255, nullable: true  })
+  @Column({ name: "password", type: "varchar", length: 255, nullable: true })
   password: any;
 
   @Column({ name: "mobile", type: "varchar", length: 15, nullable: true })
@@ -53,6 +53,12 @@ export class User extends BaseEntity {
 
   @Column({ name: "isVerified", type: "int", default: 0 })
   isVerified: any;
+
+  @Column({ name: "isEmailVerified", type: "int", default: 0 })
+  isEmailVerified: any;
+
+  @Column({ name: "isMobileVerified", type: "int", default: 0 })
+  isMobileVerified: any;
 
   @Column({ name: "credits", type: "varchar", length: 50, nullable: true })
   credits: any;
