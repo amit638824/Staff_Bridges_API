@@ -4,7 +4,7 @@ const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "MVM API",
+      title: "StaffBridge API",
       version: "1.0.0",
       description: "API documentation for the MVM",
       contact: {
@@ -15,11 +15,11 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "https://mvmapi2.techwagger.com",
-      }, 
-      {
         url: "http://localhost:8000",
-      } 
+      },
+      {
+        url: "https://staffbridgeapi.techwagger.com",
+      }
     ],
     components: {
       securitySchemes: {
