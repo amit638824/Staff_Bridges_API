@@ -18,7 +18,7 @@ export class JobPost extends BaseEntity {
     categoryId: number;
 
     @Column({ name: "jobTitle", type: "varchar", length: 100 })
-    jobTitle: string;
+    jobTitle: string; //ji
 
     @Column({ name: "hiringForOthers", type: "boolean", default: false })
     hiringForOthers: boolean;
