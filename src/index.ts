@@ -36,7 +36,7 @@ app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 //  BatchFileExecution(); // batch file logic automate 30 min   
 //  testCronJob()  test cron job
 // Routes
-app.use("/api", throttleMiddleware, loginRoute);
+app.use("/auth", throttleMiddleware, loginRoute); 
 
 app.get("/", throttleMiddleware, (req: Request, res: Response) => {
 

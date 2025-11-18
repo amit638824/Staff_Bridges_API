@@ -1,6 +1,6 @@
 /**
  * @swagger
- * /api/contact-us:
+ * /auth/contact-us:
  *   post:
  *     summary: Insert a contact-us record
  *     description: Insert a new contact-us record.
@@ -41,7 +41,7 @@
 
 /**
  * @swagger
- * /api/contact-us/{id}:
+ * /auth/contact-us/{id}:
  *   put:
  *     summary: Update a contact-us record
  *     description: Update an existing contact-us record by ID.
@@ -85,7 +85,7 @@
 
 /**
  * @swagger
- * /api/contact-us:
+ * /auth/contact-us:
  *   get:
  *     summary: Retrieve all ContactUs records
  *     description: Retrieves all ContactUs records from the database.
@@ -148,7 +148,7 @@
 
 /**
  * @swagger
- * /api/contact-us/{id}:
+ * /auth/contact-us/{id}:
  *   delete:
  *     summary: Delete a ContactUs record
  *     description: Deletes a ContactUs record by ID.
