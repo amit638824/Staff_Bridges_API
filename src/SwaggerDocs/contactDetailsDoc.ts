@@ -1,10 +1,19 @@
 /**
  * @swagger
+ * tags:
+ *   - name: Contact Us
+ *     description: APIs related to Contact Us module
+ */
+
+
+/* ----------------------- CREATE CONTACT-US ----------------------- */
+/**
+ * @swagger
  * /auth/contact-us:
  *   post:
- *     summary: Insert a contact-us record
- *     description: Insert a new contact-us record.
- *     tags: [ContactUs]
+ *     summary: Create a new Contact Us record
+ *     description: Inserts a new Contact Us form submission into the database.
+ *     tags: [Contact Us]
  *     security:
  *       - BearerAuth: []
  *     requestBody:
@@ -13,46 +22,52 @@
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - phone
+ *               - message
  *             properties:
  *               name:
  *                 type: string
+ *                 example: John Doe
  *               email:
  *                 type: string
+ *                 example: johndoe@example.com
  *               phone:
  *                 type: string
+ *                 example: "9998313322"
  *               message:
  *                 type: string
+ *                 example: I have a question about your services.
  *               subject:
  *                 type: string
- *           example:
- *             name: John Doe
- *             email: johndoe@example.com
- *             phone: "999-831-332"
- *             message: I have a question about your services.
- *             subject: Inquiry
+ *                 example: Inquiry
  *     responses:
  *       201:
- *         description: Contact us record inserted successfully.
+ *         description: Contact Us record created successfully.
  *       400:
- *         description: Bad request. Missing required fields.
+ *         description: Bad request. Missing or invalid fields.
  *       500:
  *         description: Internal server error.
  */
 
+
+/* ----------------------- UPDATE CONTACT-US ----------------------- */
 /**
  * @swagger
  * /auth/contact-us/{id}:
  *   put:
- *     summary: Update a contact-us record
- *     description: Update an existing contact-us record by ID.
- *     tags: [ContactUs]
+ *     summary: Update a Contact Us record
+ *     description: Updates a Contact Us record by its unique ID.
+ *     tags: [Contact Us]
  *     security:
  *       - BearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
  *         required: true
- *         description: ID of the contact-us record to update
+ *         description: Contact Us record ID for update
  *         schema:
  *           type: string
  *     requestBody:
@@ -74,54 +89,52 @@
  *                 type: string
  *     responses:
  *       200:
- *         description: Contact us record updated successfully.
+ *         description: Contact Us record updated successfully.
  *       400:
- *         description: Bad request. Invalid input data.
+ *         description: Bad request or invalid input.
  *       404:
- *         description: Contact us record not found.
+ *         description: Record not found.
  *       500:
  *         description: Internal server error.
  */
 
+
+/* ----------------------- GET CONTACT-US LIST ----------------------- */
 /**
  * @swagger
  * /auth/contact-us:
  *   get:
- *     summary: Retrieve all ContactUs records
- *     description: Retrieves all ContactUs records from the database.
- *     tags: [ContactUs]
+ *     summary: Get list of Contact Us records (with filters & pagination)
+ *     description: Retrieves paginated Contact Us records from the database.
+ *     tags: [Contact Us]
  *     security:
  *       - BearerAuth: []
  *     parameters:
  *       - name: page
  *         in: query
- *         description: The page number for pagination (default is 1).
- *         required: false
  *         schema:
  *           type: integer
  *           default: 1
+ *         description: Page number for pagination
  *       - name: limit
  *         in: query
- *         description: The number of records per page (default is 10).
- *         required: false
  *         schema:
  *           type: integer
  *           default: 10
+ *         description: Number of records per page
  *       - name: email
  *         in: query
- *         description: Filter records by email.
- *         required: false
  *         schema:
  *           type: string
+ *         description: Filter by email address
  *       - name: message
  *         in: query
- *         description: Filter records by message content.
- *         required: false
  *         schema:
  *           type: string
+ *         description: Filter by message keyword
  *     responses:
  *       200:
- *         description: A list of ContactUs records.
+ *         description: List of Contact Us records
  *         content:
  *           application/json:
  *             schema:
@@ -138,35 +151,45 @@
  *                   items:
  *                     type: object
  *                     properties:
+ *                       id:
+ *                         type: string
+ *                       name:
+ *                         type: string
  *                       email:
  *                         type: string
+ *                       phone:
+ *                         type: string
  *                       message:
+ *                         type: string
+ *                       subject:
  *                         type: string
  *       500:
  *         description: Internal server error.
  */
 
+
+/* ----------------------- DELETE CONTACT-US ----------------------- */
 /**
  * @swagger
  * /auth/contact-us/{id}:
  *   delete:
- *     summary: Delete a ContactUs record
- *     description: Deletes a ContactUs record by ID.
- *     tags: [ContactUs]
+ *     summary: Delete a Contact Us record
+ *     description: Deletes a Contact Us record using its ID.
+ *     tags: [Contact Us]
  *     security:
  *       - BearerAuth: []
  *     parameters:
- *       - in: path
- *         name: id
+ *       - name: id
+ *         in: path
  *         required: true
- *         description: ID of the ContactUs record to delete
+ *         description: Contact Us record ID to delete
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: ContactUs record deleted successfully.
+ *         description: Record deleted successfully.
  *       404:
- *         description: ContactUs record not found.
+ *         description: Record not found.
  *       500:
  *         description: Internal server error.
  */

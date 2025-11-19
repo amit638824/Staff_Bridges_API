@@ -6,6 +6,7 @@ import swaggerSpec from "./SwaggerDocs/swagger";
 import loginRoute from "./Route/CommonRoute/index";
 import { AppDataSource } from "./DbConfig/TypeOrm";
 import { throttleMiddleware } from "./Middleware/ThrottleMiddleware";
+import recruiterRouter from "./Route/RecruiterRoute/JobCreate";
 import expressFileupload from "express-fileupload";
 // import { BatchFileExecution } from "./helpers/CronJob";
 const app = express();
@@ -31,13 +32,13 @@ AppDataSource.initialize()
   });
 
 // Swagger setup
-app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec, { customSiteTitle: "StaffBridge API Docs"  }));
 
 //  BatchFileExecution(); // batch file logic automate 30 min   
 //  testCronJob()  test cron job
 // Routes
 app.use("/auth", throttleMiddleware, loginRoute); 
-
+app.use("/api",throttleMiddleware,recruiterRouter)
 app.get("/", throttleMiddleware, (req: Request, res: Response) => {
 
   res.send("Welcome to the server !!!");
