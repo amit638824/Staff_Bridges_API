@@ -44,5 +44,6 @@ export class Role extends BaseEntity {
 //   ('FINANCE_ADMIN', 'Manages subscriptions, transactions, and refunds', 1),
 //   ('SUPPORT_ADMIN', 'Handles user complaints and account resets', 1),
 //   ('JOB_SEEKER', 'End user searching for jobs via mobile app', 1),
-//   ('RECRUITER', 'Employer or company representative who posts and manages jobs', 1),
-//   ('RECRUITMENT_AGENCY', 'Agency managing multiple recruiters and job listings', 1);
+//   ('RECRUITER', 'Employer or company representative who posts and manages jobs', 1), 
+
+ 

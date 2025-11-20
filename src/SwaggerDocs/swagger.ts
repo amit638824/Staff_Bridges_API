@@ -6,7 +6,7 @@ const swaggerOptions = {
     info: {
       title: "StaffBridge API",
       version: "1.0.0",
-      description: "API documentation for the MVM",
+     description: "API Documentation for StaffBridge",
       contact: {
         name: "techwagger.com",
         email: "connect@techwagger.com",
