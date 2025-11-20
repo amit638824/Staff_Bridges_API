@@ -2,18 +2,96 @@
 import { createResponse } from "../../Helpers/response";
  import { JobPost } from "../../Entities/JobPost";
  
-export const createRecruiter = async(req: any, res: any) => {
+export const createRecruiter = async (req: any, res: any) => {
   try {
-    const recruiterData = req.body;
 
-    const newRecruiter = JobPost.create(recruiterData);
+    const {
+      recruiterId,
+      categoryId,
+      jobTitle,
+      hiringForOthers,
+      agencyId,
+      jobType,
+      workLocationType,
+      city,
+      locality,
+      address,
+      salaryMin,
+      salaryMax,
+      salaryModel,
+      genderPreference,
+      experienceMin,
+      experienceMax,
+      fresherAllowed,
+      jobTiming,
+      workingDays,
+      jobBenefits,
+      jobSkills,
+      documentsRequired,
+      communicationWindow,
+      candidateCanCall,
+      openings,
+      jobPostingFor,
+      companyName,
+      companyAddress,
+      companyVerificationStatus,
+      verificationRequired,
+      directCall,
+      description,
+      status,
+      adminComments,
+      createdBy,
+      updatedBy
+    } = req.body;
+
+    const newRecruiter = JobPost.create({
+      recruiterId,
+      categoryId,
+      jobTitle,
+      hiringForOthers,
+      agencyId,
+      jobType,
+      workLocationType,
+      city,
+      locality,
+      address,
+      salaryMin,
+      salaryMax,
+      salaryModel,
+      genderPreference,
+      experienceMin,
+      experienceMax,
+      fresherAllowed,
+      jobTiming,
+      workingDays,
+      jobBenefits,
+      jobSkills,
+      documentsRequired,
+      communicationWindow,
+      candidateCanCall,
+      openings,
+      jobPostingFor,
+      companyName,
+      companyAddress,
+      companyVerificationStatus,
+      verificationRequired,
+      directCall,
+      description,
+      status,
+      adminComments,
+      createdBy,
+      updatedBy
+    });
+
     const savedRecruiter = await JobPost.save(newRecruiter);
 
     return createResponse(res, 201, "Recruiter created successfully", savedRecruiter);
+
   } catch (error) {
     return createResponse(res, 500, "Something went wrong", error, false, true);
   }
 };
+
 
 
  

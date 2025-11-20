@@ -16,7 +16,6 @@ const createTransporter = () => {
     }
   });
 };
-
 const sendMail = async (mailOptions: any) => {
   try {
     const transporter = createTransporter();
@@ -29,7 +28,6 @@ const sendMail = async (mailOptions: any) => {
     throw new Error("Failed to send email");
   }
 };
-
 export const sendEmail = async (to: any, subject: any, text: any, hyperText: any) => {
   try {
     const htmlContent = forgetPasswordMailTemplate({
@@ -53,7 +51,6 @@ export const sendEmail = async (to: any, subject: any, text: any, hyperText: any
     throw new Error("Failed to send password reset email");
   }
 };
-
 export const sendContactFormEmail = async (name: any, email: any, phone: any, message: any, subject: any) => {
   try {
     const htmlContent = contactFormMailTemplate({
