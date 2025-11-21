@@ -8,7 +8,7 @@ import { AppDataSource } from "./DbConfig/TypeOrm";
 import { throttleMiddleware } from "./Middleware/ThrottleMiddleware";
 import recruiterRouter from "./Route/RecruiterRoute/JobCreate";
 import expressFileupload from "express-fileupload";
-// import { BatchFileExecution } from "./helpers/CronJob";
+// import { BatchFileExecution } from "./helpers/CronJob"; my code 
 const app = express();
 dotenv.config();
 app.set("trust proxy", 1);
