@@ -1,51 +1,37 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken"; 
+import jwt from "jsonwebtoken";
 import { Role } from "../../Entities/Role";
 import { MESSAGES } from "../../Helpers/constants";
 import { createResponse } from "../../Helpers/response";
 import { sendEmail } from "../../Helpers/email";
-import { generateToken} from "../../Helpers/utils"; 
+import { generateToken } from "../../Helpers/utils";
 import { User } from "../../Entities/user";
 import { Login } from "../../Entities/login";
-  
+
 import { OAuth2Client } from "google-auth-library";
-const client :any= new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const client: any = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 export const SocialLoginController = async (req: any, res: any) => {
     try {
         const { idToken } = req.body; 
         if (!idToken) {
-            return createResponse(res, 400, "idToken is required", [], false, true);
+            return createResponse(   res,   400,   "idToken is required",   [],  false,  true );
         } 
-        // STEP 1: VERIFY GOOGLE TOKEN
         const ticket = await client.verifyIdToken({
             idToken,
             audience: process.env.GOOGLE_CLIENT_ID,
         }); 
-        const payload: any = ticket.getPayload();
-
+        const payload: any = ticket.getPayload(); 
         if (!payload || !payload.email) {
-            return createResponse(res, 400, "Invalid Google Token", [], false, true);
+            return createResponse(   res,  400,  "Invalid Google Token",   [],  false,  true  );
         } 
-        // Extract data from Google
         const email = payload.email;
         const fullName = payload.name;
-        const socialId = payload.sub;     // Google Unique ID
+        const socialId = payload.sub;
         const provider = "GOOGLE"; 
-        
-        // STEP 2: CHECK USER EXISTS
-        let user = await User.findOne({ where: { email } });
-
-        // STEP 3: IF NEW USER — CREATE IT
+        let user = await User.findOne({ where: { email } }); 
         if (!user) {
-            user = await User.create({
-                fullName: fullName,
-                email,
-                password: null,
-                mobile: null,
-                RoleId: 2,
-            }).save();
-
+            user = await User.create({ fullName, email, password: null, mobile: null, RoleId: 2, }).save(); 
             await Login.create({
                 userId: user.id,
                 loginMethod: "SOCIAL",
@@ -55,8 +41,7 @@ export const SocialLoginController = async (req: any, res: any) => {
                 createdAt: new Date(),
                 updatedAt: new Date(),
             }).save();
-        } else {
-            // STEP 4: UPDATE LOGIN ROW
+        } else { 
             await Login.createQueryBuilder()
                 .update(Login)
                 .set({
@@ -70,44 +55,19 @@ export const SocialLoginController = async (req: any, res: any) => {
                     method: "SOCIAL",
                 })
                 .execute();
-        }
-
-        // STEP 5: GENERATE TOKEN
-        const JWT_SECRET = process.env.JWT_SECRET || "yourSecretKey";
-        const token = jwt.sign(
-            { id: user.id, email: user.email },
-            JWT_SECRET,
-            { expiresIn: "24h" }
-        );
-
-        // STEP 6: FETCH JOINED USER + ROLE
-        const queryBuilder = User.createQueryBuilder("user")
-            .select([
-                "user.id",
-                "user.fullName",
-                "user.email",
-                "user.mobile",
-                "user.RoleId",
-                "roletbl.id",
-                "roletbl.roleName",
-            ])
+        } 
+        const JWT_SECRET = process.env.JWT_SECRET || "yourSecretKey"; 
+        const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "24h" }); 
+        const data = await User.createQueryBuilder("user")
+            .select(["user.id", "user.fullName", "user.email", "user.mobile", "user.RoleId", "roletbl.id", "roletbl.roleName", ])
             .leftJoin(Role, "roletbl", "user.RoleId = roletbl.id")
-            .where("user.email = :email", { email });
-
-        const data = await queryBuilder.getRawOne();
-
-        // STEP 7: SEND RESPONSE
-        return createResponse(
-            res,
-            200,
-            MESSAGES?.LOGIN_SUCCESS || "Social login successful",
-            { token, user: data },
-            true,
-            false
-        );
+            .where("user.email = :email", { email })
+            .getRawOne(); 
+        return createResponse(res, 200, MESSAGES?.LOGIN_SUCCESS || "Social login successful", { token, user: data }, true, false);
 
     } catch (error) {
         console.log(MESSAGES?.INTERNAL_SERVER_ERROR, error);
+
         return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
     }
 };
@@ -115,9 +75,9 @@ export const SocialLoginController = async (req: any, res: any) => {
 export const EmailLoginController = async (req: any, res: any) => {
     try {
         const { email, password } = req.body;
-     
+
         // Step 1: Fetch user by email
-        const login:any = await User.findOne({
+        const login: any = await User.findOne({
             where: { email: email },
         });
 
@@ -288,6 +248,7 @@ export const ForgetPassword = async (req: any, res: any, next: any) => {
         // Log the error to the console for debugging purposes
         // tslint:disable-next-line:no-console
         console.log(MESSAGES?.RESET_LINK_ERROR, err);
+
         return createResponse(res, 500, MESSAGES?.RESET_LINK_ERROR, [], false, true);
     }
 };
@@ -315,6 +276,7 @@ export const ResetPassword = async (req: any, res: any, next: any) => {
         if (currentTime - tokenIssuedAt > TOKEN_EXPIRY_MS) {
             // Expired → clear token
             await Login.update({ loginToken: token }, { loginToken: "" as any });
+
             return createResponse(res, 401, MESSAGES?.TOKEN_EXPIRED, [], false, true);
         }
 
@@ -328,6 +290,7 @@ export const ResetPassword = async (req: any, res: any, next: any) => {
         return createResponse(res, 200, MESSAGES?.PASSWORD_UPDATED);
     } catch (err) {
         console.error(MESSAGES?.RESET_ERROR, err);
+
         return createResponse(res, 500, MESSAGES?.RESET_ERROR, [], false, true);
     }
 };

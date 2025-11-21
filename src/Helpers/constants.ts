@@ -14,7 +14,7 @@ export const MESSAGES = {
     TOKEN_EXPIRED: "The link has been expired, please request a new one",
     TOKEN_NOT_FOUND: "The link has been expired, please request a new one",
     TOKEN_FOUND: "Token  found",
-    TOKEN_FOUND_VALID:"Token is Valid",
+    TOKEN_FOUND_VALID: "Token is Valid",
     INVALID_TOKEN: "The link has been expired, please request a new one",
     RESET_ERROR: "An error occurred while processing your password reset request.",
     CONTACT_SAVED: "Message sent successfully. We’ll get back to you shortly.",

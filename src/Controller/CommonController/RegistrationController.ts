@@ -17,12 +17,14 @@ export const SeekerRegistrationMobileController = async (req: any, res: any) => 
         if (!user) {
             user = await User.save(User.create({ fullName: null, email: null, mobile, RoleId: 5, isVerified: 0, status: 1 }));
             await Login.save(Login.create({ userId: user.id, loginMethod: "MOBILE_OTP", otpCode, otpExpiry, status: 1 }));
+
             return createResponse(res, 200, "Registration successful, OTP sent", { mobile, Otp: otpCode, newUser: true }, true, false);
         } else {
             return createResponse(res, 200, "Already mobile register", { mobile, Otp: otpCode, newUser: true }, true, false);
         }
     } catch (error) {
         console.log("ERROR:", error);
+
         return createResponse(res, 500, "Internal server error", [], false, true);
     }
 };
@@ -49,9 +51,11 @@ export const SeekerOTPVerifyController = async (req: any, res: any) => {
         const loginToken = Math.random().toString(36).substring(2) + Date.now();
         await User.update({ id: user.id }, { isMobileVerified: 1 as any });
         await Login.update({ id: login.id }, { lastLogin: new Date(), loginToken: loginToken as any, otpCode: null as any });
+
         return createResponse(res, 200, "OTP verified successfully", { userId: user.id, loginToken }, true, false);
     } catch (error) {
         console.log("ERROR:", error);
+
         return createResponse(res, 500, "Internal server error", [], false, true);
     }
 };
@@ -67,12 +71,14 @@ export const RecruiterRegistrationMobileController = async (req: any, res: any) 
         if (!user) {
             user = await User.save(User.create({ fullName: null, email: null, mobile, RoleId: 6, isVerified: 0, status: 1 }));
             await Login.save(Login.create({ userId: user.id, loginMethod: "MOBILE_OTP", otpCode, otpExpiry, status: 1 }));
+
             return createResponse(res, 200, "Recruiter registration successful, OTP sent", { mobile, Otp: otpCode, newUser: true }, true, false);
         } else {
             return createResponse(res, 200, "Recruiter already registered", { mobile, Otp: otpCode, newUser: false }, true, false);
         }
     } catch (error) {
         console.log("ERROR:", error);
+
         return createResponse(res, 500, "Internal server error", [], false, true);
     }
 };
@@ -99,9 +105,11 @@ export const RecruiterOTPVerifyController = async (req: any, res: any) => {
         const loginToken = Math.random().toString(36).substring(2) + Date.now();
         await User.update({ id: user.id }, { isMobileVerified: 1 as any });
         await Login.update({ id: login.id }, { lastLogin: new Date(), loginToken: loginToken as any, otpCode: null as any });
+
         return createResponse(res, 200, "Recruiter OTP verified successfully", { userId: user.id, loginToken }, true, false);
     } catch (error) {
         console.log("ERROR:", error);
+
         return createResponse(res, 500, "Internal server error", [], false, true);
     }
 };

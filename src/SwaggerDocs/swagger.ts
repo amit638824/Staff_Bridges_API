@@ -6,7 +6,7 @@ const swaggerOptions = {
     info: {
       title: "StaffBridge API",
       version: "1.0.0",
-     description: "API Documentation for StaffBridge",
+      description: "API Documentation for StaffBridge",
       contact: {
         name: "techwagger.com",
         email: "connect@techwagger.com",
@@ -31,7 +31,7 @@ const swaggerOptions = {
       },
     },
   },
-  apis: ["./src/route/*.ts", "./src/SwaggerDocs/*.ts"], // Path to your API docs
+  apis: ["./src/Route/**/*.ts"],  // 👈 FIXED
 };
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);

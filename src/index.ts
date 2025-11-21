@@ -38,7 +38,7 @@ app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec, { customSiteTi
 //  testCronJob()  test cron job
 // Routes
 app.use("/auth", throttleMiddleware, loginRoute); 
-app.use("/api",throttleMiddleware,recruiterRouter)
+app.use("/api", throttleMiddleware, recruiterRouter);
 app.get("/", throttleMiddleware, (req: Request, res: Response) => {
 
   res.send("Welcome to the server !!!");

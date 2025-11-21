@@ -5,7 +5,6 @@
  *     description: APIs related to Contact Us module
  */
 
-
 /* ----------------------- CREATE CONTACT-US ----------------------- */
 /**
  * @swagger
@@ -52,7 +51,6 @@
  *         description: Internal server error.
  */
 
-
 /* ----------------------- UPDATE CONTACT-US ----------------------- */
 /**
  * @swagger
@@ -97,7 +95,6 @@
  *       500:
  *         description: Internal server error.
  */
-
 
 /* ----------------------- GET CONTACT-US LIST ----------------------- */
 /**
@@ -166,7 +163,6 @@
  *       500:
  *         description: Internal server error.
  */
-
 
 /* ----------------------- DELETE CONTACT-US ----------------------- */
 /**
