@@ -1,5 +1,4 @@
-import swaggerJSDoc from "swagger-jsdoc";
-
+import swaggerJSDoc from "swagger-jsdoc"; 
 const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
@@ -14,12 +13,8 @@ const swaggerOptions = {
       },
     },
     servers: [
-      {
-        url: "http://localhost:8000",
-      },
-      {
-        url: "https://staffbridgeapi.techwagger.com",
-      }
+      { url: "http://localhost:8000" },
+      { url: "https://staffbridgeapi.techwagger.com" },
     ],
     components: {
       securitySchemes: {
@@ -30,10 +25,13 @@ const swaggerOptions = {
         },
       },
     },
-  },
-  apis: ["./src/Route/**/*.ts"],   
+    security: [{ BearerAuth: [] }],
+  }, 
+ 
+  apis: [ "../SwaggerDocs/*.ts",  "../Route/**/*.ts" ],
 };
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
-
 export default swaggerSpec;
+
+
