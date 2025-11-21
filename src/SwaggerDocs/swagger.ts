@@ -31,7 +31,7 @@ const swaggerOptions = {
       },
     },
   },
-  apis: ["./src/Route/**/*.ts"],  // 👈 FIXED
+  apis: ["./src/Route/**/*.ts"],   
 };
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
