@@ -18,7 +18,7 @@ export class JobPost extends BaseEntity {
     categoryId: number;
 
     @Column({ name: "jobTitle", type: "varchar", length: 100 })
-    jobTitle: string; //ji
+    jobTitle: string; // ji
 
     @Column({ name: "hiringForOthers", type: "boolean", default: false })
     hiringForOthers: boolean;
@@ -26,11 +26,11 @@ export class JobPost extends BaseEntity {
     @Column({ name: "agencyId", type: "int", nullable: true })
     agencyId: number;
 
-    @Column({ name: "jobType", type: "enum", enum: ['Full-time', 'Part-time', 'Contract'] })
+    @Column({ name: "jobType", type: "enum", enum: ["Full-time", "Part-time", "Contract"] })
     jobType: any;
 
-    @Column({ name: "workLocationType", type: "enum", enum: ['Office', 'Field', 'WFH'] })
-    workLocationType: 'Office' | 'Field' | 'WFH';
+    @Column({ name: "workLocationType", type: "enum", enum: ["Office", "Field", "WFH"] })
+    workLocationType: "Office" | "Field" | "WFH";
 
     @Column({ name: "city", type: "varchar", length: 50 })
     city: string;
@@ -47,11 +47,11 @@ export class JobPost extends BaseEntity {
     @Column({ name: "salaryMax", type: "decimal", precision: 10, scale: 2 })
     salaryMax: number;
 
-    @Column({ name: "salaryModel", type: "enum", enum: ['Fixed', 'Fixed + Incentives'] })
-    salaryModel: 'Fixed' | 'Fixed + Incentives';
+    @Column({ name: "salaryModel", type: "enum", enum: ["Fixed", "Fixed + Incentives"] })
+    salaryModel: "Fixed" | "Fixed + Incentives";
 
-    @Column({ name: "genderPreference", type: "enum", enum: ['Any', 'Male', 'Female'] })
-    genderPreference: 'Any' | 'Male' | 'Female';
+    @Column({ name: "genderPreference", type: "enum", enum: ["Any", "Male", "Female"] })
+    genderPreference: "Any" | "Male" | "Female";
 
     @Column({ name: "experienceMin", type: "int" })
     experienceMin: number;
@@ -86,8 +86,8 @@ export class JobPost extends BaseEntity {
     @Column({ name: "openings", type: "int", default: 1 })
     openings: number;
 
-    @Column({ name: "jobPostingFor", type: "enum", enum: ['INDIVIDUAL', 'COMPANY'] })
-    jobPostingFor: 'INDIVIDUAL' | 'COMPANY';
+    @Column({ name: "jobPostingFor", type: "enum", enum: ["INDIVIDUAL", "COMPANY"] })
+    jobPostingFor: "INDIVIDUAL" | "COMPANY";
 
     @Column({ name: "companyName", type: "varchar", length: 100, nullable: true })
     companyName: string;
@@ -95,8 +95,8 @@ export class JobPost extends BaseEntity {
     @Column({ name: "companyAddress", type: "text", nullable: true })
     companyAddress: string;
 
-    @Column({ name: "companyVerificationStatus", type: "enum", enum: ['PENDING', 'VERIFIED', 'SKIPPED'], default: 'PENDING' })
-    companyVerificationStatus: 'PENDING' | 'VERIFIED' | 'SKIPPED';
+    @Column({ name: "companyVerificationStatus", type: "enum", enum: ["PENDING", "VERIFIED", "SKIPPED"], default: "PENDING" })
+    companyVerificationStatus: "PENDING" | "VERIFIED" | "SKIPPED";
 
     @Column({ name: "verificationRequired", type: "boolean", default: false })
     verificationRequired: boolean;
@@ -107,8 +107,8 @@ export class JobPost extends BaseEntity {
     @Column({ name: "description", type: "text", nullable: true })
     description: string;
 
-    @Column({ name: "status", type: "enum", enum: ['DRAFT', 'UNDER_REVIEW', 'APPROVED', 'REJECTED', 'LIVE'], default: 'DRAFT' })
-    status: 'DRAFT' | 'UNDER_REVIEW' | 'APPROVED' | 'REJECTED' | 'LIVE';
+    @Column({ name: "status", type: "enum", enum: ["DRAFT", "UNDER_REVIEW", "APPROVED", "REJECTED", "LIVE"], default: "DRAFT" })
+    status: "DRAFT" | "UNDER_REVIEW" | "APPROVED" | "REJECTED" | "LIVE";
 
     @Column({ name: "adminComments", type: "text", nullable: true })
     adminComments: string;

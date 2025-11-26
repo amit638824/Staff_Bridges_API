@@ -18,7 +18,7 @@ loginRoute.post("/mobile-login", AuthHandler.MobileLoginController);
 loginRoute.post("/social-login", AuthHandler.SocialLoginController);
 loginRoute.post("/email-login", AuthHandler.EmailLoginController);
 /* ---------------------------------------------
-   PASSWORD MANAGEMENT
+   PASSWORD MANAGEMENT   
 ----------------------------------------------*/
 loginRoute.post("/forget-password", AuthHandler.ForgetPassword);
 loginRoute.post("/reset-password", AuthHandler.ResetPassword);

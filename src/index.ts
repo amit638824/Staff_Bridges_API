@@ -7,8 +7,7 @@ import loginRoute from "./Route/CommonRoute/index";
 import { AppDataSource } from "./DbConfig/TypeOrm";
 import { throttleMiddleware } from "./Middleware/ThrottleMiddleware";
 import recruiterRouter from "./Route/RecruiterRoute/JobCreate";
-import expressFileupload from "express-fileupload";
-// import { BatchFileExecution } from "./helpers/CronJob";
+import expressFileupload from "express-fileupload"; 
 const app = express();
 dotenv.config();
 app.set("trust proxy", 1);
@@ -33,12 +32,10 @@ AppDataSource.initialize()
 
 // Swagger setup
 app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec, { customSiteTitle: "StaffBridge API Docs"  }));
-
-//  BatchFileExecution(); // batch file logic automate 30 min   
-//  testCronJob()  test cron job
+ 
 // Routes
 app.use("/auth", throttleMiddleware, loginRoute); 
-app.use("/api",throttleMiddleware,recruiterRouter)
+app.use("/api", throttleMiddleware, recruiterRouter);
 app.get("/", throttleMiddleware, (req: Request, res: Response) => {
 
   res.send("Welcome to the server !!!");

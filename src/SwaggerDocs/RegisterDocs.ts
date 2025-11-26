@@ -5,7 +5,6 @@
  *   description: APIs for Seeker and Recruiter mobile-based registration and OTP verification
  */
 
-
 /* ============================= SEEKER REGISTRATION ============================= */
 /**
  * @swagger
@@ -42,7 +41,6 @@
  *       500:
  *         description: Internal server error
  */
-
 
 /**
  * @swagger
@@ -83,8 +81,6 @@
  *         description: Internal server error
  */
 
-
-
 /* ============================= RECRUITER REGISTRATION ============================= */
 /**
  * @swagger
@@ -121,7 +117,6 @@
  *       500:
  *         description: Internal server error
  */
-
 
 /**
  * @swagger

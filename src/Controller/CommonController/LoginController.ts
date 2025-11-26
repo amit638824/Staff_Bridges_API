@@ -1,52 +1,53 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken"; 
+import jwt from "jsonwebtoken";
 import { Role } from "../../Entities/Role";
 import { MESSAGES } from "../../Helpers/constants";
 import { createResponse } from "../../Helpers/response";
 import { sendEmail } from "../../Helpers/email";
-import { generateToken} from "../../Helpers/utils"; 
+import { generateToken } from "../../Helpers/utils";
 import { User } from "../../Entities/user";
 import { Login } from "../../Entities/login";
-  
+
+import { OAuth2Client } from "google-auth-library";
+const client: any = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
 export const SocialLoginController = async (req: any, res: any) => {
     try {
-        const { email, fullName, socialId, provider } = req.body;
-
-        if (!email) {
-            return createResponse(res, 400, "Email is required", [], false, true);
-        }
-
-        // Step 1: Check if user exists
-        let user = await User.findOne({ where: { email } });
-
-        // Step 2: If not found → create new user
+        const { idToken } = req.body; 
+        if (!idToken) {
+            return createResponse(   res,   400,   "idToken is required",   [],  false,  true );
+        } 
+        const ticket = await client.verifyIdToken({
+            idToken,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        }); 
+        const payload: any = ticket.getPayload(); 
+        if (!payload || !payload.email) {
+            return createResponse(   res,  400,  "Invalid Google Token",   [],  false,  true  );
+        } 
+        const email = payload.email;
+        const fullName = payload.name;
+        const socialId = payload.sub;
+        const provider = "GOOGLE"; 
+        let user = await User.findOne({ where: { email } }); 
         if (!user) {
-            user = await User.create({
-                fullName: fullName || "Social User",
-                email,
-                password: null,
-                mobile: null,
-                RoleId: 2,
-            }).save();
-
-            // ✅ Create login record also (SOCIAL)
+            user = await User.create({ fullName, email, password: null, mobile: null, RoleId: 2, }).save(); 
             await Login.create({
                 userId: user.id,
                 loginMethod: "SOCIAL",
-                socialProvider: provider || "UNKNOWN",
-                socialId: socialId || null,
+                socialProvider: provider,
+                socialId,
                 lastLogin: new Date(),
                 createdAt: new Date(),
                 updatedAt: new Date(),
             }).save();
-        } else {
-            // ✅ Update lastLogin for existing user’s login row
+        } else { 
             await Login.createQueryBuilder()
                 .update(Login)
                 .set({
                     lastLogin: new Date(),
-                    socialProvider: provider || "UNKNOWN",
-                    socialId: socialId || null,
+                    socialProvider: provider as any,
+                    socialId,
                     updatedAt: new Date(),
                 })
                 .where("userId = :userId AND loginMethod = :method", {
@@ -54,53 +55,29 @@ export const SocialLoginController = async (req: any, res: any) => {
                     method: "SOCIAL",
                 })
                 .execute();
-        }
-
-        // Step 3: Generate JWT token
-        const JWT_SECRET: any = process.env.JWT_SECRET || "yourSecretKey";
-        const token = jwt.sign(
-            { id: user.id, email: user.email },
-            JWT_SECRET,
-            { expiresIn: "24h" }
-        );
-
-        // Step 4: Fetch joined user + role data
-        const queryBuilder = User.createQueryBuilder("user")
-            .select([
-                "user.id",
-                "user.fullName",
-                "user.email",
-                "user.mobile",
-                "user.RoleId",
-                "roletbl.id",
-                "roletbl.roleName",
-            ])
+        } 
+        const JWT_SECRET = process.env.JWT_SECRET || "yourSecretKey"; 
+        const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "24h" }); 
+        const data = await User.createQueryBuilder("user")
+            .select(["user.id", "user.fullName", "user.email", "user.mobile", "user.RoleId", "roletbl.id", "roletbl.roleName", ])
             .leftJoin(Role, "roletbl", "user.RoleId = roletbl.id")
-            .where("user.email = :email", { email });
+            .where("user.email = :email", { email })
+            .getRawOne(); 
+        return createResponse(res, 200, MESSAGES?.LOGIN_SUCCESS || "Social login successful", { token, user: data }, true, false);
 
-        const data = await queryBuilder.getRawOne();
-
-        // Step 5: Send success response
-        return createResponse(
-            res,
-            200,
-            MESSAGES?.LOGIN_SUCCESS || "Social login successful",
-            { token, user: data },
-            true,
-            false
-        );
     } catch (error) {
         console.log(MESSAGES?.INTERNAL_SERVER_ERROR, error);
 
         return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
     }
 };
+
 export const EmailLoginController = async (req: any, res: any) => {
     try {
         const { email, password } = req.body;
-     
+
         // Step 1: Fetch user by email
-        const login:any = await User.findOne({
+        const login: any = await User.findOne({
             where: { email: email },
         });
 
@@ -258,7 +235,7 @@ export const ForgetPassword = async (req: any, res: any) => {
             await Login.update({ userId: user.id }, { loginToken: token, updatedAt: new Date() });
 
             // Send a reset password email with the token as a URL parameter
-            await sendEmail(email, "Reset Password", "", `${process.env.UI_BASE_URL}/resetpassword/${token}`);
+            await sendEmail(email, "Reset Password", "", `${process.env.UI_BASE_URL}/reset-password?token=${token}`);
 
             //  Send a success response for the reset link
             return createResponse(res, 200, MESSAGES?.RESET_LINK_SENT);
@@ -271,6 +248,7 @@ export const ForgetPassword = async (req: any, res: any) => {
         // Log the error to the console for debugging purposes
         // tslint:disable-next-line:no-console
         console.log(MESSAGES?.RESET_LINK_ERROR, err);
+
         return createResponse(res, 500, MESSAGES?.RESET_LINK_ERROR, [], false, true);
     }
 };
@@ -298,6 +276,7 @@ export const ResetPassword = async (req: any, res: any) => {
         if (currentTime - tokenIssuedAt > TOKEN_EXPIRY_MS) {
             // Expired → clear token
             await Login.update({ loginToken: token }, { loginToken: "" as any });
+
             return createResponse(res, 401, MESSAGES?.TOKEN_EXPIRED, [], false, true);
         }
 
@@ -311,6 +290,7 @@ export const ResetPassword = async (req: any, res: any) => {
         return createResponse(res, 200, MESSAGES?.PASSWORD_UPDATED);
     } catch (err) {
         console.error(MESSAGES?.RESET_ERROR, err);
+
         return createResponse(res, 500, MESSAGES?.RESET_ERROR, [], false, true);
     }
 };
