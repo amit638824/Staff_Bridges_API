@@ -23,6 +23,15 @@ loginRoute.post("/email-login", AuthHandler.EmailLoginController);
 loginRoute.post("/forget-password", AuthHandler.ForgetPassword);
 loginRoute.post("/reset-password", AuthHandler.ResetPassword);
 loginRoute.post("/reset-token-check", AuthHandler.ResetTockenCheck); 
+
+/* ---------------------------------------------
+   user email and mobile verification
+----------------------------------------------*/
+ 
+loginRoute.post("/user-email-verify-otp", AuthHandler.UserEmailVerificationSendOtp); 
+loginRoute.put("/user-email-verify", AuthHandler.verifyUserEmail); 
+loginRoute.post("/user-mobile-verify-otp", AuthHandler.UserMobileVerificationSendOtp); 
+loginRoute.put("/user-mobile-verify", AuthHandler.verifyUserMobile); 
 /* ---------------------------------------------
    USER PROFILE MANAGEMENT
 ----------------------------------------------*/

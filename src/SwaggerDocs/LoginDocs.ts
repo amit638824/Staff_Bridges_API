@@ -213,3 +213,126 @@
  *       400:
  *         description: Token invalid or expired
  */
+/**
+ * @swagger
+ * /auth/user-email-verify-otp:
+ *   post:
+ *     summary: Send Email Verification OTP to user email
+ *     tags: [Login & Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: "amit.chauhan@techwagger.com"
+ *     responses:
+ *       200:
+ *         description: Email verification OTP sent successfully
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal Server Error
+ */
+/**
+ * @swagger
+ * /auth/user-email-verify:
+ *   put:
+ *     summary: Verify user email using OTP token
+ *     tags: [Login & Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - token
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: "amit.chauhan@techwagger.com"
+ *               token:
+ *                 type: string
+ *                 example: "123456"
+ *     responses:
+ *       200:
+ *         description: Email verified successfully
+ *       400:
+ *         description: Missing email or token
+ *       401:
+ *         description: Token expired
+ *       404:
+ *         description: Invalid token or user not found
+ *       500:
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /auth/user-mobile-verify-otp:
+ *   post:
+ *     summary: Send OTP to user's mobile number for verification
+ *     tags: [Login & Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - mobile
+ *             properties:
+ *               mobile:
+ *                 type: string
+ *                 example: "9876543210"
+ *     responses:
+ *       200:
+ *         description: OTP sent successfully
+ *       400:
+ *         description: Mobile number required
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /auth/user-mobile-verify:
+ *   put:
+ *     summary: Verify mobile number using OTP
+ *     tags: [Login & Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - mobile
+ *               - otp
+ *             properties:
+ *               mobile:
+ *                 type: string
+ *                 example: "9876543210"
+ *               otp:
+ *                 type: string
+ *                 example: "123456"
+ *     responses:
+ *       200:
+ *         description: Mobile verified successfully
+ *       400:
+ *         description: Mobile and OTP are required
+ *       404:
+ *         description: Invalid OTP or user not found
+ *       401:
+ *         description: OTP expired
+ *       500:
+ *         description: Internal server error
+ */
+

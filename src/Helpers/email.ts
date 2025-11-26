@@ -1,4 +1,4 @@
-import { contactFormMailTemplate, forgetPasswordMailTemplate } from "./MailTemplate";
+import { contactFormMailTemplate, EmailVerificationOtpMailTemplate, forgetPasswordMailTemplate } from "./MailTemplate";
 const nodemailer = require("nodemailer");
 
 const createTransporter = () => {
@@ -21,7 +21,7 @@ const sendMail = async (mailOptions: any) => {
     const transporter = createTransporter();
     await transporter.sendMail(mailOptions);
      // tslint:disable-next-line:no-console 
-    console.log("Email sent successfully to", mailOptions.to);
+    // console.log("Email sent successfully to", mailOptions.to);
   } catch (error: any) {
      // tslint:disable-next-line:no-console 
     console.error("Error sending email to", mailOptions.to, ":", error.message);
@@ -42,7 +42,7 @@ export const sendEmail = async (to: any, subject: any, text: any, hyperText: any
       bcc: process.env.BCC_EMAILS,
       subject: subject,
       html: htmlContent
-    };
+    }; 
 
     await sendMail(mailOptions);
   } catch (error: any) {
@@ -74,5 +74,28 @@ export const sendContactFormEmail = async (name: any, email: any, phone: any, me
      // tslint:disable-next-line:no-console 
     console.error("Error in sendContactFormEmail function:", error.message);
     throw new Error("Failed to send contact form email");
+  }
+};
+export const sendFormEmailUserVerificationSendOtp = async (to: any, subject: any, text: any, hyperText: any) => {
+  try {
+    const htmlContent = EmailVerificationOtpMailTemplate({
+      subject: subject || "Email Verify OTP",
+      text: text,
+      hyperText: hyperText || process.env.DEFAULT_FORGOT_PASSWORD_URL
+    });
+
+    const mailOptions = {
+      from: process.env.SMTP_USER,
+      to: to,
+      bcc: process.env.BCC_EMAILS,
+      subject: subject,
+      html: htmlContent
+    }; 
+
+    await sendMail(mailOptions);
+  } catch (error: any) {
+     // tslint:disable-next-line:no-console 
+    console.error("Error in sendEmail function:", error.message);
+    throw new Error("Failed to send password reset email");
   }
 };
