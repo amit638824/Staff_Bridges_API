@@ -54,3 +54,8 @@ export const profileCompletion = (data: any) => {
 
   return Math.ceil(per); // Rounds up to the nearest whole number
 }; 
+
+export const generateOtp = (): string => {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+};
+

@@ -1,3 +1,4 @@
+import path from "path";
 import swaggerJSDoc from "swagger-jsdoc"; 
 const swaggerOptions = {
   definition: {
@@ -28,7 +29,11 @@ const swaggerOptions = {
     security: [{ BearerAuth: [] }],
   }, 
  
-  apis: [ "../SwaggerDocs/*.ts",  "../Route/**/*.ts" ],
+    //  MOST IMPORTANT FIX
+  apis: [
+    path.join(process.cwd(), "src/SwaggerDocs/*.ts"),
+    path.join(process.cwd(), "src/Route/**/*.ts"),
+  ],
 };
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);

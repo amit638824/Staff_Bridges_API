@@ -2,9 +2,10 @@ import fs from "fs";
 import path from "path";
 import { MESSAGES } from "../../Helpers/constants";
 import { createResponse } from "../../Helpers/response";
-import { profileCompletion } from "../../Helpers/utils";
+import { generateOtp, profileCompletion } from "../../Helpers/utils";
 import { User } from "../../Entities/user";
-import { Login } from "../../Entities/login"; 
+import { Login } from "../../Entities/login";
+import { sendFormEmailUserVerificationSendOtp } from "../../Helpers/email";
 export const SeekerRegistrationMobileController = async (req: any, res: any) => {
     try {
         const { mobile } = req.body;
@@ -264,3 +265,130 @@ export const userProfileUpdate = async (req: any, res: any) => {
         return createResponse(res, 200, MESSAGES?.INTERNAL_SERVER_ERROR, true, false);
     }
 };
+export const UserEmailVerificationSendOtp = async (req: any, res: any) => {
+    const { email } = req.body;
+
+    try {
+        // Fetch user data using the email from the `Login` table
+        const user = await User.findOne({ where: { email: email } });
+
+        if (user) {
+            // Generate a new token for the password reset
+            const token: any = await generateOtp();
+
+            // Update the user's record with the new token and update timestamp
+            await Login.update({ userId: user.id }, { loginToken: token, updatedAt: new Date() });
+
+            // Send a reset password email with the token as a URL parameter
+            await sendFormEmailUserVerificationSendOtp(email, "Email Verification Otp", "", token);
+
+            //  Send a success response for the reset link
+            return createResponse(res, 200, MESSAGES?.EMAIL_VERIFICATION_OTP_SENT);
+        } else {
+            // If user not found, send a user not found response
+            return createResponse(res, 404, MESSAGES?.USER_NOT_FOUND, [], false, true);
+        }
+
+    } catch (err) {
+        // Log the error to the console for debugging purposes
+        // tslint:disable-next-line:no-console
+        console.log(MESSAGES?.RESET_LINK_ERROR, err);
+
+        return createResponse(res, 500, MESSAGES?.RESET_LINK_ERROR, [], false, true);
+    }
+};
+export const verifyUserEmail = async (req: any, res: any) => {
+    const { email, token } = req.body;
+    try {
+        if (!email || !token) {
+            return createResponse(res, 400, "Email and token are required.", [], false, true);
+        }
+        const user = await User.findOne({ where: { email: email } });
+        if (!user) {
+            return createResponse(res, 404, MESSAGES?.USER_NOT_FOUND, [], false, true);
+        }
+        const loginRecord = await Login.findOne({ where: { userId: user.id, loginToken: token } });
+
+        if (!loginRecord) {
+            return createResponse(res, 404, MESSAGES?.INVALID_OTP, [], false, true);
+        }
+        const tokenIssuedAt = new Date(loginRecord.updatedAt).getTime();
+        const currentTime = Date.now();
+        const TOKEN_EXPIRY_MS = 5 * 60 * 1000;
+        if (currentTime - tokenIssuedAt > TOKEN_EXPIRY_MS) {
+            await Login.update({ id: loginRecord.id }, { loginToken: "" as any });
+            return createResponse(res, 401, MESSAGES?.OTP_EXPIRED, [], false, true);
+        }
+        await User.update({ id: user.id }, { isEmailVerified: 1 as any });
+        await Login.update({ id: loginRecord.id }, { loginToken: "" as any });
+
+        return createResponse(res, 200, MESSAGES?.EMAIL_VERIFIED_SUCCESS);
+    } catch (err) {
+        console.error("VERIFY EMAIL ERROR:", err);
+        return createResponse(res, 500, MESSAGES?.RESET_ERROR, [], false, true);
+    }
+};
+export const UserMobileVerificationSendOtp = async (req: any, res: any) => {
+    const { mobile } = req.body;
+    try {
+        if (!mobile) {
+            return createResponse(res, 400, "Mobile number required.", [], false, true);
+        }
+        const user = await User.findOne({ where: { mobile } });
+
+        if (!user) {
+            return createResponse(res, 404, MESSAGES?.USER_NOT_FOUND, [], false, true);
+        }
+        const otpCode: any = generateOtp(); // 6 digit
+        const otpExpiry = new Date(Date.now() + 5 * 60 * 1000);
+        await Login.update({ userId: user.id }, { otpCode, otpExpiry, updatedAt: new Date() });
+        return createResponse(res, 200, MESSAGES?.MOBILE_VERIFICATION_OTP_SENT);
+    } catch (err) {
+        console.log("OTP SEND ERROR:", err);
+        return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
+    }
+};
+export const verifyUserMobile = async (req: any, res: any) => {
+    const { mobile, otp } = req.body;
+    try {
+        if (!mobile || !otp) {
+            return createResponse(res, 400, "Mobile and OTP are required.", [], false, true);
+        }
+        const user = await User.findOne({ where: { mobile } });
+
+        if (!user) {
+            return createResponse(res, 404, MESSAGES?.USER_NOT_FOUND, [], false, true);
+        }
+
+        const loginRecord = await Login.findOne({
+            where: { userId: user.id, otpCode: otp }
+        });
+
+        if (!loginRecord) {
+            return createResponse(res, 404, MESSAGES?.INVALID_OTP, [], false, true);
+        }
+
+        // Check if OTP expired
+        const currentTime = Date.now();
+        const otpExpiryTime = new Date(loginRecord.otpExpiry).getTime();
+
+        if (currentTime > otpExpiryTime) {
+            await Login.update({ id: loginRecord.id }, { otpCode: "" as any });
+            return createResponse(res, 401, MESSAGES?.OTP_EXPIRED, [], false, true);
+        }
+
+        // Mark mobile verified
+        await User.update({ id: user.id }, { isMobileVerified: 1 as any });
+
+        // Remove OTP
+        await Login.update({ id: loginRecord.id }, { otpCode: "" as any });
+
+        return createResponse(res, 200, MESSAGES?.MOBILE_VERIFIED_SUCCESS);
+
+    } catch (err) {
+        console.log("VERIFY MOBILE ERROR:", err);
+        return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
+    }
+};
+
+
