@@ -8,6 +8,7 @@ import { AppDataSource } from "./DbConfig/TypeOrm";
 import { throttleMiddleware } from "./Middleware/ThrottleMiddleware";
 import recruiterRouter from "./Route/RecruiterRoute/JobCreate";
 import expressFileupload from "express-fileupload"; 
+import routerFileUpload from "./Controller/CommonController/fileUpload";
 const app = express();
 dotenv.config();
 app.set("trust proxy", 1);
@@ -36,10 +37,11 @@ app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec, { customSiteTi
 // Routes
 app.use("/auth", throttleMiddleware, loginRoute); 
 app.use("/api", throttleMiddleware, recruiterRouter);
+app.use("/file", throttleMiddleware, routerFileUpload);
 app.get("/", throttleMiddleware, (req: Request, res: Response) => {
 
   res.send("Welcome to the server !!!");
-});
+}); 
 
 app.get("/test", throttleMiddleware, (req: Request, res: Response) => {
 

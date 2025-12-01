@@ -67,7 +67,7 @@ export class User extends BaseEntity {
   credits: any;
 
   @Column({ name: "status", type: "int", default: 1 })
-  status: any;
+  status: any; 
 
   @Column({ name: "createdAt", type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
@@ -78,6 +78,5 @@ export class User extends BaseEntity {
   @Column({ name: "createdBy", type: "int", nullable: true })
   createdBy: any;
 
-  @Column({ name: "updatedBy", type: "int", nullable: true })
-  updatedBy: any;
+  
 }

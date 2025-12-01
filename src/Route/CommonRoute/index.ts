@@ -8,7 +8,7 @@ const loginRoute = express.Router();
 loginRoute.post("/seeker-register-mobile", AuthHandler.SeekerRegistrationMobileController);
 loginRoute.post("/seeker-register-otp-verify", AuthHandler.SeekerOTPVerifyController); 
 // Recruiter Registration
-loginRoute.post("/recruiter-register-mobile", AuthHandler.RecruiterRegistrationMobileController);
+loginRoute.post("/recruiter-register-mo    bile", AuthHandler.RecruiterRegistrationMobileController);
 loginRoute.post("/recruiter-register-otp-verify", AuthHandler.RecruiterOTPVerifyController);
 /* ---------------------------------------------
    LOGIN SYSTEM (OTP, MOBILE, SOCIAL, EMAIL)
