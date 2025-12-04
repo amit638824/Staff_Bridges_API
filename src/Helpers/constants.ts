@@ -32,5 +32,11 @@ export const MESSAGES = {
     ACCESS_DENIED: "Access Denied. No token provided.",
     VIN_NOT_FOUND: "We are not monitoring the entered VIN. Do you want to run a new VIN report?",
     NOT_UPDATED: "Changes were not made.",
-    TEST_MSG: "hi"
-}; 
+    TEST_MSG: "hi", 
+    MOBILE_REQUIRED: "Mobile number is required.",
+    INVALID_USER_TYPE: "User type must be recruiter or seeker.",
+    USER_REGISTERED: "User registered successfully, OTP sent.",
+    OTP_SENT: "OTP sent successfully.",
+    TOKEN_VALID: "Token is valid.",
+    TOKEN_INVALID: "Invalid or expired token."
+};

@@ -11,7 +11,7 @@ import { Login } from "../../Entities/login";
 import { OAuth2Client } from "google-auth-library";
 const client: any = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-export const SocialLoginController = async (req: any, res: any) => {
+export const GoogleSocialLoginController = async (req: any, res: any) => {
     try {
         const { idToken } = req.body; 
         if (!idToken) {
@@ -88,6 +88,7 @@ export const EmailLoginController = async (req: any, res: any) => {
 
         // Step 3: Compare hashed password using bcrypt
         const isMatch = await bcrypt.compare(password, login.password);
+      
         if (!isMatch) {
             return createResponse(res, 401, MESSAGES?.INVALID_CREDENTIALS, [], false, true);
         }
@@ -132,31 +133,33 @@ export const EmailLoginController = async (req: any, res: any) => {
 };
 export const SendOtpMobileController = async (req: any, res: any) => {
     try {
-        const { mobile } = req.body;
-        if (!mobile) {
-            return createResponse(res, 400, "Mobile number required", [], false, true);
-        }
-        const user = await User.findOne({ where: { mobile } });
+        const { mobile, userType } = req.body;
+
+        if (!mobile) return createResponse(res, 400, MESSAGES.MOBILE_REQUIRED, [], false, true);
+        if (!userType || !["recruiter", "seeker"].includes(userType)) return createResponse(res, 400, MESSAGES.INVALID_USER_TYPE, [], false, true);
+
+        const roleId = userType === "recruiter" ? 6 : 5;
+        const otpCode: any = 123456;
+        const otpExpiry = new Date(Date.now() + 5 * 60 * 1000);
+
+        let user = await User.findOne({ where: { mobile } });
+
         if (!user) {
-            return createResponse(res, 404, "User not found", [], false, true);
+            user = await User.save(User.create({ fullName: null, email: null, mobile, RoleId: roleId, isVerified: 0, status: 1 }));
+            await Login.save(Login.create({ userId: user.id, loginMethod: "MOBILE_OTP", otpCode, otpExpiry, status: 1 }));
+            return createResponse(res, 200, MESSAGES.USER_REGISTERED, { mobile, otp: otpCode, newUser: true, roleId }, true, false);
         }
-        const otpCode: any = Math.floor(100000 + Math.random() * 900000).toString();
-        const otpExpiry = new Date(Date.now() + 5 * 60 * 1000); // 5 min validity
 
-        // Step 4: update query
-        await Login.createQueryBuilder()
-            .update(Login)
-            .set({ otpCode, otpExpiry, updatedAt: new Date(), loginMethod: "MOBILE_OTP" as any })
-            .where("userId = :userId", { userId: user.id })
-            .execute();
+        await Login.createQueryBuilder().update(Login).set({ otpCode, otpExpiry, updatedAt: new Date(), loginMethod: "MOBILE_OTP" as any}).where("userId = :userId", { userId: user.id }).execute();
 
-        return createResponse(res, 200, MESSAGES?.OTP_SENT_SUCCESS, { mobile, Otp: otpCode }, true, false);
+        return createResponse(res, 200, MESSAGES.OTP_SENT, { mobile, otp: otpCode, newUser: false, roleId: user.RoleId }, true, false);
+
     } catch (error) {
-        console.log(MESSAGES?.INTERNAL_SERVER_ERROR, error);
-
-        return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
+        console.log("INTERNAL_SERVER_ERROR", error);
+        return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], false, true);
     }
 };
+
 export const MobileLoginController = async (req: any, res: any) => {
     try {
         const { mobile, otp } = req.body;

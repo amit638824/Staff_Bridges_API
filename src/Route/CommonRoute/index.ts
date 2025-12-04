@@ -4,18 +4,13 @@ const loginRoute = express.Router();
 /* ---------------------------------------------
     REGISTRATION (SEEKER + RECRUITER)
 ----------------------------------------------*/
-// Seeker Registration
-loginRoute.post("/seeker-register-mobile", AuthHandler.SeekerRegistrationMobileController);
-loginRoute.post("/seeker-register-otp-verify", AuthHandler.SeekerOTPVerifyController); 
-// Recruiter Registration
-loginRoute.post("/recruiter-register-mobile", AuthHandler.RecruiterRegistrationMobileController);
-loginRoute.post("/recruiter-register-otp-verify", AuthHandler.RecruiterOTPVerifyController);
+// Seeker Registration 
 /* ---------------------------------------------
    LOGIN SYSTEM (OTP, MOBILE, SOCIAL, EMAIL)
 ----------------------------------------------*/
 loginRoute.post("/send-otp", AuthHandler.SendOtpMobileController);
 loginRoute.post("/mobile-login", AuthHandler.MobileLoginController);
-loginRoute.post("/social-login", AuthHandler.SocialLoginController);
+loginRoute.post("/social-login", AuthHandler.GoogleSocialLoginController);
 loginRoute.post("/email-login", AuthHandler.EmailLoginController);
 /* ---------------------------------------------
    PASSWORD MANAGEMENT   

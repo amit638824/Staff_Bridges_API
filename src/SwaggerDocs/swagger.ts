@@ -4,18 +4,19 @@ const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "StaffBridge API",
+      title: "StaffBridges API",
       version: "1.0.0",
-      description: "API Documentation for StaffBridge",
+      description: "API Documentation for StaffBridges",
       contact: {
         name: "techwagger.com",
         email: "connect@techwagger.com",
         url: "https://www.techwagger.com",
       },
     },
-    servers: [
-      { url: "http://localhost:8000" },
-      { url: "https://staffbridgeapi.techwagger.com" },
+    servers: 
+    [
+      { url: "https://staffbridgesapi.techwagger.com" },
+      { url: "http://localhost:4600" },
     ],
     components: {
       securitySchemes: {
