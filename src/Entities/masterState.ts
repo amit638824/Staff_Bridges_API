@@ -1,8 +1,8 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn,   } from "typeorm";
 
 
-@Entity({ name: "State" })
-export class State extends BaseEntity {
+@Entity({ name: "MasterState" })
+export class MasterState extends BaseEntity {
 
     @PrimaryGeneratedColumn({ name: "id" })
     id: number;
@@ -13,6 +13,8 @@ export class State extends BaseEntity {
     @Column({ name: "countyId", type: "int", default: 1 })
     countyId: number;
 
+     @Column({ name: "code", type: "varchar", length: 20 })
+    code: string;
 
     @Column({ name: "status", type: "int", default: 1 })
     status: number;

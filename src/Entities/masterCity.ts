@@ -1,8 +1,8 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
  
 
-@Entity({ name: "City" })
-export class City extends BaseEntity {
+@Entity({ name: "MasterCity" })
+export class MasterCity extends BaseEntity {
 
     @PrimaryGeneratedColumn({ name: "id" })
     id: number;
@@ -15,6 +15,9 @@ export class City extends BaseEntity {
 
     @Column({ name: "status", type: "int", default: 1 })
     status: number;
+
+     @Column({ name: "code", type: "varchar", length: 20 })
+    code: string;
 
     @Column({ name: "createdAt", type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
     createdAt: Date;
