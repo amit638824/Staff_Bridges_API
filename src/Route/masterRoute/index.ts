@@ -14,4 +14,18 @@ masterData.get("/master-country", MasterController.getAllCountries);
 masterData.get("/master-country/:id", MasterController.getCountryById);
 masterData.put("/master-country/:id", MasterController.updateCountry);
 masterData.delete("/master-country/:id", MasterController.deleteCountry);
+
+
+masterData.post("/master-state", MasterController.createState);
+masterData.get("/master-state", MasterController.getAllStates);
+masterData.get("/master-state/:id", MasterController.getStateById);
+masterData.put("/master-state/:id", MasterController.updateState);
+masterData.delete("/master-state/:id", MasterController.deleteState);
+
+masterData.post("/master-city", MasterController.createCity);
+masterData.get("/master-city", MasterController.getAllCities);
+masterData.get("/master-city/:id", MasterController.getCityById);
+masterData.put("/master-city/:id", MasterController.updateCity);
+masterData.delete("/master-city/:id", MasterController.deleteCity);
+
 export default masterData;
