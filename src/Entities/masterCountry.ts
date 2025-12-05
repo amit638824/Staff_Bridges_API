@@ -22,7 +22,6 @@ export class MasterCountry extends BaseEntity {
  
 }
 
-
 // INSERT INTO "MasterCountry" ("name", "code", "status") 
 // VALUES
 // ('India', 'IN', 1),

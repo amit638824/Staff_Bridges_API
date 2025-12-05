@@ -39,5 +39,3 @@ const swaggerOptions = {
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 export default swaggerSpec;
-
-

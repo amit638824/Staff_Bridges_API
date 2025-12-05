@@ -1,6 +1,5 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
  
-
 @Entity({ name: "MasterCity" })
 export class MasterCity extends BaseEntity {
 

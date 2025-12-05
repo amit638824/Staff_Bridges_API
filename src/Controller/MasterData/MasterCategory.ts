@@ -3,7 +3,6 @@ import { createResponse } from "../../Helpers/response";
 import { MESSAGES } from "../../Helpers/constants";
 import { MasterCategory } from "../../Entities/masterCategory";
  
-
 // CREATE CATEGORY
 export const createCategory = async (req: any, res: any) => {
     try {

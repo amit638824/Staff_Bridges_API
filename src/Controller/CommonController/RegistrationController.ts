@@ -69,7 +69,7 @@ export const ProfileUpdate = async (req: any, res: any) => {
 };
 export const userBasicProfileUpdate = async (req: any, res: any) => {
     try {
-        const { userId, fullName, gender, salary, education,experinced } = req.body;
+        const { userId, fullName, gender, salary, education, experinced } = req.body;
 
         if (!userId) {
             return createResponse(res, 400, "User ID is required", [], false, true);
@@ -121,6 +121,7 @@ export const userBasicProfileUpdate = async (req: any, res: any) => {
 
     } catch (err) {
         console.log(MESSAGES?.RESET_ERROR, err);
+
         return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
     }
 }; 
@@ -176,6 +177,7 @@ export const verifyUserEmail = async (req: any, res: any) => {
         const TOKEN_EXPIRY_MS = 5 * 60 * 1000;
         if (currentTime - tokenIssuedAt > TOKEN_EXPIRY_MS) {
             await Login.update({ id: loginRecord.id }, { loginToken: "" as any });
+
             return createResponse(res, 401, MESSAGES?.OTP_EXPIRED, [], false, true);
         }
         await User.update({ id: user.id }, { isEmailVerified: 1 as any });
@@ -184,6 +186,7 @@ export const verifyUserEmail = async (req: any, res: any) => {
         return createResponse(res, 200, MESSAGES?.EMAIL_VERIFIED_SUCCESS);
     } catch (err) {
         console.error("VERIFY EMAIL ERROR:", err);
+
         return createResponse(res, 500, MESSAGES?.RESET_ERROR, [], false, true);
     }
 };
@@ -201,9 +204,11 @@ export const UserMobileVerificationSendOtp = async (req: any, res: any) => {
         const otpCode: any = generateOtp(); // 6 digit
         const otpExpiry = new Date(Date.now() + 5 * 60 * 1000);
         await Login.update({ userId: user.id }, { otpCode, otpExpiry, updatedAt: new Date() });
+
         return createResponse(res, 200, MESSAGES?.MOBILE_VERIFICATION_OTP_SENT);
     } catch (err) {
         console.log("OTP SEND ERROR:", err);
+
         return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
     }
 };
@@ -233,6 +238,7 @@ export const verifyUserMobile = async (req: any, res: any) => {
 
         if (currentTime > otpExpiryTime) {
             await Login.update({ id: loginRecord.id }, { otpCode: "" as any });
+
             return createResponse(res, 401, MESSAGES?.OTP_EXPIRED, [], false, true);
         }
 
@@ -246,8 +252,7 @@ export const verifyUserMobile = async (req: any, res: any) => {
 
     } catch (err) {
         console.log("VERIFY MOBILE ERROR:", err);
+
         return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
     }
 };
-
-

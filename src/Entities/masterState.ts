@@ -1,6 +1,5 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn,   } from "typeorm";
 
-
 @Entity({ name: "MasterState" })
 export class MasterState extends BaseEntity {
 
@@ -24,6 +23,5 @@ export class MasterState extends BaseEntity {
 
     @Column({ name: "updatedAt", type: "timestamptz", default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" })
     updatedAt: Date;
-
 
 }

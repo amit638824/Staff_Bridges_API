@@ -45,7 +45,6 @@
  *         description: Server error
  */
 
-
 /* ----------------------- MOBILE LOGIN (OTP VERIFY) ----------------------- */
 /**
  * @swagger
@@ -343,4 +342,3 @@
  *       500:
  *         description: Internal server error
  */
-
