@@ -6,8 +6,7 @@ import { createResponse } from "../../Helpers/response";
 import { sendEmail } from "../../Helpers/email";
 import { generateToken } from "../../Helpers/utils";
 import { User } from "../../Entities/user";
-import { Login } from "../../Entities/login";
-
+import { Login } from "../../Entities/login"; 
 import { OAuth2Client } from "google-auth-library";
 const client: any = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -70,8 +69,7 @@ export const GoogleSocialLoginController = async (req: any, res: any) => {
 
         return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
     }
-};
-
+}; 
 export const EmailLoginController = async (req: any, res: any) => {
     try {
         const { email, password } = req.body;
@@ -158,8 +156,7 @@ export const SendOtpMobileController = async (req: any, res: any) => {
         console.log("INTERNAL_SERVER_ERROR", error);
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], false, true);
     }
-};
-
+}; 
 export const MobileLoginController = async (req: any, res: any) => {
     try {
         const { mobile, otp } = req.body;

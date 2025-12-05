@@ -1,5 +1,5 @@
 import express from "express";
-import * as AuthHandler from "./importCommonController"; 
+import * as AuthHandler from "./CommonController"; 
 const loginRoute = express.Router(); 
 /* ---------------------------------------------
     REGISTRATION (SEEKER + RECRUITER)
@@ -30,7 +30,7 @@ loginRoute.put("/user-mobile-verify", AuthHandler.verifyUserMobile);
 /* ---------------------------------------------
    USER PROFILE MANAGEMENT
 ----------------------------------------------*/
-loginRoute.put("/user-profile-update", AuthHandler.userProfileUpdate);
+loginRoute.put("/user-profile-update-basicinfo", AuthHandler.userBasicProfileUpdate);
 loginRoute.get("/user-profile/:email", AuthHandler.ProfileUpdate); 
 /* ---------------------------------------------
    ROLE & PERMISSION
