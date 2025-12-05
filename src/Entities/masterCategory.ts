@@ -4,20 +4,14 @@ import {
     Entity,
     PrimaryGeneratedColumn,
 } from "typeorm";
-@Entity({ name: "JobCategory" })
-export class JobCategory extends BaseEntity {
+@Entity({ name: "MasterCategory" })
+export class MasterCategory extends BaseEntity {
 
     @PrimaryGeneratedColumn({ name: "id" })
     id: number;
 
-    @Column({ name: "categoryId", type: "int", nullable: true })
-    categoryId: number;
-
-    @Column({ name: "userId", type: "int", nullable: true })
-    userId: number;
-
-    @Column({ name: "categoryName", type: "varchar", length: 100, nullable: true })
-    categoryName: string;
+    @Column({ name: "name", type: "varchar", length: 100, nullable: true })
+    name: string;
 
     @Column({ name: "description", type: "text", nullable: true })
     description: string;

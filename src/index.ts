@@ -10,6 +10,7 @@ import { throttleMiddleware } from "./Middleware/ThrottleMiddleware";
 import recruiterRouter from "./Route/RecruiterRoute/JobCreate";
 import expressFileupload from "express-fileupload";
 import routerFileUpload from "./Controller/CommonController/fileUpload";
+import masterData from "./Route/masterRoute";
 const translatte = require("translatte");
 const app = express();
 dotenv.config();
@@ -33,7 +34,8 @@ app.use(
   swaggerUi.setup(swaggerSpec, { customSiteTitle: "StaffBridges API Docs" })
 );
 
-app.use("/auth", throttleMiddleware, loginRoute);
+app.use("/auth", throttleMiddleware, loginRoute);  
+app.use("/api", throttleMiddleware, masterData); 
 app.use("/api", throttleMiddleware, recruiterRouter);
 app.use("/file", throttleMiddleware, routerFileUpload);
 

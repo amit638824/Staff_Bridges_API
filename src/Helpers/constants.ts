@@ -38,5 +38,11 @@ export const MESSAGES = {
     USER_REGISTERED: "User registered successfully, OTP sent.",
     OTP_SENT: "OTP sent successfully.",
     TOKEN_VALID: "Token is valid.",
-    TOKEN_INVALID: "Invalid or expired token."
+    TOKEN_INVALID: "Invalid or expired token.",
+      CATEGORY_CREATED: "Category created successfully",
+    CATEGORY_FETCHED: "Category fetched successfully",
+    CATEGORIES_FETCHED: "All categories fetched successfully",
+    CATEGORY_UPDATED: "Category updated successfully",
+    CATEGORY_DELETED: "Category deleted successfully",
+    CATEGORY_NOT_FOUND: "Category not found", 
 };
