@@ -12,15 +12,16 @@
  *       - Profile Update
  *     summary: Update basic profile information of user (Seeker/Recruiter)
  *     description: |
- *       Update full name, gender, salary, and education of a user.
+ *       Update full name, gender, salary, experience status, and education of a user.
  *
- *       **Gender options:** Male, Female, Other
+ *       **Gender options:** Male, Female, Other  
+ *       **Experinced options:** 1 (Yes), 0 (No)
  *
- *       You must choose one of the allowed gender values.
+ *       You must choose one of the allowed values.
  *     requestBody:
  *       required: true
  *       content:
- *         application/json: 
+ *         application/json:
  *           schema:
  *             type: object
  *             required:
@@ -36,6 +37,10 @@
  *                 type: string
  *                 enum: [Male, Female, Other]
  *                 example: Male
+ *               experinced:
+ *                 type: integer
+ *                 enum: [0, 1]
+ *                 example: 1
  *               salary:
  *                 type: number
  *                 example: 45000
@@ -52,7 +57,3 @@
  *       500:
  *         description: Internal server error.
  */
-
-
-
- 

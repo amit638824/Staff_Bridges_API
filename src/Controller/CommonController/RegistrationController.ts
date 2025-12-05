@@ -69,7 +69,7 @@ export const ProfileUpdate = async (req: any, res: any) => {
 };
 export const userBasicProfileUpdate = async (req: any, res: any) => {
     try {
-        const { userId, fullName, gender, salary, education } = req.body;
+        const { userId, fullName, gender, salary, education,experinced } = req.body;
 
         if (!userId) {
             return createResponse(res, 400, "User ID is required", [], false, true);
@@ -80,6 +80,7 @@ export const userBasicProfileUpdate = async (req: any, res: any) => {
             fullName,
             gender,
             salary,
+            experinced,
             education,
             updatedBy: userId,
             updatedAt: new Date(),
@@ -99,6 +100,7 @@ export const userBasicProfileUpdate = async (req: any, res: any) => {
                 "fullName",
                 "gender",
                 "salary",
+                "experinced",
                 "education",
                 "updatedAt",
             ])
