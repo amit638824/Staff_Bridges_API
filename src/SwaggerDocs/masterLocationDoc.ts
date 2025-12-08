@@ -3,8 +3,7 @@
  * tags:
  *   name: Master Country
  *   description: Country master management
- */
-
+ */ 
 /**
  * @swagger
  * /api/api/master-country:
@@ -42,40 +41,87 @@
 
 /**
  * @swagger
- * /api/api/master-country:
+ * /api/master-country:
  *   get:
- *     tags: [Master Country]
- *     summary: Get all countries
- *     description: Fetch list of all countries from master table.
+ *     tags:
+ *       - Master Country
+ *     summary: Get all countries with filters and pagination
+ *     description: Returns list of countries with optional filters and pagination.
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of records per page
+ *       - in: query
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         description: Filter by country ID (exact match)
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         description: Filter by country name (partial, case-insensitive)
+ *       - in: query
+ *         name: code
+ *         schema:
+ *           type: string
+ *         description: Filter by country code (partial, case-insensitive)
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: integer
+ *           enum: [0,1]
+ *         description: Filter by status (0 = inactive, 1 = active)
  *     responses:
  *       200:
  *         description: List of countries fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 currentPage:
+ *                   type: integer
+ *                 limit:
+ *                   type: integer
+ *                 totalPages:
+ *                   type: integer
+ *                 totalRecords:
+ *                   type: integer
+ *                 items:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       name:
+ *                         type: string
+ *                       code:
+ *                         type: string
+ *                       status:
+ *                         type: integer
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *                       updatedAt:
+ *                         type: string
+ *                         format: date-time
  *       500:
  *         description: Internal server error
  */
 
-/**
- * @swagger
- * /api/api/master-country/{id}:
- *   get:
- *     tags: [Master Country]
- *     summary: Get country by ID
- *     description: Fetch a single country using ID.
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: Country fetched successfully
- *       404:
- *         description: Country not found
- *       500:
- *         description: Internal server error
- */
 
+ 
 /**
  * @swagger
  * /api/api/master-country/{id}:
@@ -178,52 +224,96 @@
  *       500:
  *         description: Internal Server Error
  */
-
 /**
  * @swagger
  * /api/master-state:
  *   get:
  *     tags:
  *       - Master State
- *     summary: Get all states by country
- *     description: Returns all states for a specific country. If countryId is not provided, default = 1.
+ *     summary: Get all states with filters and pagination
+ *     description: Returns list of states with optional filters and pagination. Default countryId = 1 if not provided.
  *     parameters:
  *       - in: query
- *         name: countryId
- *         required: false
+ *         name: page
  *         schema:
- *           type: number
- *         example: 1
+ *           type: integer
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of records per page
+ *       - in: query
+ *         name: countryId
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Filter states by country ID
+ *       - in: query
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         description: Filter by state ID (exact match)
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         description: Filter by state name (partial, case-insensitive)
+ *       - in: query
+ *         name: code
+ *         schema:
+ *           type: string
+ *         description: Filter by state code (partial, case-insensitive)
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: integer
+ *           enum: [0,1]
+ *         description: Filter by status (0 = inactive, 1 = active)
  *     responses:
  *       200:
  *         description: States fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 currentPage:
+ *                   type: integer
+ *                 limit:
+ *                   type: integer
+ *                 totalPages:
+ *                   type: integer
+ *                 totalRecords:
+ *                   type: integer
+ *                 items:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       name:
+ *                         type: string
+ *                       code:
+ *                         type: string
+ *                       countyId:
+ *                         type: integer
+ *                       status:
+ *                         type: integer
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *                       updatedAt:
+ *                         type: string
+ *                         format: date-time
  *       500:
- *         description: Internal Server Error
+ *         description: Internal server error
  */
 
-/**
- * @swagger
- * /api/master-state/{id}:
- *   get:
- *     tags:
- *       - Master State
- *     summary: Get state by ID
- *     description: Returns a single state with country details.
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: number
- *         example: 5
- *     responses:
- *       200:
- *         description: State fetched successfully
- *       404:
- *         description: State not found
- *       500:
- *         description: Internal Server Error
- */
+ 
 /**
  * @swagger
  * /api/master-state/{id}:
@@ -333,44 +423,90 @@
  *   get:
  *     tags:
  *       - Master City
- *     summary: Get all cities
- *     description: Fetch all cities optionally filtered by stateId.
+ *     summary: Get all cities with filters and pagination
+ *     description: Returns list of cities with optional filters and pagination. Default stateId = 1 if not provided.
  *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of records per page
  *       - in: query
  *         name: stateId
  *         schema:
- *           type: number
- *         required: false
- *         description: Filter cities by stateId (default = 1)
+ *           type: integer
+ *           default: 1
+ *         description: Filter cities by state ID
+ *       - in: query
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         description: Filter by city ID (exact match)
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         description: Filter by city name (partial, case-insensitive)
+ *       - in: query
+ *         name: code
+ *         schema:
+ *           type: string
+ *         description: Filter by city code (partial, case-insensitive)
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: integer
+ *           enum: [0,1]
+ *         description: Filter by status (0 = inactive, 1 = active)
  *     responses:
  *       200:
  *         description: Cities fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 currentPage:
+ *                   type: integer
+ *                 limit:
+ *                   type: integer
+ *                 totalPages:
+ *                   type: integer
+ *                 totalRecords:
+ *                   type: integer
+ *                 items:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       name:
+ *                         type: string
+ *                       code:
+ *                         type: string
+ *                       stateId:
+ *                         type: integer
+ *                       status:
+ *                         type: integer
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *                       updatedAt:
+ *                         type: string
+ *                         format: date-time
  *       500:
  *         description: Internal server error
  */
 
-/**
- * @swagger
- * /api/master-city/{id}:
- *   get:
- *     tags:
- *       - Master City
- *     summary: Get city by ID
- *     description: Retrieve a single city by its ID.
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: number
- *     responses:
- *       200:
- *         description: City fetched successfully
- *       404:
- *         description: City not found
- *       500:
- *         description: Internal server error
- */
+ 
 
 /**
  * @swagger
@@ -429,6 +565,188 @@
  *         description: City deleted successfully
  *       404:
  *         description: City not found
+ *       500:
+ *         description: Internal server error
+ */ 
+/**
+ * @swagger
+ * /api/master-locality:
+ *   post:
+ *     tags: [Master Locality]
+ *     summary: Create a new locality
+ *     description: Add a new locality under a specific city.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               code:
+ *                 type: string
+ *               cityId:
+ *                 type: number
+ *               status:
+ *                 type: number
+ *             required:
+ *               - name
+ *               - code
+ *               - cityId
+ *     responses:
+ *       201:
+ *         description: Locality created successfully
+ *       400:
+ *         description: Missing required fields
+ *       409:
+ *         description: Locality already exists
+ *       500:
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/master-locality:
+ *   get:
+ *     tags: [Master Locality]
+ *     summary: Get all localities with filters and pagination
+ *     description: Returns list of localities filtered by cityId, name, code, status, etc.
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Records per page
+ *       - in: query
+ *         name: cityId
+ *         schema:
+ *           type: integer
+ *         description: Filter by city ID
+ *       - in: query
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         description: Filter by locality ID
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         description: Filter by name (partial match)
+ *       - in: query
+ *         name: code
+ *         schema:
+ *           type: string
+ *         description: Filter by locality code (partial match)
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: integer
+ *           enum: [0, 1]
+ *         description: Filter by status
+ *     responses:
+ *       200:
+ *         description: Localities fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 currentPage:
+ *                   type: integer
+ *                 limit:
+ *                   type: integer
+ *                 totalPages:
+ *                   type: integer
+ *                 totalRecords:
+ *                   type: integer
+ *                 items:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       name:
+ *                         type: string
+ *                       code:
+ *                         type: string
+ *                       cityId:
+ *                         type: integer
+ *                       status:
+ *                         type: integer
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *                       updatedAt:
+ *                         type: string
+ *                         format: date-time
+ *       500:
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/master-locality/{id}:
+ *   put:
+ *     tags: [Master Locality]
+ *     summary: Update locality
+ *     description: Update an existing locality by ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: number
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               code:
+ *                 type: string
+ *               cityId:
+ *                 type: number
+ *               status:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Locality updated successfully
+ *       404:
+ *         description: Locality not found
+ *       500:
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/master-locality/{id}:
+ *   delete:
+ *     tags: [Master Locality]
+ *     summary: Delete locality
+ *     description: Remove locality from database using ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: Locality deleted successfully
+ *       404:
+ *         description: Locality not found
  *       500:
  *         description: Internal server error
  */

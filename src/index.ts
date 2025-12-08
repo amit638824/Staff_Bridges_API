@@ -11,6 +11,7 @@ import recruiterRouter from "./Route/RecruiterRoute/JobCreate";
 import expressFileupload from "express-fileupload";
 import routerFileUpload from "./Controller/CommonController/fileUpload";
 import masterData from "./Route/masterRoute";
+import seekerRoute from "./Route/SeekerRoute";
 const translatte = require("translatte");
 const app = express();
 dotenv.config();
@@ -36,6 +37,7 @@ app.use(
 
 app.use("/auth", throttleMiddleware, loginRoute);  
 app.use("/api", throttleMiddleware, masterData); 
+app.use("/api", throttleMiddleware, seekerRoute); 
 app.use("/api", throttleMiddleware, recruiterRouter);
 app.use("/file", throttleMiddleware, routerFileUpload);
 

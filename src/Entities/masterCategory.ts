@@ -13,7 +13,10 @@ export class MasterCategory extends BaseEntity {
     @Column({ name: "name", type: "varchar", length: 100, nullable: true })
     name: string;
 
-    @Column({ name: "description", type: "text", nullable: true })
+    @Column({ name: "image", type: "text", nullable: true })
+    image: string;
+
+     @Column({ name: "description", type: "text", nullable: true })
     description: string;
 
     @Column({ name: "status", type: "int", default: 1 })

@@ -1,6 +1,5 @@
 import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner"; 
 export const s3 = new S3Client({
   region: process.env.AWS_S3_BUCKET_REGION,
   credentials: {
@@ -11,8 +10,8 @@ export const s3 = new S3Client({
 
 // Upload file
 export const uploadToS3 = async (file: any, folder: string) => {
-  const fileName = `${folder}/${Date.now()}-${file.name}`;
-
+const cleanName = file.name.replace(/\s+/g, '-');
+const fileName = `${folder}/${Date.now()}-${cleanName}`; 
   const params = {
     Bucket: process.env.AWS_S3_BUCKET_BUCKET_NAME!,
     Key: fileName,

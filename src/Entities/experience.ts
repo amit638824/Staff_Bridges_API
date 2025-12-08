@@ -4,8 +4,8 @@ import {
     Entity,
     PrimaryGeneratedColumn,
 } from "typeorm";
-@Entity({ name: "JobCategory" })
-export class JobCategory extends BaseEntity {
+@Entity({ name: "Experience" })
+export class Experience extends BaseEntity {
 
     @PrimaryGeneratedColumn({ name: "id" })
     id: number;
@@ -18,6 +18,9 @@ export class JobCategory extends BaseEntity {
     
     @Column({ name: "status", type: "int", default: 1 })
     status: number;
+
+     @Column({ name: "experience", type: "varchar", default: 0 })
+    experience: number;
 
     @Column({ name: "createdAt", type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
     createdAt: Date;
