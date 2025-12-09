@@ -1,15 +1,9 @@
-/**
- * @swagger
- * tags:
- *   name: Registration & OTP
- *   description: APIs for Seeker and Recruiter mobile-based registration and OTP verification
- */
-/**
+ /**
  * @swagger
  * /auth/user-profile-update-basicinfo:
  *   put:
  *     tags:
- *       - Profile Update
+ *       - Profile Updateeeeeeee
  *     summary: Update basic profile information of user (Seeker/Recruiter)
  *     description: |
  *       Update full name, gender, salary, experience status, and education of a user.
