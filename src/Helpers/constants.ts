@@ -82,4 +82,10 @@ export const MESSAGES = {
   OPTION_UPDATED: "Question option updated successfully.",
   OPTION_DELETED: "Question option deleted successfully.",
   OPTION_NOT_FOUND: "Question option not found.",
+  ANSWER_CREATED: "Answer created successfully.",
+  ANSWERS_FETCHED: "Answers fetched successfully.",
+  ANSWER_UPDATED: "Answer updated successfully.",
+  ANSWER_DELETED: "Answer deleted successfully.",
+  ANSWER_NOT_FOUND: "Answer not found.",
+
 };
