@@ -30,5 +30,14 @@ masterData.post("/master-locality", MasterController.createLocality);
 masterData.get("/master-locality", MasterController.getAllLocalities); 
 masterData.put("/master-locality/:id", MasterController.updateLocality);
 masterData.delete("/master-locality/:id", MasterController.deleteLocality);
-
+// question CRUD 
+masterData.post("/master-questions", MasterController.createQuestion);
+masterData.get("/master-questions", MasterController.getAllQuestions);
+masterData.put("/master-questions/:id", MasterController.updateQuestion);
+masterData.delete("/master-questions/:id", MasterController.deleteQuestion);
+// Options CRUD 
+masterData.post("/master-options", MasterController.createQuestionOption);
+masterData.get("/master-options", MasterController.getAllQuestionOptions);
+masterData.put("/master-options/:id", MasterController.updateQuestionOption);
+masterData.delete("/master-options/:id", MasterController.deleteQuestionOption);
 export default masterData;
