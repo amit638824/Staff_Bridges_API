@@ -145,6 +145,7 @@ export const SendOtpMobileController = async (req: any, res: any) => {
         if (!user) {
             user = await User.save(User.create({ fullName: null, email: null, mobile, RoleId: roleId, isVerified: 0, status: 1 }));
             await Login.save(Login.create({ userId: user.id, loginMethod: "MOBILE_OTP", otpCode, otpExpiry, status: 1 }));
+
             return createResponse(res, 200, MESSAGES.USER_REGISTERED, { mobile, otp: otpCode, newUser: true, roleId }, true, false);
         }
 
@@ -154,6 +155,7 @@ export const SendOtpMobileController = async (req: any, res: any) => {
 
     } catch (error) {
         console.log("INTERNAL_SERVER_ERROR", error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], false, true);
     }
 }; 

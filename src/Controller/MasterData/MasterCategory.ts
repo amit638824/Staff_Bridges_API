@@ -118,6 +118,7 @@ export const getAllCategories = async (req: any, res: any) => {
 
     } catch (error) {
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
@@ -156,6 +157,7 @@ export const updateCategory = async (req: any, res: any) => {
         if (error.code === "ER_DUP_ENTRY") {
             return createResponse(res, 409, MESSAGES.ALREADY_EXISTS("Category"), [], true, true);
         }
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
@@ -175,6 +177,7 @@ export const deleteCategory = async (req: any, res: any) => {
 
     } catch (error) {
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };

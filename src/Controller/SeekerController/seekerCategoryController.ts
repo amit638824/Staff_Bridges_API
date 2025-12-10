@@ -45,10 +45,10 @@ export const createJobCategory = async (req: any, res: any) => {
 
   } catch (error: any) {
     console.log(error);
+
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 };
-
 
 // GET ALL JOB CATEGORIES + FILTER + PAGINATION
 export const getAllJobCategories = async (req: any, res: any) => {
@@ -162,10 +162,10 @@ export const getAllJobCategories = async (req: any, res: any) => {
 
   } catch (error) {
     console.log(error);
+
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 };
-
 
 // UPDATE JOB CATEGORY
 export const updateJobCategory = async (req: any, res: any) => {
@@ -204,6 +204,7 @@ export const updateJobCategory = async (req: any, res: any) => {
 
   } catch (error: any) {
     console.log(error);
+
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 }; 
@@ -224,6 +225,7 @@ export const deleteJobCategory = async (req: any, res: any) => {
 
   } catch (error) {
     console.log(error);
+
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 };

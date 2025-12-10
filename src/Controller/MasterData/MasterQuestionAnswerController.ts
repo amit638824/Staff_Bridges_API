@@ -2,7 +2,7 @@ import { MasterQuestions } from "../../Entities/masterQuestion";
 import { MasterQuestionOptions } from "../../Entities/MasterQuestionOptions";
 import { MESSAGES } from "../../Helpers/constants";
 import { createResponse } from "../../Helpers/response";
-/////Questions group 
+///// Questions group 
 export const createQuestion = async (req: any, res: any) => {
     try {
         const { categoryId, description, status } = req.body;
@@ -126,7 +126,7 @@ export const deleteQuestion = async (req: any, res: any) => {
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
-/////Options group 
+///// Options group 
 export const createQuestionOption = async (req: any, res: any) => {
     try {
         const { questionId, optionText, status } = req.body;

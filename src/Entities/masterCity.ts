@@ -25,8 +25,6 @@ export class MasterCity extends BaseEntity {
     updatedAt: Date;
 }
 
-
-
 // -- -----------------------------
 // -- Andhra Pradesh (stateId = 1)
 // -- -----------------------------

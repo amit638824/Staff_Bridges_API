@@ -10,7 +10,7 @@ export const s3 = new S3Client({
 
 // Upload file
 export const uploadToS3 = async (file: any, folder: string) => {
-const cleanName = file.name.replace(/\s+/g, '-');
+const cleanName = file.name.replace(/\s+/g, "-");
 const fileName = `${folder}/${Date.now()}-${cleanName}`; 
   const params = {
     Bucket: process.env.AWS_S3_BUCKET_BUCKET_NAME!,

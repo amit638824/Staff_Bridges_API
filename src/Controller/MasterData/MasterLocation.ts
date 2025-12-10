@@ -26,10 +26,10 @@ export const createCountry = async (req: any, res: any) => {
         return createResponse(res, 201, MESSAGES.COUNTRY_CREATED, country); 
     } catch (error) {
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
-
 
 // UPDATE COUNTRY
 export const updateCountry = async (req: any, res: any) => {
@@ -49,6 +49,7 @@ export const updateCountry = async (req: any, res: any) => {
         return createResponse(res, 200, MESSAGES.COUNTRY_UPDATED, country);
     } catch (error) {
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
@@ -66,6 +67,7 @@ export const deleteCountry = async (req: any, res: any) => {
         return createResponse(res, 200, MESSAGES.COUNTRY_DELETED, []);
     } catch (error) {
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 }; 
@@ -86,11 +88,10 @@ export const createState = async (req: any, res: any) => {
         return createResponse(res, 201, MESSAGES.STATE_CREATED, state);
     } catch (error) {
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
- 
-
  
 // UPDATE STATE
 export const updateState = async (req: any, res: any) => {
@@ -110,6 +111,7 @@ export const updateState = async (req: any, res: any) => {
         return createResponse(res, 200, MESSAGES.STATE_UPDATED, state);
     } catch (error) {
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
@@ -125,6 +127,7 @@ export const deleteState = async (req: any, res: any) => {
         return createResponse(res, 200, MESSAGES.STATE_DELETED, []);
     } catch (error) {
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
@@ -133,16 +136,18 @@ export const createCity = async (req: any, res: any) => {
     try {
         const { name, code, stateId, status } = req.body;
 
-        if (!name || !code || !stateId)
+        if (!name || !code || !stateId) {
             return createResponse(res, 400, MESSAGES.REQUIRED_FIELDS, [], true, true);
+        }
 
         // Duplicate Check
         const existing = await MasterCity.findOne({
             where: [{ name }, { code }]
         });
 
-        if (existing)
+        if (existing) {
             return createResponse(res, 409, MESSAGES.CITY_ALREADY_EXISTS, [], true, true);
+        }
 
         const city = MasterCity.create({
             name,
@@ -157,11 +162,10 @@ export const createCity = async (req: any, res: any) => {
 
     } catch (error) {
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
-
-
 
 export const updateCity = async (req: any, res: any) => {
     try {
@@ -169,8 +173,9 @@ export const updateCity = async (req: any, res: any) => {
             where: { id: Number(req.params.id) }
         });
 
-        if (!city)
+        if (!city) {
             return createResponse(res, 404, MESSAGES.CITY_NOT_FOUND, []);
+        }
 
         const { name, code, stateId, status } = req.body;
 
@@ -185,6 +190,7 @@ export const updateCity = async (req: any, res: any) => {
 
     } catch (error) {
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
@@ -195,8 +201,9 @@ export const deleteCity = async (req: any, res: any) => {
             where: { id: Number(req.params.id) }
         });
 
-        if (!city)
+        if (!city) {
             return createResponse(res, 404, MESSAGES.CITY_NOT_FOUND, []);
+        }
 
         await MasterCity.remove(city);
 
@@ -204,6 +211,7 @@ export const deleteCity = async (req: any, res: any) => {
 
     } catch (error) {
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
@@ -242,6 +250,7 @@ export const createLocality = async (req: any, res: any) => {
 
   } catch (error) {
     console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
+
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 }; 
@@ -281,6 +290,7 @@ export const updateLocality = async (req: any, res: any) => {
 
   } catch (error) {
     console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
+
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 };
@@ -302,6 +312,7 @@ export const deleteLocality = async (req: any, res: any) => {
 
   } catch (error) {
     console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
+
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 }; 
@@ -376,6 +387,7 @@ export const getAllLocalities = async (req: any, res: any) => {
 
   } catch (error) {
     console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
+
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 };
@@ -450,13 +462,14 @@ export const getAllCountries = async (req: any, res: any) => {
 
     } catch (error) {
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };   
 // GET ALL STATES WITH FILTERS + PAGINATION
 export const getAllStates = async (req: any, res: any) => {
     try {
-        const { page = 1, limit = 10, countryId=1, ...filters } = req.query;
+        const { page = 1, limit = 10, countryId= 1, ...filters } = req.query;
         const offset = (Number(page) - 1) * Number(limit);
 
         // Base query
@@ -524,6 +537,7 @@ export const getAllStates = async (req: any, res: any) => {
 
     } catch (error) {
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };  
@@ -598,8 +612,7 @@ export const getAllCities = async (req: any, res: any) => {
 
     } catch (error) {
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };  
-
-

@@ -44,9 +44,6 @@
  *         description: Internal server error
  */
 
-
-
-
 /**
  * @swagger
  * /api/seeker-category:
@@ -88,9 +85,6 @@
  *         description: Internal server error
  */
 
-
-
-
 /**
  * @swagger
  * /api/seeker-category/{id}:
@@ -129,9 +123,6 @@
  *       500:
  *         description: Internal server error
  */
-
-
-
 
 /**
  * @swagger

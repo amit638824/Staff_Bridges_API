@@ -120,8 +120,6 @@
  *         description: Internal server error
  */
 
-
- 
 /**
  * @swagger
  * /api/api/master-country/{id}:
@@ -313,7 +311,6 @@
  *         description: Internal server error
  */
 
- 
 /**
  * @swagger
  * /api/master-state/{id}:
@@ -505,8 +502,6 @@
  *       500:
  *         description: Internal server error
  */
-
- 
 
 /**
  * @swagger
@@ -750,5 +745,3 @@
  *       500:
  *         description: Internal server error
  */
-
-

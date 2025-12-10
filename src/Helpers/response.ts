@@ -8,7 +8,6 @@ export const createResponse = (res: any, statusCode: number = 200, message: stri
     });
 }; 
 
-
 // export const NewAlertVIN = async (req: any, res: any) => {
 //     try {
 //         // Destructure page, limit, and filters from the request query parameters
