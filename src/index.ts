@@ -33,8 +33,7 @@ app.use(
   "/doc",
   swaggerUi.serve,
   swaggerUi.setup(swaggerSpec, { customSiteTitle: "StaffBridges API Docs" })
-);
-
+); 
 app.use("/auth", throttleMiddleware, loginRoute);  
 app.use("/api", throttleMiddleware, masterData); 
 app.use("/api", throttleMiddleware, seekerRoute); 
