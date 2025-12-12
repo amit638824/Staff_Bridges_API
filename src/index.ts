@@ -27,7 +27,7 @@ app.use("/api/uploads", express.static("./src/uploads"));
 
 AppDataSource.initialize()
   .then(() => console.log("🚀 Data Source has been initialized! ✅"))
-  .catch((err: any) => console.error("❌ Error during Data Source initialization", err));
+  .catch((err: any) => console.error(" Error during Data Source initialization", err));
 
 app.use(
   "/doc",

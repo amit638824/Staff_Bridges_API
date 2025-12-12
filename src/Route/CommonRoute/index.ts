@@ -31,6 +31,7 @@ loginRoute.put("/user-mobile-verify", AuthHandler.verifyUserMobile);
    USER PROFILE MANAGEMENT
 ----------------------------------------------*/
 loginRoute.put("/user-profile-update-basicinfo", AuthHandler.userBasicProfileUpdate);
+loginRoute.put("/user-profile-update-pic-mobile", AuthHandler.userProfilePicContactUpdate);
 loginRoute.get("/user-profile/:email", AuthHandler.ProfileUpdate); 
 /* ---------------------------------------------
    ROLE & PERMISSION

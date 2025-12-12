@@ -17,6 +17,6 @@ seekerRoute.delete("/seeker-experience/:id", seekerController.deleteExperience);
 seekerRoute.post("/job-question-answer", seekerController.createJobAnswer);
 seekerRoute.get("/job-question-answer", seekerController.getAllJobAnswers);
 seekerRoute.put("/job-question-answer/:id", seekerController.updateJobAnswer);
-seekerRoute.delete("/job-question-answer/:id", seekerController.deleteJobAnswer);
+seekerRoute.delete("/job-question-answer/:id", seekerController.deleteJobAnswer); 
 
 export default seekerRoute;

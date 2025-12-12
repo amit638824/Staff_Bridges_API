@@ -36,7 +36,7 @@ export class User extends BaseEntity {
   @Column({ name: "gender", type: "enum", enum: ["Male", "Female", "Other"], default: "Male" })
   gender: any;
 
-   @Column({ name: "experinced", type: "int", default: 0 })
+  @Column({ name: "experinced", type: "int", default: 0 })
   experinced: any;
 
   @Column({ name: "countryId", type: "int", nullable: true })
@@ -45,11 +45,17 @@ export class User extends BaseEntity {
   @Column({ name: "profile", type: "int", nullable: true })
   profile: any;
 
+  @Column({ name: "profilePic", type: "varchar", nullable: true })
+  profilePic: any;
+
   @Column({ name: "stateId", type: "int", nullable: true })
   stateId: any;
 
   @Column({ name: "city", type: "varchar", length: 50, nullable: true })
   city: any;
+
+  @Column({ name: "locality", type: "varchar", length: 50, nullable: true })
+  locality: any;
 
   @Column({ name: "latitude", type: "decimal", precision: 10, scale: 6, nullable: true })
   latitude: any;
@@ -68,6 +74,9 @@ export class User extends BaseEntity {
 
   @Column({ name: "salary", type: "varchar", length: 50, nullable: true })
   salary: any;
+
+   @Column({ name: "resume", type: "varchar", length: 50, nullable: true })
+  resume: any;
 
   @Column({ name: "education", type: "varchar", length: 50, nullable: true })
   education: any;
