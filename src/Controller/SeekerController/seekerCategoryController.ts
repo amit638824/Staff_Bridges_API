@@ -44,6 +44,7 @@ export const createJobCategory = async (req: any, res: any) => {
     return createResponse(res, 201, MESSAGES.CATEGORY_CREATED, jobCat);
 
   } catch (error: any) {
+     // tslint:disable-next-line:no-console 
     console.log(error);
 
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -161,6 +162,7 @@ export const getAllJobCategories = async (req: any, res: any) => {
     });
 
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     console.log(error);
 
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -203,6 +205,7 @@ export const updateJobCategory = async (req: any, res: any) => {
     return createResponse(res, 200, MESSAGES.CATEGORY_UPDATED, jobCat);
 
   } catch (error: any) {
+     // tslint:disable-next-line:no-console 
     console.log(error);
 
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -224,6 +227,7 @@ export const deleteJobCategory = async (req: any, res: any) => {
     return createResponse(res, 200, MESSAGES.CATEGORY_DELETED, []);
 
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     console.log(error);
 
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);

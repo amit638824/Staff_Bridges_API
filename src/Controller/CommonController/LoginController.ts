@@ -6,9 +6,9 @@ import { createResponse } from "../../Helpers/response";
 import { sendEmail } from "../../Helpers/email";
 import { generateToken } from "../../Helpers/utils";
 import { User } from "../../Entities/user";
-import { Login } from "../../Entities/login"; 
+import { Login } from "../../Entities/login";
 import { OAuth2Client } from "google-auth-library";
- 
+
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 export const GoogleSocialLoginController = async (req: any, res: any) => {
@@ -109,6 +109,7 @@ export const GoogleSocialLoginController = async (req: any, res: any) => {
             false
         );
     } catch (error) {
+        // tslint:disable-next-line:no-console 
         console.log("Internal server error:", error);
 
         return createResponse(res, 500, "Internal server error", [], false, true);
@@ -131,7 +132,7 @@ export const EmailLoginController = async (req: any, res: any) => {
 
         // Step 3: Compare hashed password using bcrypt
         const isMatch = await bcrypt.compare(password, login.password);
-      
+
         if (!isMatch) {
             return createResponse(res, 401, MESSAGES?.INVALID_CREDENTIALS, [], false, true);
         }
@@ -169,6 +170,7 @@ export const EmailLoginController = async (req: any, res: any) => {
         );
 
     } catch (error) {
+        // tslint:disable-next-line:no-console 
         console.log(MESSAGES?.INTERNAL_SERVER_ERROR, error);
 
         return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
@@ -194,16 +196,17 @@ export const SendOtpMobileController = async (req: any, res: any) => {
             return createResponse(res, 200, MESSAGES.USER_REGISTERED, { mobile, otp: otpCode, newUser: true, roleId }, true, false);
         }
 
-        await Login.createQueryBuilder().update(Login).set({ otpCode, otpExpiry, updatedAt: new Date(), loginMethod: "MOBILE_OTP" as any}).where("userId = :userId", { userId: user.id }).execute();
+        await Login.createQueryBuilder().update(Login).set({ otpCode, otpExpiry, updatedAt: new Date(), loginMethod: "MOBILE_OTP" as any }).where("userId = :userId", { userId: user.id }).execute();
 
         return createResponse(res, 200, MESSAGES.OTP_SENT, { mobile, otp: otpCode, newUser: false, roleId: user.RoleId }, true, false);
 
     } catch (error) {
+        // tslint:disable-next-line:no-console 
         console.log("INTERNAL_SERVER_ERROR", error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], false, true);
     }
-}; 
+};
 export const MobileLoginController = async (req: any, res: any) => {
     try {
         const { mobile, otp } = req.body;
@@ -262,6 +265,7 @@ export const MobileLoginController = async (req: any, res: any) => {
             false
         );
     } catch (error) {
+        // tslint:disable-next-line:no-console 
         console.log(MESSAGES?.INTERNAL_SERVER_ERROR, error);
 
         return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
@@ -292,7 +296,6 @@ export const ForgetPassword = async (req: any, res: any) => {
         }
 
     } catch (err) {
-        // Log the error to the console for debugging purposes
         // tslint:disable-next-line:no-console
         console.log(MESSAGES?.RESET_LINK_ERROR, err);
 
@@ -336,6 +339,7 @@ export const ResetPassword = async (req: any, res: any) => {
 
         return createResponse(res, 200, MESSAGES?.PASSWORD_UPDATED);
     } catch (err) {
+         // tslint:disable-next-line:no-console 
         console.error(MESSAGES?.RESET_ERROR, err);
 
         return createResponse(res, 500, MESSAGES?.RESET_ERROR, [], false, true);
@@ -371,8 +375,7 @@ export const ResetTockenCheck = async (req: any, res: any) => {
         // Token not found in the database, send an invalid token response
         return createResponse(res, 401, MESSAGES?.INVALID_TOKEN, [], false, true);
 
-    } catch (err) {
-        // Log the error to the console for debugging purposes
+    } catch (err) { 
         // tslint:disable-next-line:no-console
         console.log(MESSAGES?.RESET_ERROR, err);
 

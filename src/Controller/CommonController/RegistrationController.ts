@@ -1,7 +1,8 @@
- 
+
 import { MESSAGES } from "../../Helpers/constants";
 import { createResponse } from "../../Helpers/response";
-import { generateOtp, 
+import {
+    generateOtp,
     // profileCompletion 
 } from "../../Helpers/utils";
 import { User } from "../../Entities/user";
@@ -59,7 +60,6 @@ export const ProfileUpdate = async (req: any, res: any) => {
         // return createResponse(res, 200, MESSAGES?.DATA_FETCH_SUCCESS, responseData, true, false);
 
     } catch (error: any) {
-        // Log the error to the console for debugging purposes
         // tslint:disable-next-line:no-console
         console.log("Error fetching user data:", error);
 
@@ -120,11 +120,12 @@ export const userBasicProfileUpdate = async (req: any, res: any) => {
         );
 
     } catch (err) {
+        // tslint:disable-next-line:no-console 
         console.log(MESSAGES?.RESET_ERROR, err);
 
         return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
     }
-}; 
+};
 export const UserEmailVerificationSendOtp = async (req: any, res: any) => {
     const { email } = req.body;
 
@@ -150,7 +151,6 @@ export const UserEmailVerificationSendOtp = async (req: any, res: any) => {
         }
 
     } catch (err) {
-        // Log the error to the console for debugging purposes
         // tslint:disable-next-line:no-console
         console.log(MESSAGES?.RESET_LINK_ERROR, err);
 
@@ -185,6 +185,7 @@ export const verifyUserEmail = async (req: any, res: any) => {
 
         return createResponse(res, 200, MESSAGES?.EMAIL_VERIFIED_SUCCESS);
     } catch (err) {
+        // tslint:disable-next-line:no-console 
         console.error("VERIFY EMAIL ERROR:", err);
 
         return createResponse(res, 500, MESSAGES?.RESET_ERROR, [], false, true);
@@ -207,6 +208,7 @@ export const UserMobileVerificationSendOtp = async (req: any, res: any) => {
 
         return createResponse(res, 200, MESSAGES?.MOBILE_VERIFICATION_OTP_SENT);
     } catch (err) {
+        // tslint:disable-next-line:no-console 
         console.log("OTP SEND ERROR:", err);
 
         return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
@@ -251,6 +253,7 @@ export const verifyUserMobile = async (req: any, res: any) => {
         return createResponse(res, 200, MESSAGES?.MOBILE_VERIFIED_SUCCESS);
 
     } catch (err) {
+        // tslint:disable-next-line:no-console 
         console.log("VERIFY MOBILE ERROR:", err);
 
         return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);

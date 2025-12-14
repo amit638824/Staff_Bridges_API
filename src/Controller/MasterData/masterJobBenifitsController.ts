@@ -36,7 +36,9 @@ export const createMasterJobBenefit = async (req: any, res: any) => {
 
     return createResponse(res, 201, MESSAGES.JOB_BENEFIT_CREATED, benefit);
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     console.error(error);
+
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 };
@@ -93,7 +95,9 @@ export const getAllMasterJobBenefits = async (req: any, res: any) => {
       items,
     });
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     console.error(error);
+
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 };
@@ -128,7 +132,9 @@ export const updateMasterJobBenefit = async (req: any, res: any) => {
 
     return createResponse(res, 200, MESSAGES.JOB_BENEFIT_UPDATED, benefit);
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     console.error(error);
+
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 };
@@ -157,7 +163,9 @@ export const deleteMasterJobBenefit = async (req: any, res: any) => {
 
     return createResponse(res, 200, MESSAGES.JOB_BENEFIT_DELETED, []);
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     console.error(error);
+
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 };

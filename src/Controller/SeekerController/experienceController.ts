@@ -39,6 +39,7 @@ export const createExperience = async (req: any, res: any) => {
     return createResponse(res, 201, MESSAGES.CATEGORY_CREATED, exp);
 
   } catch (error: any) {
+     // tslint:disable-next-line:no-console 
     console.log(error);
 
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -150,6 +151,7 @@ export const getAllExperience = async (req: any, res: any) => {
     });
 
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     console.log(error);
 
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -200,6 +202,7 @@ export const updateExperience = async (req: any, res: any) => {
     return createResponse(res, 200, MESSAGES.CATEGORY_UPDATED, exp);
 
   } catch (error: any) {
+     // tslint:disable-next-line:no-console 
     console.log(error);
 
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -221,6 +224,7 @@ export const deleteExperience = async (req: any, res: any) => {
     return createResponse(res, 200, MESSAGES.CATEGORY_DELETED, []);
 
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     console.log(error);
 
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);

@@ -39,7 +39,9 @@ export const createRecruiterDocuments = async (req: any, res: any) => {
 
         return createResponse(res, 201, MESSAGES.DOCUMENT_CREATED, doc);
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, []);
     }
 };
@@ -89,7 +91,9 @@ export const getRecruiterDocumentsList = async (req: any, res: any) => {
             items,
         });
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, []);
     }
 };
@@ -136,7 +140,9 @@ export const updateRecruiterDocuments = async (req: any, res: any) => {
 
         return createResponse(res, 200, MESSAGES.DOCUMENT_UPDATED, doc);
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, []);
     }
 }; 
@@ -154,7 +160,9 @@ export const deleteRecruiterDocuments = async (req: any, res: any) => {
 
         return createResponse(res, 200, MESSAGES.DOCUMENT_DELETED, []);
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, []);
     }
 };

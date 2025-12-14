@@ -17,6 +17,7 @@ routerFileUpload.post("/upload", async (req: any, res: any) => {
       data: uploadRes,
     });
   } catch (err) {
+     // tslint:disable-next-line:no-console 
     console.log(err);
     res.status(500).json({ error: "Upload failed" });
   }

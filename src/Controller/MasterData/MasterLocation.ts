@@ -23,8 +23,10 @@ export const createCountry = async (req: any, res: any) => {
             status: status ?? 1
         }); 
         await country.save(); 
+        
         return createResponse(res, 201, MESSAGES.COUNTRY_CREATED, country); 
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -48,6 +50,7 @@ export const updateCountry = async (req: any, res: any) => {
 
         return createResponse(res, 200, MESSAGES.COUNTRY_UPDATED, country);
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -66,6 +69,7 @@ export const deleteCountry = async (req: any, res: any) => {
 
         return createResponse(res, 200, MESSAGES.COUNTRY_DELETED, []);
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -87,6 +91,7 @@ export const createState = async (req: any, res: any) => {
 
         return createResponse(res, 201, MESSAGES.STATE_CREATED, state);
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -110,6 +115,7 @@ export const updateState = async (req: any, res: any) => {
 
         return createResponse(res, 200, MESSAGES.STATE_UPDATED, state);
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -126,6 +132,7 @@ export const deleteState = async (req: any, res: any) => {
 
         return createResponse(res, 200, MESSAGES.STATE_DELETED, []);
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -161,6 +168,7 @@ export const createCity = async (req: any, res: any) => {
         return createResponse(res, 201, MESSAGES.CITY_CREATED, city);
 
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -189,6 +197,7 @@ export const updateCity = async (req: any, res: any) => {
         return createResponse(res, 200, MESSAGES.CITY_UPDATED, city);
 
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -210,6 +219,7 @@ export const deleteCity = async (req: any, res: any) => {
         return createResponse(res, 200, MESSAGES.CITY_DELETED, []);
 
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -249,6 +259,7 @@ export const createLocality = async (req: any, res: any) => {
     return createResponse(res, 201, MESSAGES.LOCALITY_CREATED, locality);
 
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
 
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -289,6 +300,7 @@ export const updateLocality = async (req: any, res: any) => {
     return createResponse(res, 200, MESSAGES.LOCALITY_UPDATED, locality);
 
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
 
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -311,6 +323,7 @@ export const deleteLocality = async (req: any, res: any) => {
     return createResponse(res, 200, MESSAGES.LOCALITY_DELETED, []);
 
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
 
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -386,6 +399,7 @@ export const getAllLocalities = async (req: any, res: any) => {
     });
 
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
 
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -461,6 +475,7 @@ export const getAllCountries = async (req: any, res: any) => {
         });
 
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -536,6 +551,7 @@ export const getAllStates = async (req: any, res: any) => {
         });
 
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -611,6 +627,7 @@ export const getAllCities = async (req: any, res: any) => {
         });
 
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);

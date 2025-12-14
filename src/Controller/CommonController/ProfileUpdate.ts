@@ -60,6 +60,7 @@ export const userProfilePicContactUpdate = async (req: any, res: any) => {
         );
 
     } catch (err) {
+         // tslint:disable-next-line:no-console 
         console.log(MESSAGES?.RESET_ERROR, err);
 
         return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
@@ -110,7 +111,9 @@ export const userLocationUpdate = async (req: any, res: any) => {
             false
         );
     } catch (err) {
+         // tslint:disable-next-line:no-console 
         console.error("LOCATION_UPDATE_ERROR", err);
+
         return createResponse(
             res,
             500,
@@ -121,4 +124,3 @@ export const userLocationUpdate = async (req: any, res: any) => {
         );
     }
 };
-

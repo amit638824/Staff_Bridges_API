@@ -1,4 +1,5 @@
-import { jobQuestionAnswer } from "../../Entities/jobQuestionAnswer";
+ 
+import { JobQuestionAnswer } from "../../Entities/jobQuestionAnswer";
 import { MasterQuestions } from "../../Entities/masterQuestion";
 import { MasterQuestionOptions } from "../../Entities/MasterQuestionOptions";
 import { MESSAGES } from "../../Helpers/constants";
@@ -14,7 +15,7 @@ export const createJobAnswer = async (req: any, res: any) => {
         }
 
         // Duplicate check: same user, same question, same category, same option
-        const exist = await jobQuestionAnswer.findOne({
+        const exist = await JobQuestionAnswer.findOne({
             where: { userId, questionId, categoryId, optionId }
         });
 
@@ -22,7 +23,7 @@ export const createJobAnswer = async (req: any, res: any) => {
             return createResponse(res, 409, MESSAGES.ALREADY_EXISTS("Answer"), [], true, true);
         }
 
-        const answer = jobQuestionAnswer.create({
+        const answer = JobQuestionAnswer.create({
             categoryId: categoryId ?? null,
             questionId,
             userId,
@@ -37,7 +38,9 @@ export const createJobAnswer = async (req: any, res: any) => {
         return createResponse(res, 201, MESSAGES.ANSWER_CREATED, answer);
 
     } catch (error: any) {
+         // tslint:disable-next-line:no-console 
         console.log(error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
@@ -48,7 +51,7 @@ export const getAllJobAnswers = async (req: any, res: any) => {
         const { page = 1, limit = 10, ...filters } = req.query;
         const offset = (Number(page) - 1) * Number(limit);
 
-        const qb = jobQuestionAnswer.createQueryBuilder("ans")
+        const qb = JobQuestionAnswer.createQueryBuilder("ans")
             .leftJoinAndSelect(MasterQuestions, "q", "ans.questionId = q.id")
             .leftJoinAndSelect(MasterQuestionOptions, "opt", "ans.optionId = opt.id")
             .select([
@@ -81,7 +84,7 @@ export const getAllJobAnswers = async (req: any, res: any) => {
         const items = await qb.getMany();
 
         // Count Query
-        const totalQB = jobQuestionAnswer.createQueryBuilder("ans")
+        const totalQB = JobQuestionAnswer.createQueryBuilder("ans")
             .select("COUNT(ans.id)", "total");
 
         Object.entries(filters).forEach(([key, value]) => {
@@ -105,7 +108,9 @@ export const getAllJobAnswers = async (req: any, res: any) => {
         });
 
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
@@ -116,14 +121,14 @@ export const updateJobAnswer = async (req: any, res: any) => {
         const { id } = req.params;
         const { categoryId, questionId, userId, optionId, status, updatedBy } = req.body;
 
-        const answer = await jobQuestionAnswer.findOne({ where: { id: Number(id) } });
+        const answer = await JobQuestionAnswer.findOne({ where: { id: Number(id) } });
         if (!answer) {
             return createResponse(res, 404, MESSAGES.ANSWER_NOT_FOUND, [], true, true);
         }
 
         // Duplicate check
         if (questionId || userId || categoryId || optionId) {
-            const check = await jobQuestionAnswer.findOne({
+            const check = await JobQuestionAnswer.findOne({
                 where: {
                     userId: userId ?? answer.userId,
                     questionId: questionId ?? answer.questionId,
@@ -149,7 +154,9 @@ export const updateJobAnswer = async (req: any, res: any) => {
         return createResponse(res, 200, MESSAGES.ANSWER_UPDATED, answer);
 
     } catch (error: any) {
+         // tslint:disable-next-line:no-console 
         console.log(error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
@@ -159,17 +166,19 @@ export const deleteJobAnswer = async (req: any, res: any) => {
     try {
         const { id } = req.params;
 
-        const answer = await jobQuestionAnswer.findOne({ where: { id: Number(id) } });
+        const answer = await JobQuestionAnswer.findOne({ where: { id: Number(id) } });
         if (!answer) {
             return createResponse(res, 404, MESSAGES.ANSWER_NOT_FOUND, [], true, true);
         }
 
-        await jobQuestionAnswer.remove(answer);
+        await JobQuestionAnswer.remove(answer);
 
         return createResponse(res, 200, MESSAGES.ANSWER_DELETED, []);
 
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };

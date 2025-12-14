@@ -22,6 +22,7 @@ export const createQuestion = async (req: any, res: any) => {
         return createResponse(res, 201, MESSAGES.QUESTION_CREATED, question);
 
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -86,6 +87,7 @@ export const getAllQuestions = async (req: any, res: any) => {
         });
 
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -108,6 +110,7 @@ export const updateQuestion = async (req: any, res: any) => {
         return createResponse(res, 200, MESSAGES.QUESTION_UPDATED, question);
 
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -125,6 +128,7 @@ export const deleteQuestion = async (req: any, res: any) => {
         return createResponse(res, 200, MESSAGES.QUESTION_DELETED, []);
 
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -133,8 +137,7 @@ export const deleteQuestion = async (req: any, res: any) => {
 ///// Options group 
 export const createQuestionOption = async (req: any, res: any) => {
     try {
-        const { questionId, optionText, status } = req.body;
-        console.log(questionId, optionText);
+        const { questionId, optionText, status } = req.body; 
 
         if (!questionId || !optionText) {
             return createResponse(res, 400, MESSAGES.REQUIRED_FIELDS, [], true, true);
@@ -158,7 +161,7 @@ export const createQuestionOption = async (req: any, res: any) => {
         return createResponse(res, 201, MESSAGES.OPTION_CREATED, option);
 
     } catch (error: any) { 
-
+ // tslint:disable-next-line:no-console 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
@@ -224,6 +227,7 @@ export const getAllQuestionOptions = async (req: any, res: any) => {
         });
 
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -263,12 +267,9 @@ export const updateQuestionOption = async (req: any, res: any) => {
         return createResponse(res, 200, MESSAGES.OPTION_UPDATED, option);
 
     } catch (error: any) {
+         // tslint:disable-next-line:no-console 
         console.log(error);
-
-        if (error.code === "ER_DUP_ENTRY") {
-            return createResponse(res, 409, MESSAGES.ALREADY_EXISTS("Option"), [], true, true);
-        }
-
+ 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
@@ -289,6 +290,7 @@ export const deleteQuestionOption = async (req: any, res: any) => {
         return createResponse(res, 200, MESSAGES.OPTION_DELETED, []);
 
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);

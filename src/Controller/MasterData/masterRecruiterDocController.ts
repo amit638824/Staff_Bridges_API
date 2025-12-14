@@ -32,7 +32,9 @@ export const createRecruiterDocument = async (req: any, res: any) => {
 
     return createResponse(res, 201, MESSAGES.RECRUITER_DOCUMENT_CREATED, document);
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     console.log(error);
+
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 };
@@ -69,7 +71,9 @@ export const getAllRecruiterDocuments = async (req: any, res: any) => {
 
     return createResponse(res, 200, MESSAGES.RECRUITER_DOCUMENT_FETCHED, { currentPage: Number(page), limit: Number(limit), totalPages, totalRecords, items });
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     console.log(error);
+
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 };
@@ -99,7 +103,9 @@ export const updateRecruiterDocument = async (req: any, res: any) => {
 
     return createResponse(res, 200, MESSAGES.RECRUITER_DOCUMENT_UPDATED, document);
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     console.log(error);
+
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 };
@@ -116,7 +122,9 @@ export const deleteRecruiterDocument = async (req: any, res: any) => {
 
     return createResponse(res, 200, MESSAGES.RECRUITER_DOCUMENT_DELETED, []);
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     console.log(error);
+
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 };

@@ -35,12 +35,8 @@ export const createCategory = async (req: any, res: any) => {
 
     return createResponse(res, 201, MESSAGES.CATEGORY_CREATED, category);
 
-  } catch (error: any) {
-    console.log(error); 
-    if (error.code === "ER_DUP_ENTRY") {
-      return createResponse(res, 409, MESSAGES.ALREADY_EXISTS("Category"), [], true, true);
-    }
-
+  } catch (error: any) { 
+     // tslint:disable-next-line:no-console  
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 };  
@@ -117,6 +113,7 @@ export const getAllCategories = async (req: any, res: any) => {
         });
 
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
@@ -153,10 +150,8 @@ export const updateCategory = async (req: any, res: any) => {
         return createResponse(res, 200, MESSAGES.CATEGORY_UPDATED, category);
 
     } catch (error: any) {
-        console.log(error);
-        if (error.code === "ER_DUP_ENTRY") {
-            return createResponse(res, 409, MESSAGES.ALREADY_EXISTS("Category"), [], true, true);
-        }
+         // tslint:disable-next-line:no-console 
+        console.log(error); 
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
@@ -176,6 +171,7 @@ export const deleteCategory = async (req: any, res: any) => {
         return createResponse(res, 200, MESSAGES.CATEGORY_DELETED, []);
 
     } catch (error) {
+         // tslint:disable-next-line:no-console 
         console.log(MESSAGES.INTERNAL_SERVER_ERROR, error);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);

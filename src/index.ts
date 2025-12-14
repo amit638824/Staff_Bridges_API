@@ -1,4 +1,4 @@
- 
+
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -26,17 +26,23 @@ app.use(expressFileupload());
 app.use("/api/uploads", express.static("./src/uploads"));
 
 AppDataSource.initialize()
-  .then(() => console.log("🚀 Data Source has been initialized! ✅"))
-  .catch((err: any) => console.error(" Error during Data Source initialization", err));
+  .then(() => {
+    // tslint:disable-next-line:no-console 
+    console.log("🚀 Data Source has been initialized! ✅");
+  })
+  .catch((err: any) => {
+    // tslint:disable-next-line:no-console 
+    console.error(" Error during Data Source initialization", err);
+  });
 
 app.use(
   "/doc",
   swaggerUi.serve,
   swaggerUi.setup(swaggerSpec, { customSiteTitle: "StaffBridges API Docs" })
-); 
-app.use("/auth", throttleMiddleware, loginRoute);  
-app.use("/api", throttleMiddleware, masterData); 
-app.use("/api", throttleMiddleware, seekerRoute); 
+);
+app.use("/auth", throttleMiddleware, loginRoute);
+app.use("/api", throttleMiddleware, masterData);
+app.use("/api", throttleMiddleware, seekerRoute);
 app.use("/api", throttleMiddleware, recruiterRouter);
 app.use("/file", throttleMiddleware, routerFileUpload);
 
@@ -46,6 +52,7 @@ app.get("/", async (req: any, res: any) => {
     const result = await translatte("Amit Chauhan", { to: "hi" });
     res.send(result.text);
   } catch (err) {
+    // tslint:disable-next-line:no-console 
     console.error("Translate Error:", err);
     res.status(500).send("Translation failed");
   }
@@ -56,9 +63,13 @@ app.get("/test", throttleMiddleware, (req: Request, res: Response) => {
 });
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  // tslint:disable-next-line:no-console 
   console.error(err.stack);
   res.status(500).send("Something went wrong!");
 });
 
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));
+app.listen(PORT, () => {
+  // tslint:disable-next-line:no-console 
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
+});
