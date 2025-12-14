@@ -32,6 +32,7 @@ loginRoute.put("/user-mobile-verify", AuthHandler.verifyUserMobile);
 ----------------------------------------------*/
 loginRoute.put("/user-profile-update-basicinfo", AuthHandler.userBasicProfileUpdate);
 loginRoute.put("/user-profile-update-pic-mobile", AuthHandler.userProfilePicContactUpdate);
+loginRoute.put("/user-profile-update-location", AuthHandler.userLocationUpdate);
 loginRoute.get("/user-profile/:email", AuthHandler.ProfileUpdate); 
 /* ---------------------------------------------
    ROLE & PERMISSION

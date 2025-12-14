@@ -8,29 +8,48 @@ import { generateToken } from "../../Helpers/utils";
 import { User } from "../../Entities/user";
 import { Login } from "../../Entities/login"; 
 import { OAuth2Client } from "google-auth-library";
-const client: any = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+ 
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 export const GoogleSocialLoginController = async (req: any, res: any) => {
     try {
-        const { idToken } = req.body; 
+        const { idToken } = req.body;
         if (!idToken) {
-            return createResponse(   res,   400,   "idToken is required",   [],  false,  true );
-        } 
+            return createResponse(res, 400, "idToken is required", [], false, true);
+        }
+
         const ticket = await client.verifyIdToken({
             idToken,
             audience: process.env.GOOGLE_CLIENT_ID,
-        }); 
-        const payload: any = ticket.getPayload(); 
+        });
+
+        const payload: any = ticket.getPayload();
         if (!payload || !payload.email) {
-            return createResponse(   res,  400,  "Invalid Google Token",   [],  false,  true  );
-        } 
+            return createResponse(res, 400, "Invalid Google Token", [], false, true);
+        }
+
         const email = payload.email;
         const fullName = payload.name;
         const socialId = payload.sub;
-        const provider = "GOOGLE"; 
-        let user = await User.findOne({ where: { email } }); 
+        const profilePic = payload.picture; // profilePic from Google
+        const provider = "GOOGLE";
+
+        let user = await User.findOne({ where: { email } });
+
         if (!user) {
-            user = await User.create({ fullName, email, password: null, mobile: null, RoleId: 2, }).save(); 
+            // Hash default password
+            const defaultPassword = "Test@12345";
+            const hashedPassword = await bcrypt.hash(defaultPassword, 10);
+
+            user = await User.create({
+                fullName,
+                email,
+                password: hashedPassword, // store hashed password
+                mobile: null,
+                RoleId: 2,
+                profilePic, // store Google profile pic
+            }).save();
+
             await Login.create({
                 userId: user.id,
                 loginMethod: "SOCIAL",
@@ -40,7 +59,8 @@ export const GoogleSocialLoginController = async (req: any, res: any) => {
                 createdAt: new Date(),
                 updatedAt: new Date(),
             }).save();
-        } else { 
+        } else {
+            // Update last login & social info
             await Login.createQueryBuilder()
                 .update(Login)
                 .set({
@@ -54,22 +74,46 @@ export const GoogleSocialLoginController = async (req: any, res: any) => {
                     method: "SOCIAL",
                 })
                 .execute();
-        } 
-        const JWT_SECRET = process.env.JWT_SECRET || "yourSecretKey"; 
-        const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "24h" }); 
+
+            // Update profile picture if missing or changed
+            if (!user.profilePic || user.profilePic !== profilePic) {
+                user.profilePic = profilePic;
+                await user.save();
+            }
+        }
+
+        const JWT_SECRET = process.env.JWT_SECRET || "yourSecretKey";
+        const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "24h" });
+
         const data = await User.createQueryBuilder("user")
-            .select(["user.id", "user.fullName", "user.email", "user.mobile", "user.RoleId", "roletbl.id", "roletbl.roleName", ])
+            .select([
+                "user.id",
+                "user.fullName",
+                "user.email",
+                "user.mobile",
+                "user.RoleId",
+                "user.profilePic",
+                "roletbl.id",
+                "roletbl.roleName",
+            ])
             .leftJoin(Role, "roletbl", "user.RoleId = roletbl.id")
             .where("user.email = :email", { email })
-            .getRawOne(); 
-        return createResponse(res, 200, MESSAGES?.LOGIN_SUCCESS || "Social login successful", { token, user: data }, true, false);
+            .getRawOne();
 
+        return createResponse(
+            res,
+            200,
+            "Social login successful",
+            { token, user: data },
+            true,
+            false
+        );
     } catch (error) {
-        console.log(MESSAGES?.INTERNAL_SERVER_ERROR, error);
-
-        return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
+        console.log("Internal server error:", error);
+        return createResponse(res, 500, "Internal server error", [], false, true);
     }
-}; 
+};
+
 export const EmailLoginController = async (req: any, res: any) => {
     try {
         const { email, password } = req.body;

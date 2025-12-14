@@ -42,11 +42,14 @@ export class User extends BaseEntity {
   @Column({ name: "countryId", type: "int", nullable: true })
   countryId: any;
 
-  @Column({ name: "profile", type: "int", nullable: true })
+  @Column({ name: "profile", type: "int", nullable: true }) // id se map krne 
   profile: any;
 
   @Column({ name: "profilePic", type: "varchar", nullable: true })
   profilePic: any;
+
+  @Column({ name: "resume", type: "varchar", nullable: true })
+  resume: any;
 
   @Column({ name: "stateId", type: "int", nullable: true })
   stateId: any;
@@ -74,9 +77,6 @@ export class User extends BaseEntity {
 
   @Column({ name: "salary", type: "varchar", length: 50, nullable: true })
   salary: any;
-
-   @Column({ name: "resume", type: "varchar", length: 50, nullable: true })
-  resume: any;
 
   @Column({ name: "education", type: "varchar", length: 50, nullable: true })
   education: any;

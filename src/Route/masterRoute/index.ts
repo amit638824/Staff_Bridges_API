@@ -40,4 +40,11 @@ masterData.post("/master-options", MasterController.createQuestionOption);
 masterData.get("/master-options", MasterController.getAllQuestionOptions);
 masterData.put("/master-options/:id", MasterController.updateQuestionOption);
 masterData.delete("/master-options/:id", MasterController.deleteQuestionOption);
+// mster document upload  CRUD 
+masterData.post("/master-recruiter-document", MasterController.createRecruiterDocument);
+masterData.get("/master-recruiter-document", MasterController.getAllRecruiterDocuments); 
+masterData.put("/master-recruiter-document/:id", MasterController.updateRecruiterDocument);
+masterData.delete("/master-recruiter-document/:id", MasterController.deleteRecruiterDocument);
+
+
 export default masterData;

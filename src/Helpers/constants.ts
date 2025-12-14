@@ -82,10 +82,24 @@ export const MESSAGES = {
   OPTION_UPDATED: "Question option updated successfully.",
   OPTION_DELETED: "Question option deleted successfully.",
   OPTION_NOT_FOUND: "Question option not found.",
+  
   ANSWER_CREATED: "Answer created successfully.",
   ANSWERS_FETCHED: "Answers fetched successfully.",
   ANSWER_UPDATED: "Answer updated successfully.",
   ANSWER_DELETED: "Answer deleted successfully.",
   ANSWER_NOT_FOUND: "Answer not found.",
+
+  RECRUITER_DOCUMENT_CREATED: "Recruiter document created successfully.",
+  RECRUITER_DOCUMENT_FETCHED: "Recruiter documents fetched successfully.",
+  RECRUITER_DOCUMENT_UPDATED: "Recruiter document updated successfully.",
+  RECRUITER_DOCUMENT_DELETED: "Recruiter document deleted successfully.",
+  RECRUITER_DOCUMENT_NOT_FOUND: "Recruiter document not found.", 
+  
+  DOCUMENT_CREATED: "Recruiter document created successfully",
+  DOCUMENT_FETCHED: "Recruiter documents fetched successfully",
+  DOCUMENT_UPDATED: "Recruiter document updated successfully",
+  DOCUMENT_DELETED: "Recruiter document deleted successfully",
+  DOCUMENT_NOT_FOUND: "Recruiter document not found",
+  DOCUMENT_ALREADY_EXISTS: "Recruiter document already exists",
 
 };
