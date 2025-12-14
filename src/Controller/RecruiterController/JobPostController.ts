@@ -87,6 +87,7 @@ export const createRecruiter = async (req: any, res: any) => {
     return createResponse(res, 201, "Recruiter created successfully", savedRecruiter);
 
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     return createResponse(res, 500, "Something went wrong", error, false, true);
   }
 };  
@@ -97,6 +98,7 @@ export const getRecruiterList = async(req: any, res: any) => {
 
     return createResponse(res, 200, "Recruiter List", recruiters);
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     return createResponse(res, 500, "Something went wrong", error, false, true);
   }
 };
@@ -113,6 +115,7 @@ export const getRecruiterDetail = async(req: any, res: any) => {
 
     return createResponse(res, 200, "Recruiter Details", recruiter);
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     return createResponse(res, 500, "Something went wrong", error, false, true);
   }
 };
@@ -132,6 +135,7 @@ export const updateRecruiter = async(req: any, res: any) => {
 
     return createResponse(res, 200, "Recruiter updated successfully", updatedRecruiter);
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     return createResponse(res, 500, "Something went wrong", error, false, true);
   }
 };
@@ -151,6 +155,7 @@ export const deleteRecruiter = async(req: any, res: any) => {
 
     return createResponse(res, 200, "Recruiter deleted successfully");
   } catch (error) {
+     // tslint:disable-next-line:no-console 
     return createResponse(res, 500, "Something went wrong", error, false, true);
   }
 };

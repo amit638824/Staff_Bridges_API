@@ -4,18 +4,18 @@ import {
     Entity,
     PrimaryGeneratedColumn,
 } from "typeorm";
-@Entity({ name: "JobCategory" })
-export class JobCategory extends BaseEntity {
+@Entity({ name: "MasterQuestionOptions" })
+export class MasterQuestionOptions extends BaseEntity {
 
     @PrimaryGeneratedColumn({ name: "id" })
     id: number;
 
-    @Column({ name: "categoryId", type: "int", nullable: true })
-    categoryId: number;
+    @Column({ name: "questionId" , type: "int", nullable: true })
+    questionId: any;
 
-    @Column({ name: "userId", type: "int", nullable: true })
-    userId: number; 
-    
+    @Column({ name: "optionText", type: "text", nullable: false })
+    optionText: string; 
+
     @Column({ name: "status", type: "int", default: 1 })
     status: number;
 
@@ -24,11 +24,4 @@ export class JobCategory extends BaseEntity {
 
     @Column({ name: "updatedAt", type: "timestamptz", default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" })
     updatedAt: Date;
-
-    @Column({ name: "createdBy", type: "int", nullable: true })
-    createdBy: number;
-
-    @Column({ name: "updatedBy", type: "int", nullable: true })
-    updatedBy: number;
-
 }

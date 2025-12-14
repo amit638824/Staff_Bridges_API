@@ -1,21 +1,22 @@
-import {
-    BaseEntity,
-    Column,
-    Entity,
-    PrimaryGeneratedColumn,
-} from "typeorm";
-@Entity({ name: "JobCategory" })
-export class JobCategory extends BaseEntity {
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
+@Entity({ name: "JobQuestionAnswer" })
+export class JobQuestionAnswer extends BaseEntity {
     @PrimaryGeneratedColumn({ name: "id" })
     id: number;
+
+    @Column({ name: "userId", type: "int", nullable: false })
+    userId: number;
 
     @Column({ name: "categoryId", type: "int", nullable: true })
     categoryId: number;
 
-    @Column({ name: "userId", type: "int", nullable: true })
-    userId: number; 
-    
+    @Column({ name: "questionId", type: "int", nullable: false })
+    questionId: number;
+
+    @Column({ name: "optionId", type: "int", nullable: true })
+    optionId: number;
+
     @Column({ name: "status", type: "int", default: 1 })
     status: number;
 
@@ -30,5 +31,4 @@ export class JobCategory extends BaseEntity {
 
     @Column({ name: "updatedBy", type: "int", nullable: true })
     updatedBy: number;
-
 }

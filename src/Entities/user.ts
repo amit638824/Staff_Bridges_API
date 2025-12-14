@@ -36,17 +36,29 @@ export class User extends BaseEntity {
   @Column({ name: "gender", type: "enum", enum: ["Male", "Female", "Other"], default: "Male" })
   gender: any;
 
+  @Column({ name: "experinced", type: "int", default: 0 })
+  experinced: any;
+
   @Column({ name: "countryId", type: "int", nullable: true })
   countryId: any;
 
-  @Column({ name: "profile", type: "int", nullable: true })
+  @Column({ name: "profile", type: "int", nullable: true }) // id se map krne 
   profile: any;
+
+  @Column({ name: "profilePic", type: "varchar", nullable: true })
+  profilePic: any;
+
+  @Column({ name: "resume", type: "varchar", nullable: true })
+  resume: any;
 
   @Column({ name: "stateId", type: "int", nullable: true })
   stateId: any;
 
   @Column({ name: "city", type: "varchar", length: 50, nullable: true })
   city: any;
+
+  @Column({ name: "locality", type: "varchar", length: 50, nullable: true })
+  locality: any;
 
   @Column({ name: "latitude", type: "decimal", precision: 10, scale: 6, nullable: true })
   latitude: any;
@@ -63,11 +75,17 @@ export class User extends BaseEntity {
   @Column({ name: "isMobileVerified", type: "int", default: 0 })
   isMobileVerified: any;
 
+  @Column({ name: "salary", type: "varchar", length: 50, nullable: true })
+  salary: any;
+
+  @Column({ name: "education", type: "varchar", length: 50, nullable: true })
+  education: any;
+
   @Column({ name: "credits", type: "varchar", length: 50, nullable: true })
   credits: any;
 
   @Column({ name: "status", type: "int", default: 1 })
-  status: any; 
+  status: any;
 
   @Column({ name: "createdAt", type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
@@ -78,5 +96,6 @@ export class User extends BaseEntity {
   @Column({ name: "createdBy", type: "int", nullable: true })
   createdBy: any;
 
-  
+  @Column({ name: "updatedBy", type: "int", nullable: true })
+  updatedBy: any;
 }

@@ -1,3 +1,4 @@
+
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -6,58 +7,69 @@ import swaggerSpec from "./SwaggerDocs/swagger";
 import loginRoute from "./Route/CommonRoute/index";
 import { AppDataSource } from "./DbConfig/TypeOrm";
 import { throttleMiddleware } from "./Middleware/ThrottleMiddleware";
-import recruiterRouter from "./Route/RecruiterRoute/JobCreate";
-import expressFileupload from "express-fileupload"; 
+import recruiterRouter from "./Route/RecruiterRoute";
+import expressFileupload from "express-fileupload";
 import routerFileUpload from "./Controller/CommonController/fileUpload";
+import masterData from "./Route/masterRoute";
+import seekerRoute from "./Route/SeekerRoute";
+const translatte = require("translatte");
 const app = express();
 dotenv.config();
+
 app.set("trust proxy", 1);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(expressFileupload());
-// Static serve path
+
 app.use("/api/uploads", express.static("./src/uploads"));
 
-// Initialize PostgreSQL Database
 AppDataSource.initialize()
   .then(() => {
-    // tslint:disable-next-line:no-console
-    console.log("🚀Data Source has been initialized! ✅");
+    // tslint:disable-next-line:no-console 
+    console.log("🚀 Data Source has been initialized! ✅");
   })
   .catch((err: any) => {
-
-    // tslint:disable-next-line:no-console
-    console.error("Error during Data Source initialization", err);
+    // tslint:disable-next-line:no-console 
+    console.error(" Error during Data Source initialization", err);
   });
 
-// Swagger setup
-app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec, { customSiteTitle: "StaffBridge API Docs"  }));
- 
-// Routes
-app.use("/auth", throttleMiddleware, loginRoute); 
+app.use(
+  "/doc",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, { customSiteTitle: "StaffBridges API Docs" })
+);
+app.use("/auth", throttleMiddleware, loginRoute);
+app.use("/api", throttleMiddleware, masterData);
+app.use("/api", throttleMiddleware, seekerRoute);
 app.use("/api", throttleMiddleware, recruiterRouter);
 app.use("/file", throttleMiddleware, routerFileUpload);
-app.get("/", throttleMiddleware, (req: Request, res: Response) => {
 
-  res.send("Welcome to the server !!!");
-}); 
+// Translation route
+app.get("/", async (req: any, res: any) => {
+  try {
+    const result = await translatte("Amit Chauhan", { to: "hi" });
+    res.send(result.text);
+  } catch (err) {
+    // tslint:disable-next-line:no-console 
+    console.error("Translate Error:", err);
+    res.status(500).send("Translation failed");
+  }
+});
 
 app.get("/test", throttleMiddleware, (req: Request, res: Response) => {
-
   res.send("Welcome to the 2020");
 });
 
-// Error handling middleware
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  // tslint:disable-next-line:no-console
+  // tslint:disable-next-line:no-console 
   console.error(err.stack);
   res.status(500).send("Something went wrong!");
 });
 
-// Start server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
-  // tslint:disable-next-line:no-console
-  console.log(`Hi Server is Running 🚀 at Port ${PORT}`);
+  // tslint:disable-next-line:no-console 
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
 });

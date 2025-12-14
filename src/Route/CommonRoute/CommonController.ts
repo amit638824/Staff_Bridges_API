@@ -1,4 +1,7 @@
 export * from "../../Controller/CommonController/ContactUs";
 export * from "../../Controller/CommonController/LoginController"; 
 export * from "../../Controller/CommonController/RegistrationController";
+export * from "../../Controller/CommonController/RegistrationController";
+export * from "../../Controller/CommonController/ProfileUpdate";
+
 export * from "../../Middleware/index"; 

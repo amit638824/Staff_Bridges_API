@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
@@ -11,12 +14,13 @@ export const s3 = new S3Client({
 
 // Upload file
 export const uploadToS3 = async (file: any, folder: string) => {
-  const fileName = `${folder}/${Date.now()}-${file.name}`;
+  const cleanName = file.name.replace(/\s+/g, "-");
+  const fileName = `${folder}/${Date.now()}-${cleanName}`;
 
   const params = {
     Bucket: process.env.AWS_S3_BUCKET_BUCKET_NAME!,
     Key: fileName,
-    Body: file.data,
+    Body: file.data || file.buffer, // ✅ FIX
     ContentType: file.mimetype,
   };
 
@@ -35,7 +39,9 @@ export const generateDownloadURL = async (key: string) => {
     Key: key,
   };
 
-  return await getSignedUrl(s3, new GetObjectCommand(params), {
-    expiresIn: 3600,
-  });
+  return await getSignedUrl(
+    s3,
+    new GetObjectCommand(params),
+    { expiresIn: 3600 }
+  );
 };

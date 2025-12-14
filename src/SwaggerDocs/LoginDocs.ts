@@ -10,7 +10,7 @@
  * @swagger
  * /auth/send-otp:
  *   post:
- *     summary: Send OTP for mobile login
+ *     summary: Send OTP for mobile login or auto registration
  *     tags: [Login & Authentication]
  *     requestBody:
  *       required: true
@@ -18,14 +18,18 @@
  *         application/json:
  *           schema:
  *             type: object
- *             required: [mobile]
+ *             required: [mobile, userType]
  *             properties:
  *               mobile:
  *                 type: string
  *                 example: "9876543210"
+ *               userType:
+ *                 type: string
+ *                 enum: [recruiter, seeker]
+ *                 example: "seeker"
  *     responses:
  *       200:
- *         description: OTP sent successfully
+ *         description: OTP sent
  *         content:
  *           application/json:
  *             example:
@@ -34,8 +38,11 @@
  *               data:
  *                 mobile: "9876543210"
  *                 otp: "123456"
+ *                 newUser: false
  *       400:
- *         description: Mobile number required
+ *         description: Invalid input
+ *       500:
+ *         description: Server error
  */
 
 /* ----------------------- MOBILE LOGIN (OTP VERIFY) ----------------------- */
@@ -335,4 +342,3 @@
  *       500:
  *         description: Internal server error
  */
-

@@ -1,21 +1,16 @@
 import express from "express";
-import * as AuthHandler from "./importCommonController"; 
+import * as AuthHandler from "./CommonController"; 
 const loginRoute = express.Router(); 
 /* ---------------------------------------------
     REGISTRATION (SEEKER + RECRUITER)
 ----------------------------------------------*/
-// Seeker Registration
-loginRoute.post("/seeker-register-mobile", AuthHandler.SeekerRegistrationMobileController);
-loginRoute.post("/seeker-register-otp-verify", AuthHandler.SeekerOTPVerifyController); 
-// Recruiter Registration
-loginRoute.post("/recruiter-register-mo    bile", AuthHandler.RecruiterRegistrationMobileController);
-loginRoute.post("/recruiter-register-otp-verify", AuthHandler.RecruiterOTPVerifyController);
+// Seeker Registration 
 /* ---------------------------------------------
    LOGIN SYSTEM (OTP, MOBILE, SOCIAL, EMAIL)
 ----------------------------------------------*/
 loginRoute.post("/send-otp", AuthHandler.SendOtpMobileController);
 loginRoute.post("/mobile-login", AuthHandler.MobileLoginController);
-loginRoute.post("/social-login", AuthHandler.SocialLoginController);
+loginRoute.post("/social-login", AuthHandler.GoogleSocialLoginController);
 loginRoute.post("/email-login", AuthHandler.EmailLoginController);
 /* ---------------------------------------------
    PASSWORD MANAGEMENT   
@@ -35,7 +30,9 @@ loginRoute.put("/user-mobile-verify", AuthHandler.verifyUserMobile);
 /* ---------------------------------------------
    USER PROFILE MANAGEMENT
 ----------------------------------------------*/
-loginRoute.put("/user-profile-update", AuthHandler.userProfileUpdate);
+loginRoute.put("/user-profile-update-basicinfo", AuthHandler.userBasicProfileUpdate);
+loginRoute.put("/user-profile-update-pic-mobile", AuthHandler.userProfilePicContactUpdate);
+loginRoute.put("/user-profile-update-location", AuthHandler.userLocationUpdate);
 loginRoute.get("/user-profile/:email", AuthHandler.ProfileUpdate); 
 /* ---------------------------------------------
    ROLE & PERMISSION
