@@ -40,6 +40,7 @@ export const createExperience = async (req: any, res: any) => {
 
   } catch (error: any) {
     console.log(error);
+
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 };
@@ -150,6 +151,7 @@ export const getAllExperience = async (req: any, res: any) => {
 
   } catch (error) {
     console.log(error);
+
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 };
@@ -199,6 +201,7 @@ export const updateExperience = async (req: any, res: any) => {
 
   } catch (error: any) {
     console.log(error);
+
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 };
@@ -219,6 +222,7 @@ export const deleteExperience = async (req: any, res: any) => {
 
   } catch (error) {
     console.log(error);
+
     return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
   }
 };

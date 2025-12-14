@@ -35,17 +35,3 @@ export class MasterCategory extends BaseEntity {
     updatedBy: number;
 
 }
-
-// INSERT INTO "MasterCategory"
-//     ("name", "description", "status", "createdBy", "updatedBy")
-// VALUES
-//     ('IT & Software', 'All software and IT related categories', 1, 1, 1),
-//     ('Healthcare', 'Medical and healthcare related categories', 1, 1, 1),
-//     ('Education', 'Education and training related categories', 1, 1, 1),
-//     ('Construction', 'Civil and construction related categories', 1, 1, 1),
-//     ('Finance', 'Banking, finance and taxation related categories', 1, 1, 1),
-//     ('Sales & Marketing', 'Sales, marketing and promotion related categories', 1, 1, 1),
-//     ('Manufacturing', 'Industrial and manufacturing related categories', 1, 1, 1),
-//     ('Operations', 'Operations and management related categories', 1, 1, 1),
-//     ('Customer Support', 'Customer care and support related categories', 1, 1, 1),
-//     ('Human Resources', 'HR and recruitment related categories', 1, 1, 1);

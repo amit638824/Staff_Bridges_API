@@ -110,6 +110,7 @@ export const GoogleSocialLoginController = async (req: any, res: any) => {
         );
     } catch (error) {
         console.log("Internal server error:", error);
+
         return createResponse(res, 500, "Internal server error", [], false, true);
     }
 };

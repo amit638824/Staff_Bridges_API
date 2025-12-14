@@ -51,4 +51,3 @@ export class MasterLocality extends BaseEntity {
 // ('Krishna Nagar', 'KRNG', 625, '226023', 1),
 // ('Chinhat', 'CHHT', 625, '226028', 1),
 // ('Dubagga', 'DBGG', 625, '226101', 1);
-

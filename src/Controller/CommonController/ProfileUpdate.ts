@@ -121,5 +121,4 @@ export const userLocationUpdate = async (req: any, res: any) => {
         );
     }
 };
-
-
+

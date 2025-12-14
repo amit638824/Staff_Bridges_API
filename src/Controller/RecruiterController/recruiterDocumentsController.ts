@@ -10,12 +10,14 @@ export const createRecruiterDocuments = async (req: any, res: any) => {
         const { documentId, userId, createdBy } = req.body;
         const file = req?.files?.document;
 
-        if (!documentId || !userId)
+        if (!documentId || !userId) {
             return createResponse(res, 400, MESSAGES.REQUIRED_FIELDS, []);
+        }
 
         const exists = await RecruiterDocuments.findOne({ where: { documentId, userId } });
-        if (exists)
+        if (exists) {
             return createResponse(res, 409, MESSAGES.DOCUMENT_ALREADY_EXISTS, []);
+        }
 
         let documentUrl: string | undefined;
 
@@ -28,11 +30,10 @@ export const createRecruiterDocuments = async (req: any, res: any) => {
         const doc = RecruiterDocuments.create({
             documentId,
             userId,
-            document: documentUrl, // ✅ now OK
+            document: documentUrl, 
             createdBy,
             updatedBy: createdBy,
         });
-
 
         await doc.save();
 
@@ -65,11 +66,13 @@ export const getRecruiterDocumentsList = async (req: any, res: any) => {
         Object.entries(filters).forEach(([key, value]) => {
             if (!value) return;
 
-            if (["id", "documentId", "userId", "isVerified"].includes(key))
+            if (["id", "documentId", "userId", "isVerified"].includes(key)) {
                 qb.andWhere(`rd.${key} = :${key}`, { [key]: Number(value) });
+            }
 
-            if (key === "documentName")
+            if (key === "documentName") {
                 qb.andWhere("md.name ILIKE :name", { name: `%${value}%` });
+            }
         });
 
         const items = await qb.getRawMany();
@@ -98,8 +101,9 @@ export const updateRecruiterDocuments = async (req: any, res: any) => {
         const file = req?.files?.document;
 
         const doc = await RecruiterDocuments.findOne({ where: { id: Number(id) } });
-        if (!doc)
+        if (!doc) {
             return createResponse(res, 404, MESSAGES.DOCUMENT_NOT_FOUND, []);
+        }
 
         // ✅ duplicate check only if changed
         if (
@@ -112,8 +116,9 @@ export const updateRecruiterDocuments = async (req: any, res: any) => {
                     userId: userId ?? doc.userId,
                 },
             });
-            if (duplicate)
+            if (duplicate) {
                 return createResponse(res, 409, MESSAGES.DOCUMENT_ALREADY_EXISTS, []);
+            }
         }
 
         // ✅ upload only when file exists
@@ -141,8 +146,9 @@ export const deleteRecruiterDocuments = async (req: any, res: any) => {
         const { id } = req.params;
 
         const doc = await RecruiterDocuments.findOne({ where: { id: Number(id) } });
-        if (!doc)
+        if (!doc) {
             return createResponse(res, 404, MESSAGES.DOCUMENT_NOT_FOUND, []);
+        }
 
         await RecruiterDocuments.remove(doc);
 

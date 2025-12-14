@@ -23,6 +23,7 @@ export const createQuestion = async (req: any, res: any) => {
 
     } catch (error) {
         console.log(error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
@@ -86,6 +87,7 @@ export const getAllQuestions = async (req: any, res: any) => {
 
     } catch (error) {
         console.log(error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
@@ -107,6 +109,7 @@ export const updateQuestion = async (req: any, res: any) => {
 
     } catch (error) {
         console.log(error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
@@ -123,6 +126,7 @@ export const deleteQuestion = async (req: any, res: any) => {
 
     } catch (error) {
         console.log(error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
@@ -221,6 +225,7 @@ export const getAllQuestionOptions = async (req: any, res: any) => {
 
     } catch (error) {
         console.log(error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };
@@ -285,6 +290,7 @@ export const deleteQuestionOption = async (req: any, res: any) => {
 
     } catch (error) {
         console.log(error);
+
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], true, true);
     }
 };

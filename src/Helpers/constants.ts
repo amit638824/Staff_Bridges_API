@@ -44,7 +44,7 @@ export const MESSAGES = {
   CATEGORIES_FETCHED: "All categories fetched successfully",
   CATEGORY_UPDATED: "Category updated successfully",
   CATEGORY_DELETED: "Category deleted successfully",
-  ALREADY_EXISTS: (field: string) => `${field} already exists.`,
+  ALREADY_EXISTS: (field: string = "data") => `${field} already exists.`,
   CATEGORY_NOT_FOUND: "Category not found",
   COUNTRY_CREATED: "Country created successfully",
   COUNTRIES_FETCHED: "Countries fetched successfully",
@@ -82,7 +82,7 @@ export const MESSAGES = {
   OPTION_UPDATED: "Question option updated successfully.",
   OPTION_DELETED: "Question option deleted successfully.",
   OPTION_NOT_FOUND: "Question option not found.",
-  
+
   ANSWER_CREATED: "Answer created successfully.",
   ANSWERS_FETCHED: "Answers fetched successfully.",
   ANSWER_UPDATED: "Answer updated successfully.",
@@ -93,13 +93,23 @@ export const MESSAGES = {
   RECRUITER_DOCUMENT_FETCHED: "Recruiter documents fetched successfully.",
   RECRUITER_DOCUMENT_UPDATED: "Recruiter document updated successfully.",
   RECRUITER_DOCUMENT_DELETED: "Recruiter document deleted successfully.",
-  RECRUITER_DOCUMENT_NOT_FOUND: "Recruiter document not found.", 
-  
+  RECRUITER_DOCUMENT_NOT_FOUND: "Recruiter document not found.",
+
   DOCUMENT_CREATED: "Recruiter document created successfully",
   DOCUMENT_FETCHED: "Recruiter documents fetched successfully",
   DOCUMENT_UPDATED: "Recruiter document updated successfully",
   DOCUMENT_DELETED: "Recruiter document deleted successfully",
   DOCUMENT_NOT_FOUND: "Recruiter document not found",
   DOCUMENT_ALREADY_EXISTS: "Recruiter document already exists",
+  MASTER_SKILL_CREATED: "Master skill created successfully.",
+  MASTER_SKILL_FETCHED: "Master skills fetched successfully.",
+  MASTER_SKILL_UPDATED: "Master skill updated successfully.",
+  MASTER_SKILL_DELETED: "Master skill deleted successfully.",
+  MASTER_SKILL_NOT_FOUND: "Master skill not found.",
+  JOB_BENEFIT_CREATED: "Job benefit created successfully",
+  JOB_BENEFIT_FETCHED: "Job benefits fetched successfully",
+  JOB_BENEFIT_UPDATED: "Job benefit updated successfully",
+  JOB_BENEFIT_DELETED: "Job benefit deleted successfully",
+  JOB_BENEFIT_NOT_FOUND: "Job benefit not found",
 
 };
