@@ -1,4 +1,4 @@
- /**
+/**
  * @swagger
  * /auth/user-profile-update-basicinfo:
  *   put:
@@ -9,7 +9,8 @@
  *       Update full name, gender, salary, experience status, and education of a user.
  *
  *       **Gender options:** Male, Female, Other  
- *       **Experinced options:** 1 (Yes), 0 (No)
+ *       **Experinced options:** 1 (Yes), 0 (No)  
+ *       **Education options:** Any, highschool, intermediate, diploma, graduate, postgraduate
  *
  *       You must choose one of the allowed values.
  *     requestBody:
@@ -30,7 +31,7 @@
  *               gender:
  *                 type: string
  *                 enum: [Male, Female, Other]
- *                 example: Male
+ *                 example: Female
  *               experinced:
  *                 type: integer
  *                 enum: [0, 1]
@@ -40,17 +41,92 @@
  *                 example: 45000
  *               education:
  *                 type: string
- *                 example: "B.Tech"
+ *                 enum:
+ *                   - Any
+ *                   - highschool
+ *                   - intermediate
+ *                   - diploma
+ *                   - graduate
+ *                   - postgraduate
+ *                 example: graduate
  *     responses:
  *       200:
  *         description: Profile updated successfully.
  *       400:
- *         description: Missing required fields.
+ *         description: Invalid input or missing required fields.
  *       404:
  *         description: User not found.
  *       500:
  *         description: Internal server error.
  */
+
+/**
+ * @swagger
+ * /auth/user-profile-update-aditional:
+ *   put:
+ *     tags:
+ *       - Profile Update
+ *     summary: Update additional profile details of user
+ *     description: |
+ *       This API updates **only the following optional fields**:
+ *       - Salary
+ *       - Email
+ *       - Alternate Mobile Number
+ *       - Gender
+ *       - Education
+ *
+ *       👉 Only the fields provided in request will be updated.  
+ *       👉 Other user fields will remain unchanged.
+ *
+ *       **Gender options:** Male, Female, Other  
+ *       **Education options:** Any, highschool, intermediate, diploma, graduate, postgraduate
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - userId
+ *             properties:
+ *               userId:
+ *                 type: integer
+ *                 example: 1
+ *               salary:
+ *                 type: string
+ *                 example: "45000"
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: "sheetal.sharma@gmail.com"
+ *               alternateMobile:
+ *                 type: string
+ *                 example: "9876543211"
+ *               gender:
+ *                 type: string
+ *                 enum: [Male, Female, Other]
+ *                 example: Female
+ *               education:
+ *                 type: string
+ *                 enum:
+ *                   - Any
+ *                   - highschool
+ *                   - intermediate
+ *                   - diploma
+ *                   - graduate
+ *                   - postgraduate
+ *                 example: postgraduate
+ *     responses:
+ *       200:
+ *         description: Additional profile details updated successfully.
+ *       400:
+ *         description: User ID is required or invalid education value.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Internal server error.
+ */
+
 /**
  * @swagger
  * /auth/user-profile-update-pic-mobile:
@@ -119,6 +195,9 @@
  *       500:
  *         description: Internal server error.
  */
+
+
+
 /**
  * @swagger
  * /auth/user-profile-update-location:

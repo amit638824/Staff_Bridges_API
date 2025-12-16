@@ -46,7 +46,7 @@ export const GoogleSocialLoginController = async (req: any, res: any) => {
                 email,
                 password: hashedPassword, // store hashed password
                 mobile: null,
-                RoleId: 2,
+                RoleId: 6,
                 profilePic, // store Google profile pic
             }).save();
 
@@ -218,8 +218,7 @@ export const MobileLoginController = async (req: any, res: any) => {
         }
         // Step 2: Check OTP from Login table
         const loginRecord = await Login.createQueryBuilder("login")
-            .where("login.userId = :userId", { userId: user.id })
-            .andWhere("login.loginMethod = :method", { method: "MOBILE_OTP" })
+            .where("login.userId = :userId", { userId: user.id }) 
             .getOne();
 
         if (!loginRecord) {
@@ -339,7 +338,7 @@ export const ResetPassword = async (req: any, res: any) => {
 
         return createResponse(res, 200, MESSAGES?.PASSWORD_UPDATED);
     } catch (err) {
-         // tslint:disable-next-line:no-console 
+        // tslint:disable-next-line:no-console 
         console.error(MESSAGES?.RESET_ERROR, err);
 
         return createResponse(res, 500, MESSAGES?.RESET_ERROR, [], false, true);
@@ -375,7 +374,7 @@ export const ResetTockenCheck = async (req: any, res: any) => {
         // Token not found in the database, send an invalid token response
         return createResponse(res, 401, MESSAGES?.INVALID_TOKEN, [], false, true);
 
-    } catch (err) { 
+    } catch (err) {
         // tslint:disable-next-line:no-console
         console.log(MESSAGES?.RESET_ERROR, err);
 
@@ -383,3 +382,44 @@ export const ResetTockenCheck = async (req: any, res: any) => {
         return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
     }
 }; 
+export const RecruiterRegisterController = async (req: any, res: any) => {
+    try {
+        const { email, password = "Test@12345" } = req.body;
+
+        if (!email) {
+            return createResponse(res, 400, MESSAGES.REQUIRED_FIELDS, [], false, true);
+        }
+
+        //  Duplicacy check (only recruiter)
+        const isRecruiterExist = await User.findOne({
+            where: { email, RoleId: 5 },
+        });
+
+        if (isRecruiterExist) {
+            return createResponse(res, 409, MESSAGES.EMAIL_EXISTS, isRecruiterExist, false, true);
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const user = await User.create({
+            email,
+            password: hashedPassword,
+            RoleId: 5,
+        }).save();
+
+        await Login.create({
+            userId: user.id,
+            loginMethod: "EMAIL_PASSWORD",
+            lastLogin: new Date(),
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        }).save();
+
+        return createResponse(res, 201, MESSAGES.REGISTER_SUCCESS, user, true, false);
+
+    } catch (err) {
+        console.error("RecruiterRegisterController Error:", err);
+
+        return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], false, true);
+    }
+};

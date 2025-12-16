@@ -3,78 +3,70 @@ import { createResponse } from "../../Helpers/response";
  import { JobPost } from "../../Entities/JobPost";
  
 export const createRecruiter = async (req: any, res: any) => {
-  try { 
+  try {
     const {
       recruiterId,
+      titleId,
       categoryId,
-      jobTitle,
       hiringForOthers,
       agencyId,
       jobType,
-      workLocationType,
-      city,
-      locality,
+      workLocation,
+      cityId,
+      localityId,
       address,
       salaryMin,
       salaryMax,
-      salaryModel,
-      genderPreference,
-      experienceMin,
-      experienceMax,
-      fresherAllowed,
-      jobTiming,
+      salaryBenifits,
+      gender,
+      qualification,
+      minExerince,
+      maxExperince,
+      onlyFresher,
       workingDays,
-      jobBenefits,
-      jobSkills,
-      documentsRequired,
+      jobBenefitsId,
+      jobskillsId,
+      documents,
       communicationWindow,
       candidateCanCall,
       openings,
       jobPostingFor,
-      companyName,
-      companyAddress,
-      companyVerificationStatus,
       verificationRequired,
-      directCall,
       description,
       status,
       adminComments,
       createdBy,
       updatedBy
-    }: any = req.body;
+    } = req.body;
 
-    const newRecruiter: any = JobPost.create({
+    const jobPost = JobPost.create({
       recruiterId,
+      titleId,
       categoryId,
-      jobTitle,
       hiringForOthers,
       agencyId,
       jobType,
-      workLocationType,
-      city,
-      locality,
-      address,
+      workLocation,
+      cityId,
+      localityId,
+      interviewAddress: address,
       salaryMin,
       salaryMax,
-      salaryModel,
-      genderPreference,
-      experienceMin,
-      experienceMax,
-      fresherAllowed,
-      jobTiming,
+      salaryBenifits,
+      gender,
+      qualification,
+      minExerince,
+      maxExperince,
+      onlyFresher,
       workingDays,
-      jobBenefits,
-      jobSkills,
-      documentsRequired,
+      jobBenefitsId,
+      jobskillsId,
+      documents,
       communicationWindow,
       candidateCanCall,
       openings,
       jobPostingFor,
-      companyName,
-      companyAddress,
-      companyVerificationStatus,
       verificationRequired,
-      directCall,
       description,
       status,
       adminComments,
@@ -82,15 +74,16 @@ export const createRecruiter = async (req: any, res: any) => {
       updatedBy
     });
 
-    const savedRecruiter: any = await JobPost.save(newRecruiter);
+    const savedJob = await jobPost.save();
 
-    return createResponse(res, 201, "Recruiter created successfully", savedRecruiter);
+    return createResponse(res, 201, "Recruiter created successfully", savedJob);
 
   } catch (error) {
-     // tslint:disable-next-line:no-console 
+    console.error(error);
     return createResponse(res, 500, "Something went wrong", error, false, true);
   }
-};  
+};
+
  
 export const getRecruiterList = async(req: any, res: any) => {
   try {

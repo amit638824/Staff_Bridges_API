@@ -7,6 +7,12 @@ masterData.get("/master-category", MasterController.getAllCategories);
 masterData.put("/master-category/:id", MasterController.updateCategory);
 masterData.delete("/master-category/:id", MasterController.deleteCategory);
 
+// Job Title CRUD 
+masterData.post("/master-job-title", MasterController.createJobTitle);
+masterData.get("/master-job-title", MasterController.getAllJobTitles);
+masterData.put("/master-job-title/:id", MasterController.updateJobTitle);
+masterData.delete("/master-job-title/:id", MasterController.deleteJobTitle);
+
 // Country CRUD 
 masterData.post("/master-country", MasterController.createCountry);
 masterData.get("/master-country", MasterController.getAllCountries); 
@@ -46,10 +52,8 @@ masterData.get("/master-recruiter-document", MasterController.getAllRecruiterDoc
 masterData.put("/master-recruiter-document/:id", MasterController.updateRecruiterDocument);
 masterData.delete("/master-recruiter-document/:id", MasterController.deleteRecruiterDocument);
 // mster skills  CRUD 
-masterData.post("/master-skills", MasterController.createMasterSkill);
-masterData.get("/master-skills", MasterController.getAllMasterSkills);
-masterData.put("/master-skills/:id", MasterController.updateMasterSkill);
-masterData.delete("/master-skills/:id", MasterController.deleteMasterSkill); 
+
+
 // mster job benifits  CRUD 
 masterData.post("/master-job-benifits", MasterController.createMasterJobBenefit);
 masterData.get("/master-job-benifits", MasterController.getAllMasterJobBenefits);

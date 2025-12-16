@@ -111,5 +111,7 @@ export const MESSAGES = {
   JOB_BENEFIT_UPDATED: "Job benefit updated successfully",
   JOB_BENEFIT_DELETED: "Job benefit deleted successfully",
   JOB_BENEFIT_NOT_FOUND: "Job benefit not found",
+  EMAIL_EXISTS: "Recruiter already registered with this email",
+  REGISTER_SUCCESS: "Recruiter registered successfully",
 
 };
