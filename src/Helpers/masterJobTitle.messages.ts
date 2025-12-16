@@ -43,3 +43,14 @@ export const RECRUITER_SKILLS_MESSAGES = {
   NOT_FOUND: "Recruiter skill not found",
   INTERNAL_ERROR: "Internal server error",
 };
+
+export const RECRUITER_ASSETS_MESSAGES = {
+  REQUIRED_FIELDS: "Required fields are missing",
+  ALREADY_EXISTS: "Asset already added for this user",
+  CREATED: "Recruiter asset added successfully",
+  FETCHED: "Recruiter assets fetched successfully",
+  UPDATED: "Recruiter asset updated successfully",
+  DELETED: "Recruiter asset deleted successfully",
+  NOT_FOUND: "Recruiter asset not found",
+  INTERNAL_ERROR: "Internal server error",
+};

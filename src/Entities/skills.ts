@@ -17,6 +17,9 @@ export class Skills extends BaseEntity {
   @Column({name: "userId", type: "int", nullable: false })
   userId: number;
 
+  @Column({ type: "int", nullable: true })
+  jobId: number;
+
   @Column({ name: "isVerified",type: "int", default: 0 })
   isVerified: number;
 

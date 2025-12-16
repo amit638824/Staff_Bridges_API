@@ -33,3 +33,16 @@ export class MasterJobTitle extends BaseEntity {
 
 }
 
+// INSERT INTO "MasterJobTitle" 
+// ("name", "description", "status", "createdAt", "updatedAt", "createdBy", "updatedBy")
+// VALUES
+// ('Software Engineer', 'Responsible for developing software applications', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 1),
+// ('Project Manager', 'Oversees project planning and execution', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 1),
+// ('Data Analyst', 'Analyzes data to provide business insights', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 1),
+// ('QA Engineer', 'Ensures software quality through testing', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 1),
+// ('UI/UX Designer', 'Designs user interfaces and user experiences', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 1),
+// ('DevOps Engineer', 'Manages deployment and infrastructure', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 1),
+// ('Product Owner', 'Defines product vision and requirements', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 1),
+// ('Business Analyst', 'Bridges business needs with technical solutions', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 1),
+// ('Technical Lead', 'Leads the technical team and architecture', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 1),
+// ('HR Manager', 'Manages human resources and recruitment', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 1);

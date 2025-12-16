@@ -2,26 +2,29 @@ import { createResponse } from "../../Helpers/response";
 import { RECRUITER_SKILLS_MESSAGES as MSG } from "../../Helpers/masterJobTitle.messages";
 import { Skills } from "../../Entities/skills";
 import { MasterSkills } from "../../Entities/masterSkills";
- 
 
 /* ================= CREATE ================= */
 export const createRecruiterSkill = async (req: any, res: any) => {
   try {
-    const { documentId, userId, createdBy } = req.body;
+    const { documentId, userId, jobId, createdBy } = req.body;
 
-    if (!documentId || !userId)
+    // jobId NOT required
+    if (!documentId || !userId) {
       return createResponse(res, 400, MSG.REQUIRED_FIELDS, []);
+    }
 
     const exists = await Skills.findOne({
       where: { documentId, userId },
     });
 
-    if (exists)
+    if (exists) {
       return createResponse(res, 409, MSG.ALREADY_EXISTS, []);
+    }
 
     const skill = Skills.create({
       documentId,
       userId,
+      jobId: jobId ?? null,
       createdBy,
       updatedBy: createdBy,
     });
@@ -45,6 +48,7 @@ export const getRecruiterSkillsList = async (req: any, res: any) => {
       .select([
         "s.id AS id",
         "s.userId AS userId",
+        "s.jobId AS jobId",
         "s.isVerified AS isVerified",
         "ms.id AS skillId",
         "ms.name AS skillName",
@@ -58,7 +62,7 @@ export const getRecruiterSkillsList = async (req: any, res: any) => {
     Object.entries(filters).forEach(([key, value]) => {
       if (!value) return;
 
-      if (["id", "userId", "documentId", "isVerified"].includes(key)) {
+      if (["id", "userId", "documentId", "jobId", "isVerified"].includes(key)) {
         qb.andWhere(`s.${key} = :${key}`, { [key]: Number(value) });
       }
 
@@ -87,13 +91,14 @@ export const getRecruiterSkillsList = async (req: any, res: any) => {
 export const updateRecruiterSkill = async (req: any, res: any) => {
   try {
     const { id } = req.params;
-    const { documentId, userId, isVerified, updatedBy } = req.body;
+    const { documentId, userId, jobId, isVerified, updatedBy } = req.body;
 
     const skill = await Skills.findOne({ where: { id: Number(id) } });
-    if (!skill)
+    if (!skill) {
       return createResponse(res, 404, MSG.NOT_FOUND, []);
+    }
 
-    // duplicate check
+    // duplicate check only if changed
     if (
       (documentId && documentId !== skill.documentId) ||
       (userId && userId !== skill.userId)
@@ -105,12 +110,14 @@ export const updateRecruiterSkill = async (req: any, res: any) => {
         },
       });
 
-      if (duplicate)
+      if (duplicate) {
         return createResponse(res, 409, MSG.ALREADY_EXISTS, []);
+      }
     }
 
     skill.documentId = documentId ?? skill.documentId;
     skill.userId = userId ?? skill.userId;
+    skill.jobId = jobId ?? skill.jobId;
     skill.isVerified = isVerified ?? skill.isVerified;
     skill.updatedBy = updatedBy ?? skill.updatedBy;
 
@@ -129,8 +136,9 @@ export const deleteRecruiterSkill = async (req: any, res: any) => {
     const { id } = req.params;
 
     const skill = await Skills.findOne({ where: { id: Number(id) } });
-    if (!skill)
+    if (!skill) {
       return createResponse(res, 404, MSG.NOT_FOUND, []);
+    }
 
     await Skills.remove(skill);
 

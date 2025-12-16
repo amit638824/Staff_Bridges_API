@@ -14,10 +14,10 @@ recruiterRouter.put("/recruiter-document-upload/:id", RecruiterController.update
 recruiterRouter.delete("/recruiter-document-upload/:id", RecruiterController.deleteRecruiterDocuments);
 
 
-recruiterRouter.post("/recruiter-skills", RecruiterController.createRecruiterDocuments);
-recruiterRouter.get("/recruiter-skills", RecruiterController.getRecruiterDocumentsList);
-recruiterRouter.put("/recruiter-skills/:id", RecruiterController.updateRecruiterDocuments);
-recruiterRouter.delete("/recruiter-skills/:id", RecruiterController.deleteRecruiterDocuments);
+recruiterRouter.post("/recruiter-skills", RecruiterController.createRecruiterSkill);
+recruiterRouter.get("/recruiter-skills", RecruiterController.getRecruiterJobBenefitsList);
+recruiterRouter.put("/recruiter-skills/:id", RecruiterController.updateRecruiterSkill);
+recruiterRouter.delete("/recruiter-skills/:id", RecruiterController.deleteRecruiterSkill);
 
 
 recruiterRouter.post("/recruiter-job-benifit", RecruiterController.createRecruiterJobBenefit);
@@ -25,8 +25,9 @@ recruiterRouter.get("/recruiter-job-benifit", RecruiterController.getRecruiterJo
 recruiterRouter.put("/recruiter-job-benifit/:id", RecruiterController.updateRecruiterJobBenefit);
 recruiterRouter.delete("/recruiter-job-benifit/:id", RecruiterController.deleteRecruiterJobBenefit);
 
-recruiterRouter.post("/recruiter-assets-required", RecruiterController.createRecruiterDocuments);
-recruiterRouter.get("/recruiter-assets-required", RecruiterController.getRecruiterDocumentsList);
-recruiterRouter.put("/recruiter-assets-required/:id", RecruiterController.updateRecruiterDocuments);
-recruiterRouter.delete("/recruiter-assets-required/:id", RecruiterController.deleteRecruiterDocuments);
+recruiterRouter.post("/recruiter-assets-required", RecruiterController.createRecruiterAsset);
+recruiterRouter.get("/recruiter-assets-required", RecruiterController.getRecruiterAssetsList);
+recruiterRouter.put("/recruiter-assets-required/:id", RecruiterController.updateRecruiterAsset);
+recruiterRouter.delete("/recruiter-assets-required/:id", RecruiterController.deleteRecruiterAsset);
+
 export default recruiterRouter;

@@ -1,26 +1,30 @@
 import { createResponse } from "../../Helpers/response";
-import { RECRUITER_JOB_BENEFIT_MESSAGES as MSG } from "../../Helpers//masterJobTitle.messages";
-import { JobBenifits } from "../../Entities/JobBenifits"; 
+import { RECRUITER_JOB_BENEFIT_MESSAGES as MSG } from "../../Helpers/masterJobTitle.messages";
+import { JobBenifits } from "../../Entities/JobBenifits";
 import { MasterJobBenifits } from "../../Entities/masterJobBenifits";
 
 /* ================= CREATE ================= */
 export const createRecruiterJobBenefit = async (req: any, res: any) => {
   try {
-    const { benifitId, userId, createdBy } = req.body;
+    const { benifitId, userId, jobId, createdBy } = req.body;
 
-    if (!benifitId || !userId)
+    // jobId NOT required
+    if (!benifitId || !userId) {
       return createResponse(res, 400, MSG.REQUIRED_FIELDS, []);
+    }
 
     const exists = await JobBenifits.findOne({
       where: { benifitId, userId },
     });
 
-    if (exists)
+    if (exists) {
       return createResponse(res, 409, MSG.ALREADY_EXISTS, []);
+    }
 
     const benefit = JobBenifits.create({
       benifitId,
       userId,
+      jobId: jobId ?? null,
       createdBy,
       updatedBy: createdBy,
     });
@@ -44,6 +48,7 @@ export const getRecruiterJobBenefitsList = async (req: any, res: any) => {
       .select([
         "jb.id AS id",
         "jb.userId AS userId",
+        "jb.jobId AS jobId",
         "jb.isVerified AS isVerified",
         "mb.id AS benifitId",
         "mb.name AS benifitName",
@@ -57,7 +62,7 @@ export const getRecruiterJobBenefitsList = async (req: any, res: any) => {
     Object.entries(filters).forEach(([key, value]) => {
       if (!value) return;
 
-      if (["id", "userId", "benifitId", "isVerified"].includes(key)) {
+      if (["id", "userId", "benifitId", "jobId", "isVerified"].includes(key)) {
         qb.andWhere(`jb.${key} = :${key}`, { [key]: Number(value) });
       }
 
@@ -67,7 +72,6 @@ export const getRecruiterJobBenefitsList = async (req: any, res: any) => {
     });
 
     const items = await qb.getRawMany();
-
     const total = await JobBenifits.createQueryBuilder("jb").getCount();
 
     return createResponse(res, 200, MSG.FETCHED, {
@@ -87,13 +91,17 @@ export const getRecruiterJobBenefitsList = async (req: any, res: any) => {
 export const updateRecruiterJobBenefit = async (req: any, res: any) => {
   try {
     const { id } = req.params;
-    const { benifitId, userId, isVerified, updatedBy } = req.body;
+    const { benifitId, userId, jobId, isVerified, updatedBy } = req.body;
 
-    const benefit = await JobBenifits.findOne({ where: { id: Number(id) } });
-    if (!benefit)
+    const benefit = await JobBenifits.findOne({
+      where: { id: Number(id) },
+    });
+
+    if (!benefit) {
       return createResponse(res, 404, MSG.NOT_FOUND, []);
+    }
 
-    // duplicate check only if values changed
+    // duplicate check only if changed
     if (
       (benifitId && benifitId !== benefit.benifitId) ||
       (userId && userId !== benefit.userId)
@@ -105,12 +113,14 @@ export const updateRecruiterJobBenefit = async (req: any, res: any) => {
         },
       });
 
-      if (duplicate)
+      if (duplicate) {
         return createResponse(res, 409, MSG.ALREADY_EXISTS, []);
+      }
     }
 
     benefit.benifitId = benifitId ?? benefit.benifitId;
     benefit.userId = userId ?? benefit.userId;
+    benefit.jobId = jobId ?? benefit.jobId;
     benefit.isVerified = isVerified ?? benefit.isVerified;
     benefit.updatedBy = updatedBy ?? benefit.updatedBy;
 
@@ -128,9 +138,13 @@ export const deleteRecruiterJobBenefit = async (req: any, res: any) => {
   try {
     const { id } = req.params;
 
-    const benefit = await JobBenifits.findOne({ where: { id: Number(id) } });
-    if (!benefit)
+    const benefit = await JobBenifits.findOne({
+      where: { id: Number(id) },
+    });
+
+    if (!benefit) {
       return createResponse(res, 404, MSG.NOT_FOUND, []);
+    }
 
     await JobBenifits.remove(benefit);
 

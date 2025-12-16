@@ -1,9 +1,9 @@
 import {
-    BaseEntity,
-    Column,
-    Entity,
-    PrimaryGeneratedColumn,
-} from "typeorm"; 
+  BaseEntity,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 
 @Entity({ name: "RecruiterDocuments" })
 export class RecruiterDocuments extends BaseEntity {
@@ -15,10 +15,13 @@ export class RecruiterDocuments extends BaseEntity {
   documentId: number;
 
   @Column({ type: "varchar", length: 255, nullable: true })
-  document: string; // ✅ S3 URL
+  document: string;
 
   @Column({ type: "int", nullable: false })
   userId: number;
+
+  @Column({ type: "int", nullable: true })
+  jobId: number;
 
   @Column({ type: "int", default: 0 })
   isVerified: number;
