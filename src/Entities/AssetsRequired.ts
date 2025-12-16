@@ -1,30 +1,28 @@
 import {
-  BaseEntity,
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+    BaseEntity,
+    Column,
+    Entity,
+    PrimaryGeneratedColumn,
+} from "typeorm"; 
 
-@Entity({ name: "RecruiterDocuments" })
-export class RecruiterDocuments extends BaseEntity {
+@Entity({ name: "AssetsRequired" })
+export class AssetsRequired extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: "int", nullable: false })
-  documentId: number;
+  @Column({name: "assetId", type: "int", nullable: false })
+  assetId: number; 
 
-  @Column({ type: "varchar", length: 255, nullable: true })
-  document: string;
-
-  @Column({ type: "int", nullable: false })
+  @Column({name: "userId", type: "int", nullable: false })
   userId: number;
 
   @Column({ type: "int", nullable: true })
   jobId: number;
 
-  @Column({ type: "int", default: 0 })
+  @Column({ name: "isVerified",type: "int", default: 0 })
   isVerified: number;
+
 
   @Column({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;

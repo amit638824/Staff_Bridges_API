@@ -4,6 +4,7 @@ const loginRoute = express.Router();
 /* ---------------------------------------------
     REGISTRATION (SEEKER + RECRUITER)
 ----------------------------------------------*/
+loginRoute.post("/recruiter-register", AuthHandler.RecruiterRegisterController);
 // Seeker Registration 
 /* ---------------------------------------------
    LOGIN SYSTEM (OTP, MOBILE, SOCIAL, EMAIL)
@@ -31,7 +32,8 @@ loginRoute.put("/user-mobile-verify", AuthHandler.verifyUserMobile);
    USER PROFILE MANAGEMENT
 ----------------------------------------------*/
 loginRoute.put("/user-profile-update-basicinfo", AuthHandler.userBasicProfileUpdate);
-loginRoute.put("/user-profile-update-pic-mobile", AuthHandler.userProfilePicContactUpdate);
+loginRoute.put("/user-profile-update-pic-mobile", AuthHandler.userProfilePicContactUpdate); 
+loginRoute.put("/user-profile-update-aditional", AuthHandler.userProfileAditionalUpdate);
 loginRoute.put("/user-profile-update-location", AuthHandler.userLocationUpdate);
 loginRoute.get("/user-profile/:email", AuthHandler.ProfileUpdate); 
 /* ---------------------------------------------
@@ -44,5 +46,7 @@ loginRoute.post("/add-role", AuthHandler.insertContactUs);
 loginRoute.post("/contact-us", AuthHandler.insertContactUs);
 loginRoute.get("/contact-us", AuthHandler.readContactUs);
 loginRoute.delete("/contact-us/:id", AuthHandler.deleteContactUs);
+
+
 
 export default loginRoute;

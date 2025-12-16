@@ -65,7 +65,105 @@ export const userProfilePicContactUpdate = async (req: any, res: any) => {
 
         return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
     }
+}; 
+
+export const userProfileAditionalUpdate = async (req: any, res: any) => {
+  try {
+    const {
+      userId,
+      salary,
+      email,
+      alternateMobile,
+      gender,
+      education,
+    } = req.body;
+
+    if (!userId) {
+      return createResponse(res, 400, "User ID is required", [], false, true);
+    }
+
+    const user = await User.findOne({ where: { id: userId } });
+    if (!user) {
+      return createResponse(res, 404, MESSAGES?.USER_NOT_FOUND, [], false, true);
+    }
+
+    // ✅ VALID EDUCATION VALUES (entity ke according)
+    const VALID_EDUCATION = [
+      "Any",
+      "highschool",
+      "intermediate",
+      "diploma",
+      "graduate",
+      "postgraduate",
+    ];
+
+    // ❌ education validation
+    if (education && !VALID_EDUCATION.includes(education)) {
+      return createResponse(
+        res,
+        400,
+        "Invalid education value",
+        { allowedValues: VALID_EDUCATION },
+        false,
+        true
+      );
+    }
+
+    // ✅ allowed update fields only
+    const updateData: any = {
+      salary,
+      email,
+      alternateMobile,
+      gender,
+      education,
+      updatedBy: userId,
+      updatedAt: new Date(),
+    };
+
+    // ❌ undefined fields remove
+    Object.keys(updateData).forEach(
+      (key) => updateData[key] === undefined && delete updateData[key]
+    );
+
+    // ❌ agar update karne ke liye kuch nahi hai
+    if (Object.keys(updateData).length === 2) {
+      return createResponse(res, 400, "No valid fields to update", [], false, true);
+    }
+
+    const result = await User.createQueryBuilder()
+      .update(User)
+      .set(updateData)
+      .where("id = :userId", { userId })
+      .returning([
+        "id",
+        "salary",
+        "email",
+        "alternateMobile",
+        "gender",
+        "education",
+        "updatedAt",
+      ])
+      .execute();
+
+    if (result.affected === 0) {
+      return createResponse(res, 404, MESSAGES?.USER_NOT_FOUND, [], false, true);
+    }
+
+    return createResponse(
+      res,
+      200,
+      MESSAGES?.PROFILE_UPDATED,
+      result.raw[0],
+      true,
+      false
+    );
+
+  } catch (err) {
+    console.log(MESSAGES?.RESET_ERROR, err);
+    return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
+  }
 };
+
 
 export const userLocationUpdate = async (req: any, res: any) => {
     try {

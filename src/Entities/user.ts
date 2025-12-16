@@ -27,6 +27,9 @@ export class User extends BaseEntity {
   @Column({ name: "mobile", type: "varchar", length: 15, nullable: true })
   mobile: any;
 
+  @Column({ name: "alternateMobile", type: "varchar", length: 15, nullable: true })
+  alternateMobile: any;
+
   @Column({ name: "RoleId", type: "int", nullable: true })
   RoleId: any;
 
@@ -78,8 +81,8 @@ export class User extends BaseEntity {
   @Column({ name: "salary", type: "varchar", length: 50, nullable: true })
   salary: any;
 
-  @Column({ name: "education", type: "varchar", length: 50, nullable: true })
-  education: any;
+  @Column({ name: "education", type: "enum", enum: ["Any", "highschool", "intermediate", "diploma", "graduate", "postgraduate"], default: "highschool", nullable: true, })
+  education: string;
 
   @Column({ name: "credits", type: "varchar", length: 50, nullable: true })
   credits: any;
@@ -99,3 +102,4 @@ export class User extends BaseEntity {
   @Column({ name: "updatedBy", type: "int", nullable: true })
   updatedBy: any;
 }
+

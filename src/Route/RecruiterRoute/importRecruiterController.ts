@@ -1,2 +1,5 @@
- export * from "../../Controller/RecruiterController/JobPostController";
+export * from "../../Controller/RecruiterController/JobPostController";
 export * from "../../Controller/RecruiterController/recruiterDocumentsController";
+export * from "../../Controller/RecruiterController/SkillsController";
+export * from "../../Controller/RecruiterController/JobBenifitsController";
+export * from "../../Controller/RecruiterController/AssetsRequiredController";

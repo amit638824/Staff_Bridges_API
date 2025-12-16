@@ -68,64 +68,118 @@ export const ProfileUpdate = async (req: any, res: any) => {
     }
 };
 export const userBasicProfileUpdate = async (req: any, res: any) => {
-    try {
-        const { userId, fullName, gender, salary, education, experinced } = req.body;
+  try {
+    const { userId, fullName, gender, salary, education, experinced } = req.body;
 
-        if (!userId) {
-            return createResponse(res, 400, "User ID is required", [], false, true);
-        }
-
-        // Do NOT include id here; primary key never updated
-        const updateData: any = {
-            fullName,
-            gender,
-            salary,
-            experinced,
-            education,
-            updatedBy: userId,
-            updatedAt: new Date(),
-        };
-
-        // Remove undefined keys
-        Object.keys(updateData).forEach(
-            (key) => updateData[key] === undefined && delete updateData[key]
-        );
-
-        const result = await User.createQueryBuilder()
-            .update(User)
-            .set(updateData)
-            .where("id = :userId", { userId })
-            .returning([
-                "id",
-                "fullName",
-                "gender",
-                "salary",
-                "experinced",
-                "education",
-                "updatedAt",
-            ])
-            .execute();
-
-        if (result.affected === 0) {
-            return createResponse(res, 404, MESSAGES?.USER_NOT_FOUND, [], false, true);
-        }
-
-        return createResponse(
-            res,
-            200,
-            MESSAGES?.PROFILE_UPDATED,
-            result.raw[0],
-            true,
-            false
-        );
-
-    } catch (err) {
-        // tslint:disable-next-line:no-console 
-        console.log(MESSAGES?.RESET_ERROR, err);
-
-        return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
+    if (!userId) {
+      return createResponse(res, 400, "User ID is required", [], false, true);
     }
-};
+
+    // ✅ VALID ENUM VALUES (entity ke according)
+    const VALID_EDUCATION = [
+      "Any",
+      "highschool",
+      "intermediate",
+      "diploma",
+      "graduate",
+      "postgraduate",
+    ];
+
+    const VALID_GENDER = ["Male", "Female", "Other"];
+
+    //   education validation
+    if (education && !VALID_EDUCATION.includes(education)) {
+      return createResponse(
+        res,
+        400,
+        "Invalid education value",
+        { allowedValues: VALID_EDUCATION },
+        false,
+        true
+      );
+    }
+
+    //   gender validation
+    if (gender && !VALID_GENDER.includes(gender)) {
+      return createResponse(
+        res,
+        400,
+        "Invalid gender value",
+        { allowedValues: VALID_GENDER },
+        false,
+        true
+      );
+    }
+
+    //  experinced validation
+    if (
+      experinced !== undefined &&
+      (!Number.isInteger(Number(experinced)) || Number(experinced) < 0)
+    ) {
+      return createResponse(
+        res,
+        400,
+        "Invalid experinced value",
+        "experinced must be a non-negative integer",
+        false,
+        true
+      );
+    }
+
+    // ✅ update data (id kabhi update nahi hota)
+    const updateData: any = {
+      fullName,
+      gender,
+      salary,
+      experinced,
+      education,
+      updatedBy: userId,
+      updatedAt: new Date(),
+    };
+
+    //  undefined fields hata do
+    Object.keys(updateData).forEach(
+      (key) => updateData[key] === undefined && delete updateData[key]
+    );
+
+    //   agar sirf updatedBy & updatedAt bache ho
+    if (Object.keys(updateData).length === 2) {
+      return createResponse(res, 400, "No valid fields to update", [], false, true);
+    }
+
+    const result = await User.createQueryBuilder()
+      .update(User)
+      .set(updateData)
+      .where("id = :userId", { userId })
+      .returning([
+        "id",
+        "fullName",
+        "gender",
+        "salary",
+        "experinced",
+        "education",
+        "updatedAt",
+      ])
+      .execute();
+
+    if (result.affected === 0) {
+      return createResponse(res, 404, MESSAGES?.USER_NOT_FOUND, [], false, true);
+    }
+
+    return createResponse(
+      res,
+      200,
+      MESSAGES?.PROFILE_UPDATED,
+      result.raw[0],
+      true,
+      false
+    );
+
+  } catch (err) {
+    console.log(MESSAGES?.RESET_ERROR, err);
+    return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
+  }
+}; 
 export const UserEmailVerificationSendOtp = async (req: any, res: any) => {
     const { email } = req.body;
 
