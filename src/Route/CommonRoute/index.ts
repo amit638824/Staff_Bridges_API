@@ -47,4 +47,6 @@ loginRoute.post("/contact-us", AuthHandler.insertContactUs);
 loginRoute.get("/contact-us", AuthHandler.readContactUs);
 loginRoute.delete("/contact-us/:id", AuthHandler.deleteContactUs);
 
+
+
 export default loginRoute;

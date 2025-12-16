@@ -11,8 +11,8 @@ export class JobBenifits extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({name: "documentId", type: "int", nullable: false })
-  documentId: number; 
+  @Column({name: "benifitId", type: "int", nullable: false })
+  benifitId: number; 
 
   @Column({name: "userId", type: "int", nullable: false })
   userId: number;
