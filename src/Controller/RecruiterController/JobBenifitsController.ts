@@ -1,5 +1,5 @@
 import { createResponse } from "../../Helpers/response";
-import { RECRUITER_JOB_BENEFIT_MESSAGES as MSG } from "../../Helpers/masterJobTitle.messages";
+import { RECRUITER_JOB_BENEFIT_MESSAGES as MSG } from "../../Helpers/AditionalMessages";
 import { JobBenifits } from "../../Entities/JobBenifits";
 import { MasterJobBenifits } from "../../Entities/masterJobBenifits";
 
