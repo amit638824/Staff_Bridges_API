@@ -1,82 +1,177 @@
-
+import { JobPost } from "../../Entities/JobPost";
+import { Skills } from "../../Entities/skills";
+import { AssetsRequired } from "../../Entities/AssetsRequired";
+import { RecruiterDocuments } from "../../Entities/recruiterDocuments";
+import { JobBenifits } from "../../Entities/JobBenifits";
 import { createResponse } from "../../Helpers/response";
- import { JobPost } from "../../Entities/JobPost";
- 
+import { DeepPartial } from "typeorm";
+
+const uniqueArray = (arr: number[]) => [...new Set(arr)];
+
 export const createRecruiter = async (req: any, res: any) => {
   try {
     const {
       recruiterId,
       titleId,
       categoryId,
-      hiringForOthers,
-      agencyId,
+
+      hiringForOthers = 1,
+      openings = 1,
+      agencyId = null,
+
       jobType,
       workLocation,
-      cityId,
-      localityId,
-      address,
-      salaryMin,
-      salaryMax,
-      salaryBenifits,
-      gender,
-      qualification,
-      minExerince,
-      maxExperince,
-      onlyFresher,
-      workingDays,
-      jobBenefitsId,
-      jobskillsId,
-      documents,
-      communicationWindow,
-      candidateCanCall,
-      openings,
-      jobPostingFor,
-      verificationRequired,
-      description,
-      status,
-      adminComments,
+
+      cityId = null,
+      localityId = null,
+
+      gender = "Any",
+      qualification = "highschool",
+
+      minExerince = 0,
+      maxExperince = 0,
+      onlyFresher = 0,
+
+      salaryBenifits = "Fixed",
+      salaryMin = 0,
+      salaryMax = 0,
+
+      workingDays = "5",
+      communicationWindow = [],
+
+      candidateCanCall = 0,
+      jobPostingFor = "INDIVIDUAL",
+      verificationRequired = 0,
+
+      description = null,
+      status = "DRAFT",
+      adminComments = null,
+
       createdBy,
-      updatedBy
+      updatedBy,
+
+      jobSkillsIds = [],
+      assetsIds = [],
+      documetnsIds = [],
+      jobBenitsIds = [],
     } = req.body;
 
+    /* ---------------- DUPLICACY CHECK ---------------- */
+    const existingJob = await JobPost.findOne({
+      where: {
+        recruiterId,
+        titleId,
+        cityId,
+        jobType,
+      },
+    });
+
+    if (existingJob) {
+      return createResponse(
+        res,
+        409,
+        "Duplicate job already exists",
+        null,
+        false
+      );
+    }
+
+    /* ---------------- JOB CREATE ---------------- */
     const jobPost = JobPost.create({
       recruiterId,
       titleId,
       categoryId,
       hiringForOthers,
+      openings,
       agencyId,
       jobType,
       workLocation,
       cityId,
       localityId,
-      interviewAddress: address,
-      salaryMin,
-      salaryMax,
-      salaryBenifits,
       gender,
       qualification,
       minExerince,
       maxExperince,
       onlyFresher,
+      salaryBenifits,
+      salaryMin,
+      salaryMax,
       workingDays,
-      jobBenefitsId,
-      jobskillsId,
-      documents,
       communicationWindow,
       candidateCanCall,
-      openings,
       jobPostingFor,
       verificationRequired,
       description,
       status,
       adminComments,
-      createdBy,
-      updatedBy
+      createdBy: createdBy || recruiterId,
+      updatedBy: updatedBy || recruiterId,
     });
 
     const savedJob = await jobPost.save();
 
-    return createResponse(res, 201, "Recruiter created successfully", savedJob);
+    /* ---------------- SKILLS ---------------- */
+    const skills = uniqueArray(jobSkillsIds);
+    if (skills.length) {
+      const skillsData: DeepPartial<Skills>[] = skills.map(id => ({
+        documentId: id,
+        userId: recruiterId,
+        jobId: savedJob.id,
+        isVerified: 0,
+        createdBy: createdBy || recruiterId,
+        updatedBy: updatedBy || recruiterId,
+      }));
+      await Skills.save(skillsData);
+    }
+
+    /* ---------------- ASSETS ---------------- */
+    const assets = uniqueArray(assetsIds);
+    if (assets.length) {
+      const assetsData: DeepPartial<AssetsRequired>[] = assets.map(id => ({
+        assetId: id,
+        userId: recruiterId,
+        jobId: savedJob.id,
+        isVerified: 0,
+        createdBy: createdBy || recruiterId,
+        updatedBy: updatedBy || recruiterId,
+      }));
+      await AssetsRequired.save(assetsData);
+    }
+
+    /* ---------------- DOCUMENTS ---------------- */
+    const documents = uniqueArray(documetnsIds);
+    if (documents.length) {
+      const documentsData: DeepPartial<RecruiterDocuments>[] = documents.map(id => ({
+        documentId: id,
+        userId: recruiterId,
+        jobId: savedJob.id,
+        isVerified: 0,
+        createdBy: createdBy || recruiterId,
+        updatedBy: updatedBy || recruiterId,
+      }));
+      await RecruiterDocuments.save(documentsData);
+    }
+
+    /* ---------------- BENEFITS ---------------- */
+    const benefits = uniqueArray(jobBenitsIds);
+    if (benefits.length) {
+      const benefitsData: DeepPartial<JobBenifits>[] = benefits.map(id => ({
+        benifitId: id,
+        userId: recruiterId,
+        jobId: savedJob.id,
+        isVerified: 0,
+        createdBy: createdBy || recruiterId,
+        updatedBy: updatedBy || recruiterId,
+      }));
+      await JobBenifits.save(benefitsData);
+    }
+
+    return createResponse(
+      res,
+      201,
+      "Recruiter job created successfully",
+      savedJob
+    );
 
   } catch (error) {
     console.error(error);
@@ -153,3 +248,4 @@ export const deleteRecruiter = async(req: any, res: any) => {
   }
 };
  
+
