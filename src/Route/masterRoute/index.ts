@@ -60,4 +60,11 @@ masterData.get("/master-job-benifits", MasterController.getAllMasterJobBenefits)
 masterData.put("/master-job-benifits/:id", MasterController.updateMasterJobBenefit);
 masterData.delete("/master-job-benifits/:id", MasterController.deleteMasterJobBenefit);
 
+// master-assets-required
+masterData.post("/master-assets-required", MasterController.createMasterAssets);
+masterData.get("/master-assets-required", MasterController.getAllMasterAssets);
+masterData.put("/master-assets-required/:id", MasterController.updateMasterAssets);
+masterData.delete("/master-assets-required/:id", MasterController.deleteMasterAssets);
+
+
 export default masterData;

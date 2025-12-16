@@ -1,2 +1,2 @@
- export * from "../../Controller/RecruiterController/JobPostController";
-export * from "../../Controller/RecruiterController/recruiterDocumentsController";
+ export * from "../../Controller/RecruiterController/JobPostController"; 
+ export * from "../../Controller/RecruiterController/recruiterDocumentsController"; 

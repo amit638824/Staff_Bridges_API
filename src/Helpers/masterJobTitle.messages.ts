@@ -11,3 +11,13 @@ export const MASTER_JOB_TITLE_MESSAGES = {
 
   INTERNAL_SERVER_ERROR: "Internal server error.",
 };
+
+export const MASTER_ASSETS_MESSAGES = {
+  REQUIRED_FIELDS: "Required fields are missing",
+  CREATED: "Master asset created successfully",
+  FETCHED: "Master assets fetched successfully",
+  UPDATED: "Master asset updated successfully",
+  DELETED: "Master asset deleted successfully",
+  NOT_FOUND: "Master asset not found",
+  ALREADY_EXISTS: "Master asset already exists",
+};
