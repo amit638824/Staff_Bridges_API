@@ -36,3 +36,4 @@ export class Skills extends BaseEntity {
   @Column({ type: "int", nullable: true })
   updatedBy: number;
 }
+

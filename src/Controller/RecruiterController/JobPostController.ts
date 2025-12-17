@@ -1,7 +1,7 @@
 import { JobPost } from "../../Entities/JobPost";
 import { Skills } from "../../Entities/skills";
 import { AssetsRequired } from "../../Entities/AssetsRequired";
-import { RecruiterDocuments } from "../../Entities/recruiterDocuments";
+import { RecruiterDocuments } from "../../Entities/recruiterDocuments";  
 import { JobBenifits } from "../../Entities/JobBenifits";
 import { createResponse } from "../../Helpers/response";
 import { DeepPartial } from "typeorm";
@@ -177,8 +177,7 @@ export const createRecruiter = async (req: any, res: any) => {
     console.error(error);
     return createResponse(res, 500, "Something went wrong", error, false, true);
   }
-};
-
+}; 
  
 export const getRecruiterList = async(req: any, res: any) => {
   try {
@@ -226,8 +225,7 @@ export const updateRecruiter = async(req: any, res: any) => {
      // tslint:disable-next-line:no-console 
     return createResponse(res, 500, "Something went wrong", error, false, true);
   }
-};
-
+}; 
 // ---------------------- DELETE -------------------------
 export const deleteRecruiter = async(req: any, res: any) => {
   try {

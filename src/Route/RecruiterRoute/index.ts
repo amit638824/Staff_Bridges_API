@@ -11,8 +11,7 @@ recruiterRouter.delete("/recruiter-jobpost-delete/:id", RecruiterController.dele
 recruiterRouter.post("/recruiter-document-upload", RecruiterController.createRecruiterDocuments);
 recruiterRouter.get("/recruiter-document-upload", RecruiterController.getRecruiterDocumentsList);
 recruiterRouter.put("/recruiter-document-upload/:id", RecruiterController.updateRecruiterDocuments);
-recruiterRouter.delete("/recruiter-document-upload/:id", RecruiterController.deleteRecruiterDocuments);
-
+recruiterRouter.delete("/recruiter-document-upload/:id", RecruiterController.deleteRecruiterDocuments); 
 
 recruiterRouter.post("/recruiter-skills", RecruiterController.createRecruiterSkill);
 recruiterRouter.get("/recruiter-skills", RecruiterController.getRecruiterJobBenefitsList);
