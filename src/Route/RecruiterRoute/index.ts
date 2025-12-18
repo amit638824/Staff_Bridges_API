@@ -14,7 +14,10 @@ recruiterRouter.get("/recruiter-apply-job",  RecruiterController.getRecruiterApp
 recruiterRouter.put("/recruiter-apply-job/:id",  RecruiterController.updateRecruiterApplyJob);
 recruiterRouter.delete("/recruiter-apply-job/:id",  RecruiterController.deleteRecruiterApplyJob);
 
-
+recruiterRouter.post("/notification", RecruiterController.createNotification);
+recruiterRouter.get("/notification", RecruiterController.getNotificationList);
+recruiterRouter.put("/notification/:id/read", RecruiterController.markNotificationRead);
+recruiterRouter.delete("/notification/:id", RecruiterController.deleteNotification);
 
 recruiterRouter.post("/recruiter-jobpost-create", RecruiterController.createRecruiter); 
 recruiterRouter.get("/recruiter-jobpost-detail/:id", RecruiterController.getRecruiterDetail);

@@ -65,3 +65,14 @@ export const APPLIED_JOB_MESSAGES = {
   NOT_FOUND: "Applied job record not found",
   INTERNAL_ERROR: "Internal server error",
 };
+
+export const NOTIFICATION_MESSAGES = {
+  REQUIRED_FIELDS: "Required fields are missing",
+  CREATED: "Notification created successfully",
+  FETCHED: "Notifications fetched successfully",
+  UPDATED: "Notification marked as read",
+  DELETED: "Notification deleted successfully",
+  NOT_FOUND: "Notification not found",
+  RECRUITER_REQUIRED: "Recruiter ID is required",
+  INTERNAL_ERROR: "Internal server error",
+};
