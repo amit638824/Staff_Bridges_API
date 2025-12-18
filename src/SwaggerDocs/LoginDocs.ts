@@ -342,3 +342,35 @@
  *       500:
  *         description: Internal server error
  */
+
+/**
+ * @swagger
+ * /auth/user-logout:
+ *   post:
+ *     summary: Logout user
+ *     tags: [Login & Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [userId]
+ *             properties:
+ *               userId:
+ *                 type: number
+ *                 example: 12
+ *     responses:
+ *       200:
+ *         description: Logout successful
+ *         content:
+ *           application/json:
+ *             example:
+ *               status: true
+ *               message: "Logout successful"
+ *               data: []
+ *       400:
+ *         description: User ID is required
+ *       500:
+ *         description: Internal server error
+ */

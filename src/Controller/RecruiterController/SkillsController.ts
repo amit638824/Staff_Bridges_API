@@ -1,5 +1,5 @@
 import { createResponse } from "../../Helpers/response";
-import { RECRUITER_SKILLS_MESSAGES as MSG } from "../../Helpers/masterJobTitle.messages";
+import { RECRUITER_SKILLS_MESSAGES as MSG } from "../../Helpers/AditionalMessages";
 import { Skills } from "../../Entities/skills";
 import { MasterSkills } from "../../Entities/masterSkills";
 

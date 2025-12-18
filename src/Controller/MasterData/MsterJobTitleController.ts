@@ -1,5 +1,5 @@
 import { MasterJobTitle } from "../../Entities/MasterJobTitle";
-import { MASTER_JOB_TITLE_MESSAGES } from "../../Helpers/masterJobTitle.messages";
+import { MASTER_JOB_TITLE_MESSAGES } from "../../Helpers/AditionalMessages";
 import { createResponse } from "../../Helpers/response"; 
 export const createJobTitle = async (req: any, res: any) => {
   try {

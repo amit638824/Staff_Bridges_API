@@ -75,6 +75,7 @@ export const userProfileAditionalUpdate = async (req: any, res: any) => {
       email,
       alternateMobile,
       gender,
+      age,
       education,
     } = req.body;
 
@@ -87,7 +88,7 @@ export const userProfileAditionalUpdate = async (req: any, res: any) => {
       return createResponse(res, 404, MESSAGES?.USER_NOT_FOUND, [], false, true);
     }
 
-    // ✅ VALID EDUCATION VALUES (entity ke according)
+    // ✅ VALID EDUCATION VALUES
     const VALID_EDUCATION = [
       "Any",
       "highschool",
@@ -97,7 +98,6 @@ export const userProfileAditionalUpdate = async (req: any, res: any) => {
       "postgraduate",
     ];
 
-    // ❌ education validation
     if (education && !VALID_EDUCATION.includes(education)) {
       return createResponse(
         res,
@@ -109,23 +109,41 @@ export const userProfileAditionalUpdate = async (req: any, res: any) => {
       );
     }
 
-    // ✅ allowed update fields only
+    // ✅ EMAIL DUPLICATE CHECK
+    if (email) {
+      const existingEmailUser = await User.createQueryBuilder("user")
+        .where("LOWER(user.email) = LOWER(:email)", { email })
+        .andWhere("user.id != :userId", { userId })
+        .getOne();
+
+      if (existingEmailUser) {
+        return createResponse(
+          res,
+          400,
+          "Email already exists",
+          [],
+          false,
+          true
+        );
+      }
+    }
+
     const updateData: any = {
       salary,
       email,
       alternateMobile,
       gender,
+      age,
       education,
       updatedBy: userId,
       updatedAt: new Date(),
     };
 
-    // ❌ undefined fields remove
     Object.keys(updateData).forEach(
       (key) => updateData[key] === undefined && delete updateData[key]
     );
 
-    // ❌ agar update karne ke liye kuch nahi hai
+    // updatedBy & updatedAt ke alawa kuch nahi
     if (Object.keys(updateData).length === 2) {
       return createResponse(res, 400, "No valid fields to update", [], false, true);
     }
@@ -140,14 +158,11 @@ export const userProfileAditionalUpdate = async (req: any, res: any) => {
         "email",
         "alternateMobile",
         "gender",
+        "age",
         "education",
         "updatedAt",
       ])
       .execute();
-
-    if (result.affected === 0) {
-      return createResponse(res, 404, MESSAGES?.USER_NOT_FOUND, [], false, true);
-    }
 
     return createResponse(
       res,
@@ -160,9 +175,17 @@ export const userProfileAditionalUpdate = async (req: any, res: any) => {
 
   } catch (err) {
     console.log(MESSAGES?.RESET_ERROR, err);
-    return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
+    return createResponse(
+      res,
+      500,
+      MESSAGES?.INTERNAL_SERVER_ERROR,
+      [],
+      false,
+      true
+    );
   }
 };
+
 
 
 export const userLocationUpdate = async (req: any, res: any) => {

@@ -1,5 +1,5 @@
 import { MasterAssets } from "../../Entities/MasterAssetsRequired";
-import { MASTER_ASSETS_MESSAGES as MSG } from "../../Helpers/masterJobTitle.messages";
+import { MASTER_ASSETS_MESSAGES as MSG } from "../../Helpers/AditionalMessages";
 import { createResponse } from "../../Helpers/response";
 
 /* ================= CREATE ================= */

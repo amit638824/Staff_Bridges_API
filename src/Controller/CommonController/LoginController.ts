@@ -218,7 +218,7 @@ export const MobileLoginController = async (req: any, res: any) => {
         }
         // Step 2: Check OTP from Login table
         const loginRecord = await Login.createQueryBuilder("login")
-            .where("login.userId = :userId", { userId: user.id }) 
+            .where("login.userId = :userId", { userId: user.id })
             .getOne();
 
         if (!loginRecord) {
@@ -381,7 +381,7 @@ export const ResetTockenCheck = async (req: any, res: any) => {
         // Send a 500 response for internal server error
         return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
     }
-}; 
+};
 export const RecruiterRegisterController = async (req: any, res: any) => {
     try {
         const { email, password = "Test@12345" } = req.body;
@@ -421,5 +421,77 @@ export const RecruiterRegisterController = async (req: any, res: any) => {
         console.error("RecruiterRegisterController Error:", err);
 
         return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, [], false, true);
+    }
+};
+
+export const userProfileInfoController = async (req: any, res: any) => {
+    try {
+        const { id } = req.query;
+
+        if (!id) {
+            return createResponse(res, 400, "User id is required", [], false, true);
+        }
+
+        const data = await User.createQueryBuilder("user")
+            .leftJoin(Role, "roletbl", "user.RoleId = roletbl.id")
+            .addSelect([
+                "roletbl.id",
+                "roletbl.roleName"
+            ])
+            .where("user.id = :id", { id })
+            .getRawOne();
+
+        // Not Found
+        if (!data) {
+            return createResponse(res, 404, "User not found", [], false, true);
+        }
+
+        return createResponse(res, 200, "User profile fetched successfully", data, true, false);
+
+    } catch (error) {
+        console.error(error);
+        return createResponse(res, 500, "Internal Server Error", [], false, true);
+    }
+};
+
+export const LogoutController = async (req: any, res: any) => {
+    try {
+        const { userId } = req.body;
+
+        // Validate userId
+        if (!userId) {
+            return createResponse(
+                res,
+                400,
+                "User ID is required",
+                [],
+                false,
+                true
+            );
+        }
+
+        // (Optional) Token/session invalidate logic yahan ayega
+        // e.g. remove refresh token, update isLoggedIn = false, etc.
+
+        return createResponse(
+            res,
+            200,
+            "Logout successful",
+            [],
+            true,
+            false
+        );
+
+    } catch (error) {
+        console.log(MESSAGES?.INTERNAL_SERVER_ERROR, error);
+
+        return createResponse(
+            res,
+            500,
+            MESSAGES?.INTERNAL_SERVER_ERROR,
+            [],
+            false,
+            true
+        );
     }
 };

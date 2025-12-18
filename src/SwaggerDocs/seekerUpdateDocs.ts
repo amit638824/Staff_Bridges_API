@@ -59,7 +59,6 @@
  *       500:
  *         description: Internal server error.
  */
-
 /**
  * @swagger
  * /auth/user-profile-update-aditional:
@@ -71,6 +70,7 @@
  *       This API updates **only the following optional fields**:
  *       - Salary
  *       - Email
+ *       - Age
  *       - Alternate Mobile Number
  *       - Gender
  *       - Education
@@ -99,6 +99,9 @@
  *                 type: string
  *                 format: email
  *                 example: "sheetal.sharma@gmail.com"
+ *               age:
+ *                 type: integer
+ *                 example: 28
  *               alternateMobile:
  *                 type: string
  *                 example: "9876543211"
@@ -120,12 +123,13 @@
  *       200:
  *         description: Additional profile details updated successfully.
  *       400:
- *         description: User ID is required or invalid education value.
+ *         description: User ID is required or invalid input value.
  *       404:
  *         description: User not found.
  *       500:
  *         description: Internal server error.
  */
+
 
 /**
  * @swagger
@@ -265,4 +269,56 @@
  *         description: User not found
  *       500:
  *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /auth/user-info:
+ *   get:
+ *     tags:
+ *       - User Profile
+ *     summary: Get user profile information
+ *     description: |
+ *       This API fetches **complete user profile details** along with role information.
+ *
+ *       👉 User ID query parameter me dena mandatory hai  
+ *       👉 User table ka **poora data + role id & roleName** return hota hai
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: User ID
+ *         example: 1
+ *     responses:
+ *       200:
+ *         description: User profile fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: User profile fetched successfully
+ *                 data: 
+ *                       type: object
+ *                       description: User table raw data with role details
+ *                       example:
+ *                         id: 1
+ *                         name: Amit Chauhan
+ *                         email: amit@gmail.com
+ *                         mobile: 9876543210
+ *                         RoleId: 2
+ *                         roletbl_id: 2
+ *                         roletbl_roleName: Admin
+ *       400:
+ *         description: User id is required
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal Server Error
  */

@@ -1,9 +1,22 @@
 import express from "express";
 import * as RecruiterController from "./importRecruiterController";
-const recruiterRouter = express.Router();
+const recruiterRouter = express.Router(); 
+ 
+recruiterRouter.get("/recruiter-jobpost-list", RecruiterController.getRecruiterList); 
+recruiterRouter.get("/recruiter-best-job-your", RecruiterController.getRecruiterList);
+recruiterRouter.get("/recruiter-similar-jobs", RecruiterController.getRecruiterList);
+recruiterRouter.get("/recruiter-choose-from-job-categories", RecruiterController.getRecruiterList);
+recruiterRouter.get("/recruiter-jobs-in-near-by-areas", RecruiterController.getRecruiterList);
+recruiterRouter.get("/recruiter-job-details", RecruiterController.getRecruiterList);
 
-recruiterRouter.post("/recruiter-jobpost-create", RecruiterController.createRecruiter);
-recruiterRouter.get("/recruiter-jobpost-list", RecruiterController.getRecruiterList);
+recruiterRouter.post("/recruiter-apply-job",  RecruiterController.createRecruiterApplyJob);
+recruiterRouter.get("/recruiter-apply-job",  RecruiterController.getRecruiterApplyJobList); 
+recruiterRouter.put("/recruiter-apply-job/:id",  RecruiterController.updateRecruiterApplyJob);
+recruiterRouter.delete("/recruiter-apply-job/:id",  RecruiterController.deleteRecruiterApplyJob);
+
+
+
+recruiterRouter.post("/recruiter-jobpost-create", RecruiterController.createRecruiter); 
 recruiterRouter.get("/recruiter-jobpost-detail/:id", RecruiterController.getRecruiterDetail);
 recruiterRouter.put("/recruiter-jobpost-update/:id", RecruiterController.updateRecruiter);
 recruiterRouter.delete("/recruiter-jobpost-delete/:id", RecruiterController.deleteRecruiter);
@@ -11,8 +24,7 @@ recruiterRouter.delete("/recruiter-jobpost-delete/:id", RecruiterController.dele
 recruiterRouter.post("/recruiter-document-upload", RecruiterController.createRecruiterDocuments);
 recruiterRouter.get("/recruiter-document-upload", RecruiterController.getRecruiterDocumentsList);
 recruiterRouter.put("/recruiter-document-upload/:id", RecruiterController.updateRecruiterDocuments);
-recruiterRouter.delete("/recruiter-document-upload/:id", RecruiterController.deleteRecruiterDocuments);
-
+recruiterRouter.delete("/recruiter-document-upload/:id", RecruiterController.deleteRecruiterDocuments); 
 
 recruiterRouter.post("/recruiter-skills", RecruiterController.createRecruiterSkill);
 recruiterRouter.get("/recruiter-skills", RecruiterController.getRecruiterJobBenefitsList);

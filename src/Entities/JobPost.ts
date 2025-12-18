@@ -1,122 +1,162 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  Index,
+} from "typeorm";
 
+@Index(
+  "UQ_RECRUITER_JOB",
+  ["recruiterId", "titleId", "cityId", "jobType"],
+  { unique: true }
+)
 @Entity({ name: "JobPost" })
 export class JobPost extends BaseEntity {
 
-  @PrimaryGeneratedColumn({ name: "id", type: "int" }) 
-  id: any;
+  @PrimaryGeneratedColumn({ type: "int", name: "id" })
+  id: number;
 
-  @Column({ name: "recruiterId", type: "int" })
-   recruiterId: any;
+  @Column({ type: "int", name: "recruiterId" })
+  recruiterId: number;
 
-  @Column({ name: "titleId", type: "int" }) 
-  titleId: any;
+  @Column({ type: "int", name: "titleId" })
+  titleId: number;
 
-  @Column({ name: "categoryId", type: "int" }) 
-  categoryId: any;
+  @Column({ type: "int", name: "categoryId" })
+  categoryId: number;
 
-  @Column({ name: "hiringForOthers", type: "int", default: 1 }) 
-  hiringForOthers: any;
+  @Column({ type: "int", default: 1, name: "hiringForOthers" })
+  hiringForOthers: number;
 
-  @Column({ name: "openings", type: "int", default: 1 })
-   openings: any;
+  @Column({ type: "int", default: 1, name: "openings" })
+  openings: number;
 
-  @Column({ name: "agencyId", type: "int", nullable: true }) 
-  agencyId: any;
+  @Column({ type: "int", nullable: true, name: "agencyId" })
+  agencyId: number;
 
-  @Column({ name: "jobType", type: "enum", enum: ["Full-time", "Part-time", "Contract"] }) 
-  jobType: any;
+  @Column({
+    type: "enum",
+    enum: ["Full-time", "Part-time", "Contract"],
+    name: "jobType"
+  })
+  jobType: string;
 
-  @Column({ name: "workLocation", type: "enum", enum: ["Office", "Field", "WorkFromHome"] })
-   workLocation: any;
+  @Column({
+    type: "enum",
+    enum: ["Office", "Field", "WorkFromHome"],
+    name: "workLocation"
+  })
+  workLocation: string;
 
-  @Column({ name: "cityId", type: "int", nullable: true }) 
-  cityId: any;
+  @Column({ type: "int", nullable: true, name: "cityId" })
+  cityId: number;
 
-  @Column({ name: "localityId", type: "int", nullable: true }) 
-  localityId: any;
+  @Column({ type: "int", nullable: true, name: "localityId" })
+  localityId: number;
 
-  @Column({ name: "gender", type: "enum", enum: ["Any", "Male", "Female"] }) 
-  gender: any;
+  @Column({
+    type: "enum",
+    enum: ["Any", "Male", "Female"],
+    default: "Any",
+    name: "gender"
+  })
+  gender: string;
 
-  @Column({ name: "qualification", type: "enum", enum: ["Any", "highschool", "intermediate", "diploma", "graduate", "postgraduate"], default: "highschool", nullable: true, })
-   qualification: any;
+  @Column({
+    type: "enum",
+    enum: ["Any", "highschool", "intermediate", "diploma", "graduate", "postgraduate"],
+    default: "highschool",
+    name: "qualification"
+  })
+  qualification: string;
 
-  @Column({ name: "minExerince", type: "decimal", precision: 10, scale: 2 }) 
-  minExerince: any;
+  @Column({ type: "decimal", precision: 10, scale: 2, default: 0, name: "minExerince" })
+  minExerince: number;
 
-  @Column({ name: "maxExperince", type: "decimal", precision: 10, scale: 2 }) 
-  maxExperince: any;
+  @Column({ type: "decimal", precision: 10, scale: 2, default: 0, name: "maxExperince" })
+  maxExperince: number;
 
-  @Column({ name: "onlyFresher", type: "int", default: 0 }) 
-  onlyFresher: any;
+  @Column({ type: "int", default: 0, name: "onlyFresher" })
+  onlyFresher: number;
 
-  @Column({ name: "salaryBenifits", type: "enum", enum: ["Fixed", "Fixed + Incentives"] })
-   salaryBenifits: any;
+  @Column({
+    type: "enum",
+    enum: ["Fixed", "Fixed + Incentives"],
+    default: "Fixed",
+    name: "salaryBenifits"
+  })
+  salaryBenifits: string;
 
-  @Column({ name: "salaryMin", type: "decimal", precision: 10, scale: 2 })
-   salaryMin: any;
+  @Column({ type: "decimal", precision: 10, scale: 2, default: 0, name: "salaryMin" })
+  salaryMin: number;
 
-  @Column({ name: "salaryMax", type: "decimal", precision: 10, scale: 2 }) 
-  salaryMax: any;
+  
+  @Column({
+    type: "enum",
+    enum: ["Day", "Night ", "Any", ],
+    default: "Day",
+    name: "shift",
+    nullable: true,
+  })
+  shift: string;
 
-  @Column({ name: "jobBenefitsId", type: "text", nullable: true }) 
-  jobBenefitsId: any;
+  @Column({ type: "decimal", precision: 10, scale: 2, default: 0, name: "salaryMax" })
+  salaryMax: number;
 
-  @Column({ name: "workType", type: "varchar", length: 50, nullable: true })
-   workType: any;
+  @Column({
+    type: "enum",
+    enum: ["5", "6", "other"],
+    default: "5",
+    name: "workingDays"
+  })
+  workingDays: string;
 
-  @Column({ name: "candiate_special_experince", type: "int", default: 0 }) 
-  candiate_special_experince: any;
+  @Column({ type: "text", array: true, nullable: true, name: "communicationWindow" })
+  communicationWindow: string[];
 
-  @Column({ name: "jobskillsId", type: "int", default: 0 }) 
-  jobskillsId: any;
+  @Column({ type: "int", default: 0, name: "candidateCanCall" })
+  candidateCanCall: number;
 
-  @Column({ name: "assets_Required", type: "text", nullable: true })
-   assets_Required: any;
+  @Column({
+    type: "enum",
+    enum: ["INDIVIDUAL", "COMPANY"],
+    default: "INDIVIDUAL",
+    name: "jobPostingFor"
+  })
+  jobPostingFor: string;
 
-  @Column({ name: "documents", type: "text", array: true, nullable: true })
-   documents: any;
+  @Column({ type: "int", default: 0, name: "verificationRequired" })
+  verificationRequired: number;
 
-  @Column({ name: "workingDays", type: "enum", enum: ["5", "6", "other"], default: "5" })
-   workingDays: any;
+  @Column({
+    type: "enum",
+    enum: ["DRAFT", "UNDER_REVIEW", "APPROVED", "REJECTED", "LIVE"],
+    default: "DRAFT",
+    name: "status"
+  })
+  status: string;
 
-  @Column({ name: "interviewAddress", type: "varchar", length: 100, nullable: true }) 
-  interviewAddress: any;
+  @Column({ type: "text", nullable: true, name: "adminComments" })
+  adminComments: string;
 
-  @Column({ name: "communicationWindow", type: "text", array: true, nullable: true }) 
-  communicationWindow: any;
+  @Column({ type: "text", nullable: true, name: "description" })
+  description: string;
 
-  @Column({ name: "candidateCanCall", type: "int", default: 0 }) 
-  candidateCanCall: any;
-
-  @Column({ name: "candidate_deposite", type: "int", default: 0 }) 
-  candidate_deposite: any;
-
-  @Column({ name: "description", type: "text", nullable: true })
-   description: any;
-
-  @Column({ name: "jobPostingFor", type: "enum", enum: ["INDIVIDUAL", "COMPANY"] }) 
-  jobPostingFor: any;
-
-  @Column({ name: "verificationRequired", type: "int", default: 0 }) 
-  verificationRequired: any;
-
-  @Column({ name: "status", type: "enum", enum: ["DRAFT", "UNDER_REVIEW", "APPROVED", "REJECTED", "LIVE"], default: "DRAFT" })
-   status: any;
-
-  @Column({ name: "adminComments", type: "text", nullable: true }) 
-  adminComments: any;
-
-  @Column({ name: "createdAt", type: "timestamptz", default: () => "CURRENT_TIMESTAMP" }) 
+  @Column({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP", name: "createdAt" })
   createdAt: Date;
 
-  @Column({ name: "updatedAt", type: "timestamptz", default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" }) 
+  @Column({
+    type: "timestamptz",
+    default: () => "CURRENT_TIMESTAMP",
+    onUpdate: "CURRENT_TIMESTAMP",
+    name: "updatedAt"
+  })
   updatedAt: Date;
 
-  @Column({ name: "createdBy", type: "int", nullable: true }) 
-  createdBy: any;
+  @Column({ type: "int", nullable: true, name: "createdBy" })
+  createdBy: number;
 
-  @Column({ name: "updatedBy", type: "int", nullable: true })
-   updatedBy: any;
+  @Column({ type: "int", nullable: true, name: "updatedBy" })
+  updatedBy: number;
 }
