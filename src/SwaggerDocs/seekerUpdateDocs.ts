@@ -59,7 +59,6 @@
  *       500:
  *         description: Internal server error.
  */
-
 /**
  * @swagger
  * /auth/user-profile-update-aditional:
@@ -71,6 +70,7 @@
  *       This API updates **only the following optional fields**:
  *       - Salary
  *       - Email
+ *       - Age
  *       - Alternate Mobile Number
  *       - Gender
  *       - Education
@@ -99,6 +99,9 @@
  *                 type: string
  *                 format: email
  *                 example: "sheetal.sharma@gmail.com"
+ *               age:
+ *                 type: integer
+ *                 example: 28
  *               alternateMobile:
  *                 type: string
  *                 example: "9876543211"
@@ -120,12 +123,13 @@
  *       200:
  *         description: Additional profile details updated successfully.
  *       400:
- *         description: User ID is required or invalid education value.
+ *         description: User ID is required or invalid input value.
  *       404:
  *         description: User not found.
  *       500:
  *         description: Internal server error.
  */
+
 
 /**
  * @swagger

@@ -72,41 +72,7 @@
  *         description: Internal server error
  */
 
-/**
- * @swagger
- * /api/recruiter-jobpost-list:
- *   get:
- *     summary: Get list of recruiter job posts
- *     tags: [Recruiter Job Post]
- *     responses:
- *       200:
- *         description: List of recruiter jobs
- *       500:
- *         description: Internal server error
- */
-
-/**
- * @swagger
- * /api/recruiter-jobpost-detail/{id}:
- *   get:
- *     summary: Get recruiter job post detail
- *     tags: [Recruiter Job Post]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: number
- *         example: 1
- *     responses:
- *       200:
- *         description: Recruiter job details
- *       404:
- *         description: Recruiter not found
- *       500:
- *         description: Internal server error
- */
-
+ 
 /**
  * @swagger
  * /api/recruiter-jobpost-update/{id}:

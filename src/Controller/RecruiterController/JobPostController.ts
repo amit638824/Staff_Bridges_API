@@ -1,14 +1,21 @@
 import { JobPost } from "../../Entities/JobPost";
-import { Skills } from "../../Entities/skills";
-import { AssetsRequired } from "../../Entities/AssetsRequired";
-import { RecruiterDocuments } from "../../Entities/recruiterDocuments";  
-import { JobBenifits } from "../../Entities/JobBenifits";
 import { createResponse } from "../../Helpers/response";
 import { DeepPartial } from "typeorm";
+// import { MasterJobBenifits } from "../../Entities/masterJobBenifits"; 
+// import { MasterSkills } from "../../Entities/masterSkills";
+// import { MasterAssets } from "../../Entities/MasterAssetsRequired";
 
-const uniqueArray = (arr: number[]) => [...new Set(arr)];
+// import { JobCategory } from "../../Entities/category";
+import { AssetsRequired } from "../../Entities/AssetsRequired";
+import { Skills } from "../../Entities/skills";
+import { JobBenifits } from "../../Entities/JobBenifits";
+import { RecruiterDocuments } from "../../Entities/recruiterDocuments";
+
+
 
 export const createRecruiter = async (req: any, res: any) => {
+  const uniqueArray = (arr: number[]) => [...new Set(arr)];
+
   try {
     const {
       recruiterId,
@@ -177,20 +184,11 @@ export const createRecruiter = async (req: any, res: any) => {
     console.error(error);
     return createResponse(res, 500, "Something went wrong", error, false, true);
   }
-}; 
- 
-export const getRecruiterList = async(req: any, res: any) => {
-  try {
-    const recruiters = await JobPost.find();
-
-    return createResponse(res, 200, "Recruiter List", recruiters);
-  } catch (error) {
-     // tslint:disable-next-line:no-console 
-    return createResponse(res, 500, "Something went wrong", error, false, true);
-  }
 };
- 
-export const getRecruiterDetail = async(req: any, res: any) => {
+
+
+
+export const getRecruiterDetail = async (req: any, res: any) => {
   try {
     const { id } = req.params;
 
@@ -202,12 +200,12 @@ export const getRecruiterDetail = async(req: any, res: any) => {
 
     return createResponse(res, 200, "Recruiter Details", recruiter);
   } catch (error) {
-     // tslint:disable-next-line:no-console 
+    // tslint:disable-next-line:no-console 
     return createResponse(res, 500, "Something went wrong", error, false, true);
   }
 };
 
-export const updateRecruiter = async(req: any, res: any) => {
+export const updateRecruiter = async (req: any, res: any) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
@@ -222,12 +220,12 @@ export const updateRecruiter = async(req: any, res: any) => {
 
     return createResponse(res, 200, "Recruiter updated successfully", updatedRecruiter);
   } catch (error) {
-     // tslint:disable-next-line:no-console 
+    // tslint:disable-next-line:no-console 
     return createResponse(res, 500, "Something went wrong", error, false, true);
   }
-}; 
+};
 // ---------------------- DELETE -------------------------
-export const deleteRecruiter = async(req: any, res: any) => {
+export const deleteRecruiter = async (req: any, res: any) => {
   try {
     const { id } = req.params;
 
@@ -241,9 +239,9 @@ export const deleteRecruiter = async(req: any, res: any) => {
 
     return createResponse(res, 200, "Recruiter deleted successfully");
   } catch (error) {
-     // tslint:disable-next-line:no-console 
+    // tslint:disable-next-line:no-console 
     return createResponse(res, 500, "Something went wrong", error, false, true);
   }
 };
- 
+
 

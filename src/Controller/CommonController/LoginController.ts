@@ -453,3 +453,45 @@ export const userProfileInfoController = async (req: any, res: any) => {
         return createResponse(res, 500, "Internal Server Error", [], false, true);
     }
 };
+
+export const LogoutController = async (req: any, res: any) => {
+    try {
+        const { userId } = req.body;
+
+        // Validate userId
+        if (!userId) {
+            return createResponse(
+                res,
+                400,
+                "User ID is required",
+                [],
+                false,
+                true
+            );
+        }
+
+        // (Optional) Token/session invalidate logic yahan ayega
+        // e.g. remove refresh token, update isLoggedIn = false, etc.
+
+        return createResponse(
+            res,
+            200,
+            "Logout successful",
+            [],
+            true,
+            false
+        );
+
+    } catch (error) {
+        console.log(MESSAGES?.INTERNAL_SERVER_ERROR, error);
+
+        return createResponse(
+            res,
+            500,
+            MESSAGES?.INTERNAL_SERVER_ERROR,
+            [],
+            false,
+            true
+        );
+    }
+};

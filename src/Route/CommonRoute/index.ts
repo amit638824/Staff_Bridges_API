@@ -12,7 +12,9 @@ loginRoute.post("/recruiter-register", AuthHandler.RecruiterRegisterController);
 loginRoute.post("/send-otp", AuthHandler.SendOtpMobileController);
 loginRoute.post("/mobile-login", AuthHandler.MobileLoginController);
 loginRoute.post("/social-login", AuthHandler.GoogleSocialLoginController);
-loginRoute.post("/email-login", AuthHandler.EmailLoginController);
+loginRoute.post("/email-login", AuthHandler.EmailLoginController); 
+loginRoute.post("/user-logout", AuthHandler.LogoutController);
+
 /* ---------------------------------------------
    PASSWORD MANAGEMENT   
 ----------------------------------------------*/

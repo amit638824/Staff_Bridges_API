@@ -54,3 +54,14 @@ export const RECRUITER_ASSETS_MESSAGES = {
   NOT_FOUND: "Recruiter asset not found",
   INTERNAL_ERROR: "Internal server error",
 };
+
+export const APPLIED_JOB_MESSAGES = {
+  REQUIRED_FIELDS: "Required fields are missing",
+  ALREADY_APPLIED: "User has already applied for this job",
+  CREATED: "Job applied successfully",
+  FETCHED: "Applied job(s) fetched successfully",
+  UPDATED: "Applied job updated successfully",
+  DELETED: "Applied job deleted successfully",
+  NOT_FOUND: "Applied job record not found",
+  INTERNAL_ERROR: "Internal server error",
+};
