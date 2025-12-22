@@ -54,6 +54,11 @@ export class User extends BaseEntity {
   @Column({ name: "profilePic", type: "varchar", nullable: true })
   profilePic: any;
 
+  
+  @Column({ name: "companyLogo", type: "varchar", nullable: true })
+  companyLogo: any;
+
+
   @Column({ name: "resume", type: "varchar", nullable: true })
   resume: any;
 

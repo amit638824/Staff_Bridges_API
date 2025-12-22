@@ -4,7 +4,7 @@ import { Role } from "../../Entities/Role";
 import { MESSAGES } from "../../Helpers/constants";
 import { createResponse } from "../../Helpers/response";
 import { sendEmail } from "../../Helpers/email";
-import { generateToken } from "../../Helpers/utils";
+import { generateToken, getProfileCompletion } from "../../Helpers/utils";
 import { User } from "../../Entities/user";
 import { Login } from "../../Entities/login";
 import { OAuth2Client } from "google-auth-library";
@@ -440,13 +440,13 @@ export const userProfileInfoController = async (req: any, res: any) => {
             ])
             .where("user.id = :id", { id })
             .getRawOne();
-
+        const profile = await getProfileCompletion(data)
         // Not Found
         if (!data) {
             return createResponse(res, 404, "User not found", [], false, true);
         }
-
-        return createResponse(res, 200, "User profile fetched successfully", data, true, false);
+        const result = { ...data, profile }
+        return createResponse(res, 200, "User profile fetched successfully", result, true, false);
 
     } catch (error) {
         console.error(error);

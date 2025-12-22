@@ -284,6 +284,7 @@ export const getRecruiterList = async (req: any, res: any) => {
                 "locality.pinCode AS pin_code",
 
                 "user.companyName AS company",
+                "user.companyLogo AS companylogo",
             ])
             .orderBy(sortColumn, sortOrder)
             .take(take)

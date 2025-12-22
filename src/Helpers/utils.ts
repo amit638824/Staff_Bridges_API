@@ -34,26 +34,57 @@ export const generateToken = () => {
     return token;
 };  
 // Fields to consider for profile completion
-const fieldsToCheck = ["firstName", "lastName", "emailId", "secondaryEmailId", "companyId", "title", "profile"];
+ 
+const PROFILE_FIELDS = [
+  { key: "user_fullName", label: "Full Name" },
+  { key: "user_email", label: "Email" },
+  { key: "user_mobile", label: "Mobile Number" },
+  { key: "user_gender", label: "Gender" },
+  { key: "user_age", label: "Age" },
+  { key: "user_education", label: "Education" },
+  { key: "user_city", label: "City" },
+  { key: "user_locality", label: "Locality" },
+  { key: "user_profilePic", label: "Profile Picture" },
+  { key: "user_resume", label: "Resume" },
+  { key: "user_salary", label: "Expected Salary" },
+];
+export const getProfileCompletion = (user: any) => {
+  const totalFields = PROFILE_FIELDS.length;
 
-export const profileCompletion = (data: any) => {
-  const total = fieldsToCheck?.length;
-  let raw = 0;
+  let filledCount = 0;
+  const missingFields: any[] = [];
 
-  fieldsToCheck?.forEach((field) => {
+  PROFILE_FIELDS.forEach(({ key, label }) => {
+    const value = user[key];
+
     if (
-      data[field] != null && 
-      data[field] !== undefined && 
-      data[field] !== "" && 
-      data[field] !== "undefined" // Check for string 'undefined'
+      value !== null &&
+      value !== undefined &&
+      value !== "" &&
+      value !== "undefined"
     ) {
-      raw++;
+      filledCount++;
+    } else {
+      missingFields.push({
+        field: key,
+        label,
+        message: `${label} is not filled`,
+      });
     }
-  });  
-  const per = (raw * 100) / total;
+  });
 
-  return Math.ceil(per); // Rounds up to the nearest whole number
-}; 
+  const percentage = Math.ceil((filledCount / totalFields) * 100);
+
+  return {
+    percentage,
+    filledCount,
+    totalFields,
+    missingFields,
+  };
+};
+
+
+
 
 export const generateOtp = (): string => {
     return Math.floor(100000 + Math.random() * 900000).toString();
