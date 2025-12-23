@@ -34,13 +34,66 @@ export const createMasterAssets = async (req: any, res: any) => {
 /* ================= GET ALL ================= */
 export const getAllMasterAssets = async (req: any, res: any) => {
   try {
-    const items = await MasterAssets.find({ order: { id: "DESC" } });
-    return createResponse(res, 200, MSG.FETCHED, items);
+    const { page = 1, limit = 10, ...filters } = req.query;
+    const offset = (Number(page) - 1) * Number(limit);
+
+    const qb = MasterAssets.createQueryBuilder("asset")
+      .select([
+        "asset.id",
+        "asset.name",
+        "asset.description",
+        "asset.status",
+        "asset.createdAt",
+      ])
+      .orderBy("asset.id", "DESC")
+      .limit(Number(limit))
+      .offset(offset);
+
+    // 🔹 Apply filters
+    Object.entries(filters).forEach(([key, value]) => {
+      if (!value) return;
+
+      key === "id" || key === "status"
+        ? qb.andWhere(`asset."${key}" = :${key}`, { [key]: Number(value) })
+        : qb.andWhere(`asset."${key}" ILIKE :${key}`, {
+            [key]: `%${value}%`,
+          });
+    });
+
+    const items = await qb.getMany();
+
+    // 🔹 Total count query
+    const totalQB = MasterAssets.createQueryBuilder("asset").select(
+      "COUNT(asset.id)",
+      "total"
+    );
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (!value) return;
+
+      key === "id" || key === "status"
+        ? totalQB.andWhere(`asset."${key}" = :${key}`, { [key]: Number(value) })
+        : totalQB.andWhere(`asset."${key}" ILIKE :${key}`, {
+            [key]: `%${value}%`,
+          });
+    });
+
+    const totalRecords = Number((await totalQB.getRawOne()).total);
+    const totalPages = Math.ceil(totalRecords / Number(limit));
+
+    return createResponse(res, 200, MSG.FETCHED, {
+      currentPage: Number(page),
+      limit: Number(limit),
+      totalPages,
+      totalRecords,
+      items,
+    });
   } catch (err) {
     console.error(err);
     return createResponse(res, 500, "Internal server error", [], true);
   }
 };
+
 
 /* ================= UPDATE ================= */
 export const updateMasterAssets = async (req: any, res: any) => {

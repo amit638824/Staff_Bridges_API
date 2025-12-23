@@ -19,7 +19,7 @@ export const createRecruiter = async (req: any, res: any) => {
 
   try {
     const {
-      recruiterId,
+     recruiterId,
       titleId,
       categoryId,
 
@@ -45,6 +45,12 @@ export const createRecruiter = async (req: any, res: any) => {
       salaryMax = 0,
 
       workingDays = "5",
+      shift = "Day",
+      minJobTiming = 0,
+      maxJobTiming = 0,
+      depositeRequired=0,
+
+      interviewAddress = null,
       communicationWindow = [],
 
       candidateCanCall = 0,
@@ -86,7 +92,7 @@ export const createRecruiter = async (req: any, res: any) => {
 
     /* ---------------- JOB CREATE ---------------- */
     const jobPost = JobPost.create({
-      recruiterId,
+       recruiterId,
       titleId,
       categoryId,
       hiringForOthers,
@@ -105,6 +111,11 @@ export const createRecruiter = async (req: any, res: any) => {
       salaryMin,
       salaryMax,
       workingDays,
+      shift,
+      minJobTiming,
+      maxJobTiming,
+      depositeRequired,
+      interviewAddress,
       communicationWindow,
       candidateCanCall,
       jobPostingFor,
