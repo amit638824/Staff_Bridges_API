@@ -61,7 +61,7 @@ export class JobPost extends BaseEntity {
     default: "Any",
     name: "gender"
   })
-  gender: string;
+  gender: string; //
 
   @Column({
     type: "enum",
@@ -134,7 +134,7 @@ export class JobPost extends BaseEntity {
     name: "jobPostingFor"
   })
   jobPostingFor: string;
-  
+
   @Column({ type: "int", default: 0, name: "depositeRequired" })
   depositeRequired: number;
 
