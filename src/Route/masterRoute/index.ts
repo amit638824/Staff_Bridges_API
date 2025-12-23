@@ -52,7 +52,10 @@ masterData.get("/master-recruiter-document", MasterController.getAllRecruiterDoc
 masterData.put("/master-recruiter-document/:id", MasterController.updateRecruiterDocument);
 masterData.delete("/master-recruiter-document/:id", MasterController.deleteRecruiterDocument);
 // mster skills  CRUD 
-
+masterData.post("/master-skills", MasterController.createMasterSkill);
+masterData.get("/master-skills", MasterController.getAllMasterSkills);
+masterData.put("/master-skills/:id", MasterController.updateMasterSkill);
+masterData.delete("/master-skills/:id", MasterController.deleteMasterSkill);
 
 // mster job benifits  CRUD 
 masterData.post("/master-job-benifits", MasterController.createMasterJobBenefit);
@@ -66,5 +69,9 @@ masterData.get("/master-assets-required", MasterController.getAllMasterAssets);
 masterData.put("/master-assets-required/:id", MasterController.updateMasterAssets);
 masterData.delete("/master-assets-required/:id", MasterController.deleteMasterAssets);
 
+// master-assets-required
+
 
 export default masterData;
+
+    

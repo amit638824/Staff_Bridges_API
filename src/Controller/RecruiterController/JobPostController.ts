@@ -10,16 +10,14 @@ import { AssetsRequired } from "../../Entities/AssetsRequired";
 import { Skills } from "../../Entities/skills";
 import { JobBenifits } from "../../Entities/JobBenifits";
 import { RecruiterDocuments } from "../../Entities/recruiterDocuments";
-import { createNotificationHelper } from "../../Helpers/notificationHelper";
-
-
+import { createNotificationHelper } from "../../Helpers/notificationHelper"; 
 
 export const createRecruiter = async (req: any, res: any) => {
   const uniqueArray = (arr: number[]) => [...new Set(arr)];
 
   try {
     const {
-      recruiterId,
+     recruiterId,
       titleId,
       categoryId,
 
@@ -45,6 +43,12 @@ export const createRecruiter = async (req: any, res: any) => {
       salaryMax = 0,
 
       workingDays = "5",
+      shift = "Day",
+      minJobTiming = 0,
+      maxJobTiming = 0,
+      depositeRequired=0,
+
+      interviewAddress = null,
       communicationWindow = [],
 
       candidateCanCall = 0,
@@ -86,7 +90,7 @@ export const createRecruiter = async (req: any, res: any) => {
 
     /* ---------------- JOB CREATE ---------------- */
     const jobPost = JobPost.create({
-      recruiterId,
+       recruiterId,
       titleId,
       categoryId,
       hiringForOthers,
@@ -105,6 +109,11 @@ export const createRecruiter = async (req: any, res: any) => {
       salaryMin,
       salaryMax,
       workingDays,
+      shift,
+      minJobTiming,
+      maxJobTiming,
+      depositeRequired,
+      interviewAddress,
       communicationWindow,
       candidateCanCall,
       jobPostingFor,

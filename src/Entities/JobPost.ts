@@ -91,10 +91,10 @@ export class JobPost extends BaseEntity {
   @Column({ type: "decimal", precision: 10, scale: 2, default: 0, name: "salaryMin" })
   salaryMin: number;
 
-  
+
   @Column({
     type: "enum",
-    enum: ["Day", "Night ", "Any", ],
+    enum: ["Day", "Night ", "Any",],
     default: "Day",
     name: "shift",
     nullable: true,
@@ -112,6 +112,15 @@ export class JobPost extends BaseEntity {
   })
   workingDays: string;
 
+  @Column({ type: "decimal", precision: 10, scale: 2, default: 0, name: "minJobTiming" })
+  minJobTiming: number;
+
+  @Column({ type: "decimal", precision: 10, scale: 2, default: 0, name: "maxJobTiming" })
+  maxJobTiming: number;
+
+  @Column({ type: "text", nullable: true, name: "interviewAddress" })
+  interviewAddress: string; 
+
   @Column({ type: "text", array: true, nullable: true, name: "communicationWindow" })
   communicationWindow: string[];
 
@@ -125,9 +134,14 @@ export class JobPost extends BaseEntity {
     name: "jobPostingFor"
   })
   jobPostingFor: string;
+  
+  @Column({ type: "int", default: 0, name: "depositeRequired" })
+  depositeRequired: number;
 
   @Column({ type: "int", default: 0, name: "verificationRequired" })
   verificationRequired: number;
+
+   
 
   @Column({
     type: "enum",
