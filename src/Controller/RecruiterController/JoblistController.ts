@@ -255,10 +255,13 @@ export const getRecruiterList = async (req: any, res: any) => {
 
                 "job.shift AS shift",
                 "job.workingDays AS working_days",
+                "job.minJobTiming AS minJobTiming",
+                "job.maxJobTiming AS maxJobTiming",
 
                 "job.communicationWindow AS communication_window",
                 "job.candidateCanCall AS candidate_can_call",
-
+                "job.interviewAddress AS interviewAddress",
+                "job.depositeRequired AS depositeRequired",
                 "job.verificationRequired AS verification_required",
                 "job.status AS status",
 
@@ -287,7 +290,7 @@ export const getRecruiterList = async (req: any, res: any) => {
                 "user.companyLogo AS companylogo",
             ])
             .orderBy(sortColumn, sortOrder)
-            .take(take)
+            .limit(take)
             .skip(skip)
             .getRawMany();
 
