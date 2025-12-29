@@ -49,57 +49,70 @@ export const createRecruiterDocuments = async (req: any, res: any) => {
 };
 
 export const getRecruiterDocumentsList = async (req: any, res: any) => {
-    try {
-        const { page = 1, limit = 10, ...filters } = req.query;
-        const offset = (Number(page) - 1) * Number(limit);
+  try {
+    const { page = 1, limit = 10, ...filters } = req.query;
+    const offset = (Number(page) - 1) * Number(limit);
 
-        const qb = RecruiterDocuments.createQueryBuilder("rd")
-            .select([
-                "rd.id AS id",
-                "rd.document AS document",
-                "rd.isVerified AS isVerified",
-                "rd.userId AS userId",
+    const qb = RecruiterDocuments.createQueryBuilder("rd")
+      .select([
+        "rd.id AS id",
+        "rd.document AS document",
+        "rd.isVerified AS isVerified",
+        "rd.userId AS userId",
+        "rd.jobId AS jobId",
 
-                "md.name AS documentName",
-                "md.description AS description",
-            ])
-            .leftJoin(MasterRecruiterDocument, "md", "md.id = rd.documentId")
-            .orderBy("rd.id", "DESC")
-            .limit(Number(limit))
-            .offset(offset);
+        "md.name AS documentName",
+        "md.description AS description",
+      ])
+      .leftJoin(MasterRecruiterDocument, "md", "md.id = rd.documentId")
+      .orderBy("rd.id", "DESC")
+      .limit(Number(limit))
+      .offset(offset);
 
-        Object.entries(filters).forEach(([key, value]) => {
-            if (!value) return;
+    Object.entries(filters).forEach(([key, value]) => {
+      if (!value) return;
 
-            if (["id", "documentId", "userId", "isVerified"].includes(key)) {
-                qb.andWhere(`rd.${key} = :${key}`, { [key]: Number(value) });
-            }
-
-            if (key === "documentName") {
-                qb.andWhere("md.name ILIKE :name", { name: `%${value}%` });
-            }
+      // numeric filters
+      if (
+        ["id", "documentId", "userId", "jobId", "isVerified"].includes(key)
+      ) {
+        qb.andWhere(`rd.${key} = :${key}`, {
+          [key]: Number(value),
         });
+      }
 
-        const items = await qb.getRawMany();
-
-        const total = await RecruiterDocuments.createQueryBuilder("rd")
-            .leftJoin(MasterRecruiterDocument, "md", "md.id = rd.documentId")
-            .getCount();
-
-        return createResponse(res, 200, MESSAGES.DOCUMENT_FETCHED, {
-            currentPage: Number(page),
-            limit: Number(limit),
-            totalRecords: total,
-            totalPages: Math.ceil(total / Number(limit)),
-            items,
+      // document name search
+      if (key === "documentName") {
+        qb.andWhere("md.name ILIKE :name", {
+          name: `%${value}%`,
         });
-    } catch (error) {
-         // tslint:disable-next-line:no-console 
-        console.log(error);
+      }
+    });
 
-        return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, []);
-    }
+    const items = await qb.getRawMany();
+
+    const total = await RecruiterDocuments.createQueryBuilder("rd")
+      .leftJoin(MasterRecruiterDocument, "md", "md.id = rd.documentId")
+      .where(
+        Object.keys(filters).length
+          ? "1=1"
+          : "1=1"
+      )
+      .getCount();
+
+    return createResponse(res, 200, MESSAGES.DOCUMENT_FETCHED, {
+      currentPage: Number(page),
+      limit: Number(limit),
+      totalRecords: total,
+      totalPages: Math.ceil(total / Number(limit)),
+      items,
+    });
+  } catch (error) {
+    console.log(error);
+    return createResponse(res, 500, MESSAGES.INTERNAL_SERVER_ERROR, []);
+  }
 };
+
 
 export const updateRecruiterDocuments = async (req: any, res: any) => {
   try {

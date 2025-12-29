@@ -30,7 +30,7 @@ recruiterRouter.put("/recruiter-document-upload/:id", RecruiterController.update
 recruiterRouter.delete("/recruiter-document-upload/:id", RecruiterController.deleteRecruiterDocuments); 
 
 recruiterRouter.post("/recruiter-skills", RecruiterController.createRecruiterSkill);
-recruiterRouter.get("/recruiter-skills", RecruiterController.getRecruiterJobBenefitsList);
+recruiterRouter.get("/recruiter-skills", RecruiterController.getRecruiterSkillsList);
 recruiterRouter.put("/recruiter-skills/:id", RecruiterController.updateRecruiterSkill);
 recruiterRouter.delete("/recruiter-skills/:id", RecruiterController.deleteRecruiterSkill);
 

@@ -70,20 +70,33 @@
  *         schema:
  *           type: integer
  *       - in: query
- *         name: name
- *         schema:
- *           type: string
- *       - in: query
- *         name: status
+ *         name: jobId
  *         schema:
  *           type: integer
- *           enum: [0,1]
+ *         description: Filter documents by Job ID
+ *       - in: query
+ *         name: userId
+ *         schema:
+ *           type: integer
+ *         description: Filter documents by User ID
+ *       - in: query
+ *         name: documentName
+ *         schema:
+ *           type: string
+ *         description: Search by document name
+ *       - in: query
+ *         name: isVerified
+ *         schema:
+ *           type: integer
+ *           enum: [0, 1]
+ *         description: Verification status
  *     responses:
  *       200:
  *         description: Recruiter documents fetched successfully
  *       500:
  *         description: Internal server error
  */
+
 /**
  * @swagger
  * /api/master-recruiter-document/{id}:
