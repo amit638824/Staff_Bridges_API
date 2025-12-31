@@ -46,6 +46,6 @@ recruiterRouter.put("/recruiter-assets-required/:id", RecruiterController.update
 recruiterRouter.delete("/recruiter-assets-required/:id", RecruiterController.deleteRecruiterAsset);
 
 
-recruiterRouter.get("/recruiter-verification-data", RecruiterController.deleteRecruiterAsset);
+recruiterRouter.get("/recruiter-verification-data", RecruiterController.recruiterVerificationData);
 
 export default recruiterRouter;  // Verification Steps

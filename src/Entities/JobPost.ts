@@ -119,7 +119,7 @@ export class JobPost extends BaseEntity {
   maxJobTiming: number;
 
   @Column({ type: "text", nullable: true, name: "interviewAddress" })
-  interviewAddress: string; 
+  interviewAddress: string;
 
   @Column({ type: "text", array: true, nullable: true, name: "communicationWindow" })
   communicationWindow: string[];
@@ -141,7 +141,8 @@ export class JobPost extends BaseEntity {
   @Column({ type: "int", default: 0, name: "verificationRequired" })
   verificationRequired: number;
 
-   
+  @Column({ name: "isVerified", type: "int", default: 0 })
+  isVerified: number;
 
   @Column({
     type: "enum",
