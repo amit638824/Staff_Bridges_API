@@ -8,6 +8,7 @@ import {
 import { User } from "../../Entities/user";
 import { Login } from "../../Entities/login";
 import { sendFormEmailUserVerificationSendOtp } from "../../Helpers/email";
+import { uploadToS3 } from "../../Helpers/s3";
 
 export const ProfileUpdate = async (req: any, res: any) => {
     // const { email } = req.params;
@@ -69,13 +70,25 @@ export const ProfileUpdate = async (req: any, res: any) => {
 };
 export const userBasicProfileUpdate = async (req: any, res: any) => {
   try {
-    const { userId, fullName, gender, salary, education, experinced } = req.body;
+    const {
+      userId,
+      fullName,
+      gender,
+      salary,
+      education,
+      experinced,
+      email,
+      companyName,
+      companyAddress,
+      differentInterviewAddress,
+    } = req.body;
 
     if (!userId) {
       return createResponse(res, 400, "User ID is required", [], false, true);
     }
 
-    // ✅ VALID ENUM VALUES (entity ke according)
+    /* ================= ENUM VALIDATION ================= */
+
     const VALID_EDUCATION = [
       "Any",
       "highschool",
@@ -87,7 +100,6 @@ export const userBasicProfileUpdate = async (req: any, res: any) => {
 
     const VALID_GENDER = ["Male", "Female", "Other"];
 
-    //   education validation
     if (education && !VALID_EDUCATION.includes(education)) {
       return createResponse(
         res,
@@ -99,7 +111,6 @@ export const userBasicProfileUpdate = async (req: any, res: any) => {
       );
     }
 
-    //   gender validation
     if (gender && !VALID_GENDER.includes(gender)) {
       return createResponse(
         res,
@@ -111,7 +122,6 @@ export const userBasicProfileUpdate = async (req: any, res: any) => {
       );
     }
 
-    //  experinced validation
     if (
       experinced !== undefined &&
       (!Number.isInteger(Number(experinced)) || Number(experinced) < 0)
@@ -126,25 +136,48 @@ export const userBasicProfileUpdate = async (req: any, res: any) => {
       );
     }
 
-    // ✅ update data (id kabhi update nahi hota)
+    /* ================= FILE UPLOAD ================= */
+    let companyLogoUrl;
+    if (req.files?.companyLogo) {
+      const uploadRes = await uploadToS3(
+        req.files.companyLogo,
+        "company-logo"
+      );
+      companyLogoUrl = uploadRes.url;
+    }
+
+    /* ================= UPDATE DATA ================= */
+
     const updateData: any = {
       fullName,
+      email,
       gender,
       salary,
       experinced,
       education,
+      companyName,
+      companyAddress,
+      differentInterviewAddress,
+      companyLogo: companyLogoUrl,
       updatedBy: userId,
       updatedAt: new Date(),
     };
 
-    //  undefined fields hata do
+    // 🔥 undefined fields remove
     Object.keys(updateData).forEach(
       (key) => updateData[key] === undefined && delete updateData[key]
     );
 
-    //   agar sirf updatedBy & updatedAt bache ho
+    // sirf updatedAt & updatedBy bacha ho
     if (Object.keys(updateData).length === 2) {
-      return createResponse(res, 400, "No valid fields to update", [], false, true);
+      return createResponse(
+        res,
+        400,
+        "No valid fields to update",
+        [],
+        false,
+        true
+      );
     }
 
     const result = await User.createQueryBuilder()
@@ -154,32 +187,44 @@ export const userBasicProfileUpdate = async (req: any, res: any) => {
       .returning([
         "id",
         "fullName",
+        "email",
         "gender",
         "salary",
         "experinced",
         "education",
+        "companyName",
+        "companyAddress",
+        "differentInterviewAddress",
+        "companyLogo",
         "updatedAt",
       ])
       .execute();
 
     if (result.affected === 0) {
-      return createResponse(res, 404, MESSAGES?.USER_NOT_FOUND, [], false, true);
+      return createResponse(res, 404, MESSAGES.USER_NOT_FOUND, [], false, true);
     }
 
     return createResponse(
       res,
       200,
-      MESSAGES?.PROFILE_UPDATED,
+      MESSAGES.PROFILE_UPDATED,
       result.raw[0],
       true,
       false
     );
-
   } catch (err) {
-    console.log(MESSAGES?.RESET_ERROR, err);
-    return createResponse(res, 500, MESSAGES?.INTERNAL_SERVER_ERROR, [], false, true);
+    console.log(MESSAGES.RESET_ERROR, err);
+    return createResponse(
+      res,
+      500,
+      MESSAGES.INTERNAL_SERVER_ERROR,
+      [],
+      false,
+      true
+    );
   }
-}; 
+};
+
 export const UserEmailVerificationSendOtp = async (req: any, res: any) => {
     const { email } = req.body;
 

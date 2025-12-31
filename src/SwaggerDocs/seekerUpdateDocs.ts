@@ -3,20 +3,20 @@
  * /auth/user-profile-update-basicinfo:
  *   put:
  *     tags:
- *       - Profile Update 
- *     summary: Update basic profile information of user (Seeker/Recruiter)
+ *       - Profile Update
+ *     summary: Update basic & company profile information of user (Seeker/Recruiter)
  *     description: |
- *       Update full name, gender, salary, experience status, and education of a user.
+ *       Update user basic and company-related profile details.
  *
  *       **Gender options:** Male, Female, Other  
- *       **Experinced options:** 1 (Yes), 0 (No)  
- *       **Education options:** Any, highschool, intermediate, diploma, graduate, postgraduate
+ *       **Experinced options:** 0 (No), 1 (Yes)  
+ *       **Education options:** Any, highschool, intermediate, diploma, graduate, postgraduate  
  *
- *       You must choose one of the allowed values.
+ *       Only the fields provided in the request will be updated.
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -25,20 +25,29 @@
  *               userId:
  *                 type: integer
  *                 example: 1
+ *
  *               fullName:
  *                 type: string
  *                 example: "Sheetal Sharma"
+ *
+ *               email:
+ *                 type: string
+ *                 example: "sheetal@gmail.com"
+ *
  *               gender:
  *                 type: string
  *                 enum: [Male, Female, Other]
  *                 example: Female
+ *
  *               experinced:
  *                 type: integer
  *                 enum: [0, 1]
  *                 example: 1
+ *
  *               salary:
  *                 type: number
  *                 example: 45000
+ *
  *               education:
  *                 type: string
  *                 enum:
@@ -49,6 +58,25 @@
  *                   - graduate
  *                   - postgraduate
  *                 example: graduate
+ *
+ *               companyName:
+ *                 type: string
+ *                 example: "ABC Pvt Ltd"
+ *
+ *               companyAddress:
+ *                 type: string
+ *                 example: "Noida Sector 62"
+ *
+ *               differentInterviewAddress:
+ *                 type: integer
+ *                 enum: [0, 1]
+ *                 example: 0
+ *
+ *               companyLogo:
+ *                 type: string
+ *                 format: binary
+ *                 description: Company logo image file
+ *
  *     responses:
  *       200:
  *         description: Profile updated successfully.
@@ -59,6 +87,7 @@
  *       500:
  *         description: Internal server error.
  */
+
 /**
  * @swagger
  * /auth/user-profile-update-aditional:
