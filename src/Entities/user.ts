@@ -24,7 +24,7 @@ export class User extends BaseEntity {
   @Column({ name: "password", type: "varchar", length: 255, nullable: true })
   password: any;
 
-  @Column({ name: "age", type: "varchar",  nullable: true })
+  @Column({ name: "age", type: "varchar", nullable: true })
   age: any;
 
   @Column({ name: "mobile", type: "varchar", length: 15, nullable: true })
@@ -48,16 +48,24 @@ export class User extends BaseEntity {
   @Column({ name: "countryId", type: "int", nullable: true })
   countryId: any;
 
-  @Column({ name: "companyName",  type: "varchar",  nullable: true }) // id se map krne 
+  @Column({ name: "companyName", type: "varchar", nullable: true }) // id se map krne 
   companyName: any;
+
+  @Column({ name: "companyAddress", type: "varchar", nullable: true }) // id se map krne 
+  companyAddress: any;
+
+  @Column({ name: "hiringFor", type: "varchar", nullable: true }) // id se map krne 
+  hiringFor: any;
 
   @Column({ name: "profilePic", type: "varchar", nullable: true })
   profilePic: any;
 
-  
+
   @Column({ name: "companyLogo", type: "varchar", nullable: true })
   companyLogo: any;
 
+  @Column({ name: "differentInterviewAddress", type: "int", default: 0 })
+  differentInterviewAddress: any;
 
   @Column({ name: "resume", type: "varchar", nullable: true })
   resume: any;
