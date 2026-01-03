@@ -4,8 +4,8 @@ const recruiterRouter = express.Router();
  
 recruiterRouter.get("/recruiter-jobpost-list", RecruiterController.getRecruiterList); 
 recruiterRouter.get("/recruiter-best-job-your", RecruiterController.getRecruiterList);
-recruiterRouter.get("/recruiter-similar-jobs", RecruiterController.getRecruiterList);
-recruiterRouter.get("/recruiter-choose-from-job-categories", RecruiterController.getRecruiterList);
+recruiterRouter.get("/recruiter-similar-jobs", RecruiterController.getRecruiterSimilarJobList);
+recruiterRouter.get("/recruiter-choose-from-job-categories", RecruiterController.getCategoryJobList);
 recruiterRouter.get("/recruiter-jobs-in-near-by-areas", RecruiterController.getRecruiterList);
 recruiterRouter.get("/recruiter-job-details", RecruiterController.getRecruiterList);
 

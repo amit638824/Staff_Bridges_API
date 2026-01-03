@@ -3,10 +3,12 @@ import {
     Column,
     Entity,
     PrimaryGeneratedColumn,
+    CreateDateColumn,
+    UpdateDateColumn
 } from "typeorm";
+
 @Entity({ name: "Experience" })
 export class Experience extends BaseEntity {
-
     @PrimaryGeneratedColumn({ name: "id" })
     id: number;
 
@@ -14,18 +16,28 @@ export class Experience extends BaseEntity {
     categoryId: number;
 
     @Column({ name: "userId", type: "int", nullable: true })
-    userId: number; 
-    
+    userId: number;
+
     @Column({ name: "status", type: "int", default: 1 })
     status: number;
 
-     @Column({ name: "experience", type: "varchar", default: 0 })
-    experience: number;
+    // FIX: Changed from number to string since your controller uses string operations
+    @Column({ name: "experience", type: "varchar", nullable: true })
+    experience: string;
 
-    @Column({ name: "createdAt", type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
+    @Column({ name: "company", type: "varchar", nullable: true })
+    company: string; // FIX: Changed from number to string
+
+    @Column({ name: "year", type: "int", default: 0 })
+    year: number;
+
+    @Column({ name: "months", type: "int", default: 0 })
+    months: number;
+
+    @CreateDateColumn({ name: "createdAt", type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
     createdAt: Date;
 
-    @Column({ name: "updatedAt", type: "timestamptz", default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" })
+    @UpdateDateColumn({ name: "updatedAt", type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
     updatedAt: Date;
 
     @Column({ name: "createdBy", type: "int", nullable: true })
@@ -33,5 +45,4 @@ export class Experience extends BaseEntity {
 
     @Column({ name: "updatedBy", type: "int", nullable: true })
     updatedBy: number;
-
 }

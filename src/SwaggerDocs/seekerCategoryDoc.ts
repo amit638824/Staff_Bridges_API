@@ -145,7 +145,6 @@
  *       500:
  *         description: Internal server error
  */
-
 /**
  * @swagger
  * /api/seeker-experience:
@@ -164,20 +163,32 @@
  *               - experience
  *             properties:
  *               categoryId:
- *                 type: number
+ *                 type: integer
  *                 example: 3
  *               userId:
- *                 type: number
+ *                 type: integer
  *                 example: 15
  *               experience:
  *                 type: string
  *                 example: "5 years in UI/UX"
+ *               company:
+ *                 type: string
+ *                 example: "Tech Corp Inc"
+ *               year:
+ *                 type: integer
+ *                 minimum: 0
+ *                 example: 5
+ *               months:
+ *                 type: integer
+ *                 minimum: 0
+ *                 maximum: 11
+ *                 example: 3
  *               status:
- *                 type: number
+ *                 type: integer
  *                 default: 1
  *                 example: 1
  *               createdBy:
- *                 type: number
+ *                 type: integer
  *                 example: 1
  *     responses:
  *       201:
@@ -200,40 +211,101 @@
  *       - in: query
  *         name: page
  *         schema:
- *           type: number
+ *           type: integer 
+ *           default: 1
  *         example: 1
  *       - in: query
  *         name: limit
  *         schema:
- *           type: number
+ *           type: integer 
+ *           default: 10
  *         example: 10
  *       - in: query
  *         name: id
  *         schema:
- *           type: number
- *         example: 5
+ *           type: integer
+ *         example: 1
  *       - in: query
  *         name: categoryId
  *         schema:
- *           type: number
- *         example: 3
+ *           type: integer
+ *         example: 1
  *       - in: query
  *         name: userId
  *         schema:
- *           type: number
- *         example: 10
+ *           type: integer
+ *         example: 1
  *       - in: query
  *         name: status
  *         schema:
- *           type: number
- *         example: 1
+ *           type: integer
+ *         example: 1 
  *       - in: query
- *         name: experience
+ *         name: company
  *         schema:
  *           type: string
+ *         example: "Tech Corp"
+ *       - in: query
+ *         name: year
+ *         schema:
+ *           type: integer
+ *         example: 5
+ *       - in: query
+ *         name: months
+ *         schema:
+ *           type: integer
+ *         example: 3 
  *     responses:
  *       200:
  *         description: Experiences fetched successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 currentPage:
+ *                   type: integer
+ *                 limit:
+ *                   type: integer
+ *                 totalPages:
+ *                   type: integer
+ *                 totalRecords:
+ *                   type: integer
+ *                 items:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       experience_id:
+ *                         type: integer
+ *                       experience_categoryId:
+ *                         type: integer
+ *                       experience_userId:
+ *                         type: integer
+ *                       experience_value:
+ *                         type: string
+ *                       experience_company:
+ *                         type: string
+ *                       experience_year:
+ *                         type: integer
+ *                       experience_months:
+ *                         type: integer
+ *                       experience_status:
+ *                         type: integer
+ *                       experience_createdAt:
+ *                         type: string
+ *                         format: date-time
+ *                       experience_updatedAt:
+ *                         type: string
+ *                         format: date-time
+ *                       category_name:
+ *                         type: string
+ *                       category_image:
+ *                         type: string
+ *                       user_fullName:
+ *                         type: string
+ *                       user_email:
+ *                         type: string
  *       500:
  *         description: Internal server error.
  */
@@ -249,7 +321,7 @@
  *         name: id
  *         required: true
  *         schema:
- *           type: number
+ *           type: integer
  *         example: 12
  *     requestBody:
  *       required: true
@@ -259,23 +331,36 @@
  *             type: object
  *             properties:
  *               categoryId:
- *                 type: number
+ *                 type: integer
  *                 example: 4
  *               userId:
- *                 type: number
+ *                 type: integer
  *                 example: 15
  *               experience:
  *                 type: string
  *                 example: "7 years in web development"
+ *               company:
+ *                 type: string
+ *                 example: "Web Solutions Ltd"
+ *               year:
+ *                 type: integer
+ *                 example: 7
+ *               months:
+ *                 type: integer
+ *                 example: 2
  *               status:
- *                 type: number
+ *                 type: integer
  *                 example: 1
  *               updatedBy:
- *                 type: number
+ *                 type: integer
  *                 example: 2
  *     responses:
  *       200:
  *         description: Experience updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Experience'
  *       400:
  *         description: User cannot have more than 4 experiences.
  *       404:
@@ -297,7 +382,7 @@
  *         name: id
  *         required: true
  *         schema:
- *           type: number
+ *           type: integer
  *         example: 12
  *     responses:
  *       200:
@@ -306,4 +391,39 @@
  *         description: Experience not found.
  *       500:
  *         description: Internal server error.
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Experience:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         categoryId:
+ *           type: integer
+ *         userId:
+ *           type: integer
+ *         status:
+ *           type: integer
+ *         experience:
+ *           type: string
+ *         company:
+ *           type: string
+ *         year:
+ *           type: integer
+ *         months:
+ *           type: integer
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *         createdBy:
+ *           type: integer
+ *         updatedBy:
+ *           type: integer
  */

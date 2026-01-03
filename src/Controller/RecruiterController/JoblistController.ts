@@ -33,7 +33,7 @@ export const getRecruiterList = async (req: any, res: any) => {
             sortBy = "createdAt",
             order = "DESC",
 
-            // Dynamic filters (includes id)
+            // Dynamic filters
             ...filters
         } = req.query;
 
@@ -51,7 +51,7 @@ export const getRecruiterList = async (req: any, res: any) => {
             .leftJoin(MasterLocality, "locality", "locality.id = job.localityId");
 
         /* ---------------------------------------------------
-           DYNAMIC FILTER CONFIG
+           FILTER CONFIG
         --------------------------------------------------- */
         const enumFields = [
             "jobType",
@@ -63,7 +63,7 @@ export const getRecruiterList = async (req: any, res: any) => {
         ];
 
         const intFields = [
-            "id",               // ✅ EXACT JOB ID FILTER
+            "id",
             "recruiterId",
             "categoryId",
             "titleId",
@@ -73,12 +73,40 @@ export const getRecruiterList = async (req: any, res: any) => {
         ];
 
         /* ---------------------------------------------------
-           APPLY DYNAMIC FILTERS
+           DYNAMIC FILTERS
         --------------------------------------------------- */
         Object.entries(filters).forEach(([key, value]) => {
             if (!value) return;
 
-            // CSV support
+            /* ===============================
+               QUALIFICATION FILTER (NEW)
+            =============================== */
+            if (key === "qualification") {
+                // "Any" aaye to filter skip
+                if (String(value).toLowerCase() === "any") return;
+
+                // Multiple values support
+                if (typeof value === "string" && value.includes(",")) {
+                    const qualifications = value
+                        .split(",")
+                        .map(v => v.trim());
+
+                    baseQB.andWhere(
+                        "job.qualification IN (:...qualification)",
+                        { qualification: qualifications }
+                    );
+                } else {
+                    baseQB.andWhere(
+                        "job.qualification = :qualification",
+                        { qualification: value }
+                    );
+                }
+                return;
+            }
+
+            /* ===============================
+               EXISTING LOGIC (UNCHANGED)
+            =============================== */
             if (typeof value === "string" && value.includes(",")) {
                 const arr = value.split(",").map(v => v.trim());
 
@@ -94,24 +122,20 @@ export const getRecruiterList = async (req: any, res: any) => {
                         [key]: arr,
                     });
                 }
-            }
-
-            // Integer fields (exact match)
+            } 
             else if (intFields.includes(key)) {
                 const num = Number(value);
                 if (!isNaN(num)) {
-                    baseQB.andWhere(`job.${key} = :${key}`, { [key]: num });
+                    baseQB.andWhere(`job.${key} = :${key}`, {
+                        [key]: num,
+                    });
                 }
-            }
-
-            // Enum fields
+            } 
             else if (enumFields.includes(key)) {
                 baseQB.andWhere(`job.${key}::text ILIKE :${key}`, {
                     [key]: `%${value}%`,
                 });
-            }
-
-            // String fallback
+            } 
             else {
                 baseQB.andWhere(`job.${key} ILIKE :${key}`, {
                     [key]: `%${value}%`,
@@ -204,7 +228,7 @@ export const getRecruiterList = async (req: any, res: any) => {
         }
 
         /* ---------------------------------------------------
-           TOTAL COUNT (NO PAGINATION)
+           TOTAL COUNT
         --------------------------------------------------- */
         const totalRecords = await baseQB.clone().getCount();
 
@@ -220,7 +244,8 @@ export const getRecruiterList = async (req: any, res: any) => {
         };
 
         const sortColumn = allowedSort[sortBy] || "job.createdAt";
-        const sortOrder = String(order).toUpperCase() === "ASC" ? "ASC" : "DESC";
+        const sortOrder =
+            String(order).toUpperCase() === "ASC" ? "ASC" : "DESC";
 
         /* ---------------------------------------------------
            DATA QUERY
@@ -301,6 +326,161 @@ export const getRecruiterList = async (req: any, res: any) => {
             limit: take,
             totalPages,
             totalRecords,
+            items,
+        });
+    } catch (error) {
+        console.error(error);
+        return createResponse(res, 500, "Something went wrong", [], true, true);
+    }
+};
+
+export const getCategoryJobList = async (req: any, res: any) => {
+    try {
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+       
+        /* ---------------------------------------------------
+           BASE QUERY FOR CATEGORY WISE COUNTS
+        --------------------------------------------------- */
+        const baseQuery = JobPost.createQueryBuilder("job")
+            .leftJoin(MasterCategory, "category", "category.id = job.categoryId") 
+
+        /* ---------------------------------------------------
+           TOTAL CATEGORY COUNT (FOR PAGINATION)
+        --------------------------------------------------- */
+        const totalRecords = await baseQuery
+            .select("COUNT(DISTINCT category.id)", "count")
+            .getRawOne();
+
+        const totalCount = Number(totalRecords?.count) || 0;
+        const totalPages = Math.ceil(totalCount / limit);
+
+        /* ---------------------------------------------------
+           PAGINATED CATEGORY LIST
+        --------------------------------------------------- */
+        const items = await baseQuery
+            .select([
+                "category.id AS category_id",
+                 "category.image AS category_img_url",
+                "category.name AS category_name",
+                "COUNT(job.id) AS job_count"
+            ])
+            .groupBy("category.id, category.name")
+            .orderBy("category.name", "ASC")
+            .skip(skip)
+            .take(limit)
+            .getRawMany();
+
+        return createResponse(res, 200, "Category wise job list", {
+            currentPage: page,
+            limit,
+            totalPages,
+            totalRecords: totalCount,
+            items: items.map(item => ({
+                ...item,
+                job_count: Number(item.job_count)
+            }))
+        });
+
+    } catch (error) {
+        console.error(error);
+        return createResponse(res, 500, "Something went wrong", [], true, true);
+    }
+};
+export const getRecruiterSimilarJobList = async (req: any, res: any) => {
+    try {
+        const {
+            page = 1,
+            limit = 10,
+            jobId, // 👈 current job id
+            sortBy = "createdAt",
+            order = "DESC",
+        } = req.query;
+
+        if (!jobId) {
+            return createResponse(res, 400, "jobId is required");
+        }
+
+        const take = Number(limit);
+        const skip = (Number(page) - 1) * take;
+
+        /* ---------------------------------------------------
+           STEP 1: GET CATEGORY OF CURRENT JOB
+        --------------------------------------------------- */
+        const currentJob = await JobPost.findOne({
+            where: { id: Number(jobId) },
+            select: ["id", "categoryId"],
+        });
+
+        if (!currentJob) {
+            return createResponse(res, 404, "Job not found");
+        }
+
+        /* ---------------------------------------------------
+           STEP 2: FETCH SIMILAR JOBS (SAME CATEGORY)
+        --------------------------------------------------- */
+        const qb = JobPost.createQueryBuilder("job")
+            .leftJoin(MasterCategory, "category", "category.id = job.categoryId")
+            .leftJoin(MasterJobTitle, "title", "title.id = job.titleId")
+            .leftJoin(User, "user", "user.id = job.recruiterId")
+            .leftJoin(MasterCity, "city", "city.id = job.cityId")
+            .leftJoin(MasterLocality, "locality", "locality.id = job.localityId")
+            .where("job.categoryId = :categoryId", {
+                categoryId: currentJob.categoryId,
+            })
+            .andWhere("job.id != :jobId", { jobId }) // 👈 exclude current job
+            .andWhere("job.status = :status", { status: "ACTIVE" });
+
+        /* ---------------------------------------------------
+           TOTAL COUNT
+        --------------------------------------------------- */
+        const totalRecords = await qb.clone().getCount();
+
+        /* ---------------------------------------------------
+           SORTING
+        --------------------------------------------------- */
+        const allowedSort: Record<string, string> = {
+            createdAt: "job.createdAt",
+            salaryMin: "job.salaryMin",
+            salaryMax: "job.salaryMax",
+        };
+
+        const sortColumn = allowedSort[sortBy] || "job.createdAt";
+        const sortOrder = order?.toUpperCase() === "ASC" ? "ASC" : "DESC";
+
+        /* ---------------------------------------------------
+           DATA
+        --------------------------------------------------- */
+        const items = await qb
+            .select([
+                "job.id AS job_id",
+                "job.titleId AS title_id",
+                "job.categoryId AS category_id",
+                "job.salaryMin AS salary_min",
+                "job.salaryMax AS salary_max",
+                "job.createdAt AS created_at",
+
+                "category.name AS category_name",
+                "title.name AS job_title_name",
+
+                "city.name AS city_name",
+                "locality.name AS locality_name",
+
+                "user.companyName AS company",
+                "user.companyLogo AS company_logo",
+            ])
+            .orderBy(sortColumn, sortOrder)
+            .take(take)
+            .skip(skip)
+            .getRawMany();
+
+        return createResponse(res, 200, "Similar Jobs", {
+            currentPage: Number(page),
+            limit: take,
+            totalRecords,
+            totalPages: Math.ceil(totalRecords / take),
             items,
         });
     } catch (error) {

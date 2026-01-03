@@ -51,6 +51,10 @@ loginRoute.post("/contact-us", AuthHandler.insertContactUs);
 loginRoute.get("/contact-us", AuthHandler.readContactUs);
 loginRoute.delete("/contact-us/:id", AuthHandler.deleteContactUs);
 
-
+// RateUs CRUD Routes
+loginRoute.post("/rate-us", AuthHandler.createRateUs);
+loginRoute.get("/rate-us", AuthHandler.getAllRateUs);  
+loginRoute.put("/rate-us/:id", AuthHandler.updateRateUs);
+loginRoute.delete("/rate-us/:id", AuthHandler.deleteRateUs);
 
 export default loginRoute;

@@ -7,7 +7,16 @@ import { User } from "../../Entities/user";
 // ================= CREATE EXPERIENCE =================
 export const createExperience = async (req: any, res: any) => {
   try {
-    const { categoryId, userId, status, createdBy, experience } = req.body;
+    const { 
+      categoryId, 
+      userId, 
+      status, 
+      createdBy, 
+      experience, 
+      company, 
+      year, 
+      months 
+    } = req.body;
 
     if (!categoryId || !userId || !experience) {
       return createResponse(res, 400, MESSAGES.REQUIRED_FIELDS, [], true, true);
@@ -20,7 +29,13 @@ export const createExperience = async (req: any, res: any) => {
     }
 
     // CHECK DUPLICATE categoryId + userId
-    const exists = await Experience.findOne({ where: { categoryId, userId } });
+    const exists = await Experience.findOne({ 
+      where: { 
+        categoryId, 
+        userId,
+        experience // Also check experience value to avoid duplicate entries
+      } 
+    });
     if (exists) {
       return createResponse(res, 409, MESSAGES.ALREADY_EXISTS("Experience"), [], true, true);
     }
@@ -29,6 +44,9 @@ export const createExperience = async (req: any, res: any) => {
       categoryId,
       userId,
       experience,
+      company: company || null,
+      year: year || 0,
+      months: months || 0,
       status: status ?? 1,
       createdBy,
       updatedBy: createdBy,
@@ -58,6 +76,12 @@ export const getAllExperience = async (req: any, res: any) => {
         "exp.categoryId AS experience_categoryId",
         "exp.userId AS experience_userId",
         "exp.experience AS experience_value",
+        "exp.company AS experience_company",
+        "exp.year AS experience_year",
+        "exp.months AS experience_months",
+        "exp.status AS experience_status",
+        "exp.createdAt AS experience_createdAt",
+        "exp.updatedAt AS experience_updatedAt",
 
         "category.name AS category_name",
         "category.image AS category_image",
@@ -80,11 +104,17 @@ export const getAllExperience = async (req: any, res: any) => {
         case "categoryId":
         case "userId":
         case "status":
+        case "year":
+        case "months":
           qb.andWhere(`exp.${key} = :${key}`, { [key]: Number(value) });
           break;
 
         case "experience":
           qb.andWhere(`exp.experience ILIKE :experience`, { experience: `%${value}%` });
+          break;
+
+        case "company":
+          qb.andWhere(`exp.company ILIKE :company`, { company: `%${value}%` });
           break;
 
         case "categoryName":
@@ -117,11 +147,17 @@ export const getAllExperience = async (req: any, res: any) => {
         case "categoryId":
         case "userId":
         case "status":
+        case "year":
+        case "months":
           totalQB.andWhere(`exp.${key} = :${key}`, { [key]: Number(value) });
           break;
 
         case "experience":
           totalQB.andWhere(`exp.experience ILIKE :experience`, { experience: `%${value}%` });
+          break;
+
+        case "company":
+          totalQB.andWhere(`exp.company ILIKE :company`, { company: `%${value}%` });
           break;
 
         case "categoryName":
@@ -162,28 +198,42 @@ export const getAllExperience = async (req: any, res: any) => {
 export const updateExperience = async (req: any, res: any) => {
   try {
     const { id } = req.params;
-    const { categoryId, userId, status, updatedBy, experience } = req.body;
+    const { 
+      categoryId, 
+      userId, 
+      status, 
+      updatedBy, 
+      experience, 
+      company, 
+      year, 
+      months 
+    } = req.body;
 
     const exp = await Experience.findOne({ where: { id: Number(id) } });
     if (!exp) {
       return createResponse(res, 404, MESSAGES.CATEGORY_NOT_FOUND, [], true, true);
     }
 
-    // CHECK DUPLICATE IF categoryId OR userId CHANGED
-    if ((categoryId && categoryId !== exp.categoryId) || (userId && userId !== exp.userId)) {
+    // CHECK DUPLICATE IF categoryId OR userId OR experience CHANGED
+    if ((categoryId && categoryId !== exp.categoryId) || 
+        (userId && userId !== exp.userId) ||
+        (experience && experience !== exp.experience)) {
+      
       const duplicate = await Experience.findOne({
         where: {
           categoryId: categoryId ?? exp.categoryId,
           userId: userId ?? exp.userId,
+          experience: experience ?? exp.experience
         }
       });
 
-      if (duplicate) {
+      // Exclude current record from duplicate check
+      if (duplicate && duplicate.id !== exp.id) {
         return createResponse(res, 409, MESSAGES.ALREADY_EXISTS("Experience"), [], true, true);
       }
     }
 
-    // MAX 4 EXPERIENCES PER USER CHECK
+    // MAX 4 EXPERIENCES PER USER CHECK (only if userId is being changed)
     if (userId && userId !== exp.userId) {
       const experienceCount = await Experience.count({ where: { userId } });
       if (experienceCount >= 4) {
@@ -195,6 +245,9 @@ export const updateExperience = async (req: any, res: any) => {
     exp.userId = userId ?? exp.userId;
     exp.status = status ?? exp.status;
     exp.experience = experience ?? exp.experience;
+    exp.company = company ?? exp.company;
+    exp.year = year ?? exp.year;
+    exp.months = months ?? exp.months;
     exp.updatedBy = updatedBy ?? exp.updatedBy;
 
     await exp.save();

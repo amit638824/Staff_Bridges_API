@@ -12,7 +12,7 @@ import { JobBenifits } from "../../Entities/JobBenifits";
 import { RecruiterDocuments } from "../../Entities/recruiterDocuments";
 import { createNotificationHelper } from "../../Helpers/notificationHelper"; 
 
-export const createRecruiter = async (req: any, res: any) => {
+export const  createRecruiter = async (req: any, res: any) => {
   const uniqueArray = (arr: number[]) => [...new Set(arr)];
 
   try {
